@@ -1,0 +1,33 @@
+# Local Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# .terraform directory - contains downloaded providers and modules
+.terraform/
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Plugin binary files (useful for local development, but not needed in version control)
+.terraform.lock.hcl
+
+# VSCode specific files
+.vscode/
+
+# IDE-specific files
+.idea/
+
+# Local Terraform variable files
+terraform.tfvars
+terraform.tfvars.json
+
+# Sensitive variable values
+*.pem
+*.key
+*.crt

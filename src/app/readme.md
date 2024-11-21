@@ -1,0 +1,1 @@
+this is to display count down, welcome message and dress code and news, also interac email and Payme pay code

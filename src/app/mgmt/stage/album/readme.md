@@ -1,0 +1,1 @@
+allow guest to watch album on big screen

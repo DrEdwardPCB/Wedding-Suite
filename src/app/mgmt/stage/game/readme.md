@@ -1,0 +1,1 @@
+connect websocket, allow guest to play game realtime
