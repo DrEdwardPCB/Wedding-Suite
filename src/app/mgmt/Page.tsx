@@ -1,5 +1,5 @@
 import HomeRoute from "@/component/mgmt/HomeRoute";
-import { getSession } from "@/lib/ironsession/action";
+import { getSession, logoutMgmt } from "@/lib/ironsession/action";
 import { redirect } from "next/navigation";
 import PhotoAlbumIcon from '@mui/icons-material/PhotoAlbum';
 import CastIcon from '@mui/icons-material/Cast';
@@ -7,10 +7,10 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import PeopleIcon from '@mui/icons-material/People';
 import StadiumIcon from '@mui/icons-material/Stadium';
 import TheatersIcon from '@mui/icons-material/Theaters';
+import { SubmitButton } from "@/component/SubmitButton";
 export default async function MgmtHomePage(){
     const session = await getSession();
     if(!session.isAdmin||!session.isLoggedIn){
-        alert("You have not loggedin we are redirecting you to mgmt login")
         redirect("/mgmt/auth")
     }
     return (<div className="flex gap-4 items-center justify-start flex-col">
@@ -22,5 +22,10 @@ export default async function MgmtHomePage(){
         <HomeRoute url={"/mgmt/stage/game"} title="Stage Game" icon={<StadiumIcon></StadiumIcon>}/>
         <HomeRoute url={"/mgmt/stage/video"} title="Stage Video" icon={<StadiumIcon></StadiumIcon>}/>
         <HomeRoute url={"/mgmt/video"} title="Video" icon={<TheatersIcon></TheatersIcon>}/>
+        <form action={logoutMgmt} >
+          <div>
+            <SubmitButton value="Logout" />
+          </div>
+        </form>
     </div>)
 } 

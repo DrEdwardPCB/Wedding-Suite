@@ -1,14 +1,15 @@
 import { getSession, loginMgmt } from "@/lib/ironsession/action";
 import { redirect } from "next/navigation";
 import { SigninForm } from "@/component/SigninForm";
-export default async function MgmtLoginPage(){
+
+export default async function GuestLoginPage(){
     const session = await getSession();
     if(session.isAdmin&&session.isLoggedIn){
-        redirect("/mgmt/")
+        redirect("/guest/")
     }
     return (<div className="flex gap-4 items-center justify-start flex-col">
         <form action={loginMgmt} className="flex flex-col items-center justify-center gap-2">
-            <SigninForm/>
+        <SigninForm/>
         </form>
     </div>)
 }

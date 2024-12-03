@@ -6,7 +6,10 @@ import { revalidatePath } from "next/cache";
 import { env } from "../envalid/env";
 
 export async function getSession(shouldSleep = true) {
-  const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+  const cookie = await cookies()
+  const session = await getIronSession<SessionData>(
+    cookie, 
+    sessionOptions);
 
   if (!session.isLoggedIn) {
       session.username = defaultSession.username;
