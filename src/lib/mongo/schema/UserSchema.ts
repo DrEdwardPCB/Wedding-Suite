@@ -7,6 +7,7 @@ const UserSchema = new Schema({
     dinner:{type:Boolean,required:true},
     password:{type:String, required:true},
     side:{type:String,enum:["GROOM","BRIDE","BOTH"],required:true},
+    category:{type:String}, // describe briefly on relations
     dinnerDeskNumber:{type:Number},
     ceremonySeatNumber:{type:Number}
 })
