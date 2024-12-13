@@ -6,8 +6,9 @@ export default async function MgmtLoginPage(){
     if(session.isAdmin&&session.isLoggedIn){
         redirect("/mgmt/")
     }
-    return (<div className="flex gap-4 items-center justify-start flex-col">
-        <form action={loginMgmt} className="flex flex-col items-center justify-center gap-2">
+    return (<div className="flex gap-4 items-center justify-center flex-col h-[100vh] ">
+        <h1 className="">mgmt login</h1>
+        <form action={loginMgmt} className="flex flex-col items-scratch justify-center gap-2 outline outline-1 p-4 rounded-lg">
             <SigninForm/>
         </form>
     </div>)

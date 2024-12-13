@@ -19,7 +19,6 @@ export function SigninForm() {
         radius="lg"
         label="Password"
         description="the word that only you can remember"
-        error="incorrect"
         placeholder="Input placeholder"/>
     <SubmitButton value="Submit"></SubmitButton>
 

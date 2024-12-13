@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import MuiXLicense from "@/lib/license/MuiXLicense";
+import '@mantine/core/styles.css';
 
 
 const geistSans = localFont({
@@ -26,17 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-mantine-color-scheme="light">
       <head>
         <ColorSchemeScript />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        cz-shortcut-listen="true"
       >
         <MantineProvider>
 
         {children}
         </MantineProvider>
+        <MuiXLicense />
       </body>
     </html>
   );
