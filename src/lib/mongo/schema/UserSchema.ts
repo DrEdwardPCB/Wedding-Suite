@@ -21,7 +21,7 @@ const UserSchema = new Schema({
     checkedIn:{type:Boolean, required:true}// only apply to ceremony==true||dinner==true
 })
 
-export default models.User|| model('User', UserSchema)
+export default models?.User|| model('User', UserSchema)
 
 export const ZodUserSchema=z.object({
     id:z.string().trim().min(1),

@@ -1,5 +1,5 @@
 import { MgmtHome } from "@/component/common/MgmtHome";
-import { AlbumManagement } from "@/component/mgmt/album/AlbumManagement";
+import { PhotoManagement } from "@/component/mgmt/album/PhotoManagement";
 import { getSession, logoutMgmt } from "@/lib/ironsession/action";
 import { Button } from "@mui/material";
 import { redirect } from "next/navigation";
@@ -20,7 +20,7 @@ export default async function AlbumPage(){
                     logout
                 </Button>
             </div>
-            <AlbumManagement/>
+            <PhotoManagement/>
         </div>
     )
 }

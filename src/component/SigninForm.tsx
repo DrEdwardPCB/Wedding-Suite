@@ -12,14 +12,14 @@ export function SigninForm() {
         radius="lg"
         description="Username registered on vault"
         label="Username"
-        placeholder="Focus me to see tooltip"
+        placeholder="Username"
     />
     <PasswordInput
         name="password"
         radius="lg"
         label="Password"
         description="the word that only you can remember"
-        placeholder="Input placeholder"/>
+        placeholder="Password"/>
     <SubmitButton value="Submit"></SubmitButton>
 
 </>
