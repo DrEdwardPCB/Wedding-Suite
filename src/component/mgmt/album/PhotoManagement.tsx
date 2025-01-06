@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete"
 import { useEffect, useState } from "react"
 import { TZodPhotoSchema } from '../../../lib/mongo/schema/Photo';
 import { PhotoAddForm } from "./PhotoAddForm"
+import { PhotoItem } from "./PhotoItem"
 export interface IAlbumSelection {
   id:string|null
   label:string
@@ -27,7 +28,7 @@ export const PhotoManagement = ()=>{
     }else{
       setPhotos([])
     }
-  },[selectedAlbum])
+  },[selectedAlbum.id])
   async function queryAlbum(){
     const albumList = await queryAll();
     const albumSelectionArray:IAlbumSelection[] = []
@@ -77,8 +78,12 @@ export const PhotoManagement = ()=>{
           <AddButton/>
       </div>
       <div className="grid grid-cols-4 gap-2">
-{photos.length}
-</div>
-</div>
-)
+        {photos.map(e=>{
+          return (
+            <PhotoItem key = {e._id} fileLocation = {e.fileLocation} onDeleteCallback={()=>{queryPhoto(selectedAlbum.id as string)}}/>
+          )
+        })}
+      </div>
+    </div>
+  )
 }

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   }
 
   const formData = await request.formData();
-  const album = formData.get("albumid") as string
+  const album = formData.get("album") as string
   const title= formData.get("title") as string|undefined
   const description= formData.get("description") as string|undefined
   const slot = formData.get("slot") as string|undefined

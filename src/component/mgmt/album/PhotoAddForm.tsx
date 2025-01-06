@@ -11,7 +11,7 @@ export interface IPhotoAddFormProps{
     submitCallback?:()=>void
     cancelCallback?:()=>void
 }
-async function uploadDocuments(
+async function uploadPhotos(
     url: string,
     { arg }: { arg: { 
         files: FileWithPath[], 
@@ -45,7 +45,7 @@ export const PhotoAddForm = ({open,album, submitCallback, cancelCallback}:IPhoto
     const [description,setDescription]= useState<string|undefined>(undefined)
     const [slot,setSlot] = useState<string|undefined>(undefined)
     const [files, setFiles] = useState<FileWithPath[]>([])
-    const { trigger } = useSWRMutation("/api/documents", uploadDocuments);
+    const { trigger } = useSWRMutation("/api/documents", uploadPhotos);
     const handleCancel=async ()=>{
         resetForm()
         if(cancelCallback){

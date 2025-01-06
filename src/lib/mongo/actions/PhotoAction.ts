@@ -10,8 +10,13 @@ export const commitAdd=async (photo:TZodPhotoSchema)=>{
 }
 export const commitDelete=async (id:string)=>{
     console.log("[Photo] commit delete")
-     Photo.deleteOne({_id:id})
+    await Photo.deleteOne({_id:id})
 }
+export const commitDeleteByFilelocation=async (fileLocation:string)=>{
+    console.log("[Photo] commit delete")
+    await Photo.deleteOne({fileLocation:fileLocation})
+}
+
 export const commitUpdate=async (id:string, photo:TZodPhotoSchema)=>{
     console.log("[Photo] commit update")
     // console.log(photo)
@@ -32,6 +37,7 @@ export const queryPhotoByAlbumId=async(album:string)=>{
     })).map(e=>{
         const result=_.omit(e.toJSON(),["__v"])
         result._id = e._id.toHexString()
+        result.album = e.album.toHexString()
         return result
     })
     return parsed
@@ -40,6 +46,13 @@ export const getPhotoBySlot=async(slot:string)=>{
     const parsed = (await Photo.findOne({
         slot
     }))
+    const result=_.omit(parsed.toJSON(),["_id","__v"])
+    result._id = parsed._id.toHexString()
+    return result
+    
+}
+export const getPhotoById=async(id:string)=>{
+    const parsed = (await Photo.findById(id)).toJSON()
     const result=_.omit(parsed.toJSON(),["_id","__v"])
     result._id = parsed._id.toHexString()
     return result

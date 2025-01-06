@@ -1,4 +1,5 @@
-import {Schema, model} from 'mongoose'
+import {Schema, model, models} from 'mongoose'
+import { z } from 'zod'
 
 const ConfigSchema = new Schema({
     zoomSDKKey:{type:String},
@@ -8,7 +9,30 @@ const ConfigSchema = new Schema({
     zoomSecretToken:{type:String},
     zoomVerificationToken:{type:String},
     youtubeStreamLink:{type:String},
-    youtubeStreamKey:{type:String}
+    youtubeStreamKey:{type:String},
+    stageDisplayCategory:{type:String},
+    stageDisplayId:{type:String},
+    createdAt:{type:Date, require:true}
 })
 
-export default model('Config', ConfigSchema )
+export default models?.Config||model('Config', ConfigSchema )
+
+export const ZodConfigSchema = z.object({
+    zoomSDKKey:z.string().optional(),
+    zoomSDKSecret:z.string().optional(),
+    zoomAPIKey:z.string().optional(),
+    zoomAPISecret:z.string().optional(),
+    zoomSecretToken:z.string().optional(),
+    zoomVerificationToken:z.string().optional(),
+    youtubeStreamLink:z.string().optional(),
+    youtubeStreamKey:z.string().optional(),
+    stageDisplayCategory:z.union([
+        z.literal("game"),
+        z.literal("video"),
+        z.literal("album")
+    ]),
+    stageDisplayId:z.string().optional(),
+    createdAt:z.date()
+
+})
+export type TZodConfigSchema = z.infer<typeof ZodConfigSchema>
