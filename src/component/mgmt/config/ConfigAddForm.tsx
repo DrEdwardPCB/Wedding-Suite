@@ -28,16 +28,16 @@ export interface IAutoConfigItem {
     label:string
   }
 export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProps)=>{
-    const [zoomSDKKey,setzoomSDKKey]=useState<string|undefined>(undefined),
-    const [zoomSDKSecret,setzoomSDKSecret]=useState<string|undefined>(undefined),
-    const [zoomAPIKey,setzoomAPIKey]=useState<string|undefined>(undefined),
-    const [zoomAPISecret,setzoomAPISecret]=useState<string|undefined>(undefined),
-    const [zoomSecretToken,setzoomSecretToken]=useState<string|undefined>(undefined),
-    const [zoomVerificationToken,setzoomVerificationToken]=useState<string|undefined>(undefined),
-    const [youtubeStreamLink,setyoutubeStreamLink]=useState<string|undefined>(undefined),
-    const [youtubeStreamKey,setyoutubeStreamKey]=useState<string|undefined>(undefined),
-    const [stageDisplayCategory,setstageDisplayCategory]=useState<IAutoConfigItem>(defaultOption),
-    const [stageDisplayId,setstageDisplayId]=useState<IAutoConfigItem>(defaultOption),
+    const [zoomSDKKey,setzoomSDKKey]=useState<string|undefined>(undefined)
+    const [zoomSDKSecret,setzoomSDKSecret]=useState<string|undefined>(undefined)
+    const [zoomAPIKey,setzoomAPIKey]=useState<string|undefined>(undefined)
+    const [zoomAPISecret,setzoomAPISecret]=useState<string|undefined>(undefined)
+    const [zoomSecretToken,setzoomSecretToken]=useState<string|undefined>(undefined)
+    const [zoomVerificationToken,setzoomVerificationToken]=useState<string|undefined>(undefined)
+    const [youtubeStreamLink,setyoutubeStreamLink]=useState<string|undefined>(undefined)
+    const [youtubeStreamKey,setyoutubeStreamKey]=useState<string|undefined>(undefined)
+    const [stageDisplayCategory,setstageDisplayCategory]=useState<IAutoConfigItem>(defaultOption)
+    const [stageDisplayId,setstageDisplayId]=useState<IAutoConfigItem>(defaultOption)
 
     const [stageDisplayIdOptions, setStageDisplayIdOptions] = useState<IAutoConfigItem[]>([defaultOption])
     

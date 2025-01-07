@@ -1,13 +1,11 @@
 "use client"
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material"
 import {  useState } from "react"
-import { IAlbumSelection } from "./PhotoManagement"
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import useSWRMutation from 'swr/mutation';
 
 export interface IPhotoAddFormProps{
     open:boolean
-    album:IAlbumSelection
     submitCallback?:()=>void
     cancelCallback?:()=>void
 }
@@ -18,7 +16,6 @@ async function uploadPhotos(
         title:string|undefined,
         description:string|undefined, 
         type:"photo"|"video",
-        album:string,
         slot:string|undefined 
     }}
   ): Promise<object[]> {
@@ -31,8 +28,6 @@ async function uploadPhotos(
         body.append("type",arg.type)
     if(arg.slot)
         body.append("slot",arg.slot)
-    if(arg.album)
-        body.append("album",arg.album)
     arg.files.forEach((file) => {
       body.append("file", file, file.name);
     });
@@ -40,7 +35,7 @@ async function uploadPhotos(
     const response = await fetch(url, { method: "POST", body });
     return await response.json();
   }
-export const PhotoAddForm = ({open,album, submitCallback, cancelCallback}:IPhotoAddFormProps)=>{
+export const PhotoAddForm = ({open, submitCallback, cancelCallback}:IPhotoAddFormProps)=>{
     const [title,setTitle] = useState<string|undefined>(undefined)
     const [description,setDescription]= useState<string|undefined>(undefined)
     const [slot,setSlot] = useState<string|undefined>(undefined)
@@ -60,8 +55,7 @@ export const PhotoAddForm = ({open,album, submitCallback, cancelCallback}:IPhoto
                 title,
                 description,
                 slot,
-                type:"photo",
-                album:album.id!
+                type:"video",
             })
             resetForm()
         }catch(err){
@@ -78,9 +72,9 @@ export const PhotoAddForm = ({open,album, submitCallback, cancelCallback}:IPhoto
         setSlot(undefined)
         setFiles([])
     }
-    return <Dialog open={open}>
+    return <Dialog open={open} fullWidth maxWidth="lg">
             <DialogTitle>
-                Add Photo
+                Add Video
             </DialogTitle>
             <DialogContent>
                 <form className="flex flex-col gap-2">
@@ -88,10 +82,9 @@ export const PhotoAddForm = ({open,album, submitCallback, cancelCallback}:IPhoto
                     <TextField label="description" value={description} onChange={(e)=>setDescription(e.target.value)} ></TextField>
                     <TextField label="slot" value={slot} onChange={(e)=>setSlot(e.target.value)} ></TextField>
                     <Dropzone
-                        onDrop={(files)=>setFiles(files)}
+                        onDrop={(files)=>setFiles([files[0]])}
                         >
                             <div className="outline outline-2 flex justify-center items-center p-10">
-
                                 Drop here
                             </div>
                     </Dropzone>

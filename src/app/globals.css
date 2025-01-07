@@ -2,3 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
+.fade-in-bck {
+	-webkit-animation: fade-in-bck 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: fade-in-bck 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+  }
+  .not-visible {
+    opacity: 0;
+    visibility: visible;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+  }
+
+@font-face{
+    font-family: 'theseasons';
+    src:url("/fonts/Fontspring-DEMO-theseasons-reg.otf") format("otf");
+}
+@font-face{
+    font-family: 'theseasons';
+    font-weight: bold;
+    src:url("/fonts/Fontspring-DEMO-theseasons-bd.otf") format("otf");
+}
+@font-face{
+    font-family: 'theseasons';
+    font-weight: bold;
+    font-style: italic;
+    src:url("/fonts/Fontspring-DEMO-theseasons-bdit.otf") format("otf");
+}
+@font-face{
+    font-family: 'theseasons';
+    font-style: italic;
+    src:url("/fonts/Fontspring-DEMO-theseasons-it.otf") format("otf");
+}
+@font-face{
+    font-family: 'theseasons';
+    font-weight: lighter;
+    src:url("/fonts/Fontspring-DEMO-theseasons-lt.otf") format("otf");
+}
+@font-face{
+    font-family: 'theseasons';
+    font-weight: lighter;
+    font-style: italic;
+    src:url("/fonts/Fontspring-DEMO-theseasons-ltit.otf") format("otf");
+}
+
+@font-face{
+    font-family: 'bevietnam';
+    src:url("/fonts/BeVietnamPro-Regular.ttf") format("ttf")
+}
+@font-face{
+    font-family: 'bevietnam';
+    font-style: italic;
+    src:url("/fonts/BeVietnamPro-Italic.ttf") format("ttf")
+}
+@font-face{
+    font-family: 'bevietnam';
+    font-weight: bold;
+    src:url("/fonts/BeVietnamPro-Bold.ttf") format("ttf")
+}
+@font-face{
+    font-family: 'bevietnam';
+    font-weight: bold;
+    font-style: italic;
+    src:url("/fonts/BeVietnamPro-BoldItalic.ttf") format("ttf")
+}
+@font-face{
+    font-family: 'bevietnam';
+    font-weight: lighter;
+    src:url("/fonts/BeVietnamPro-Thin.ttf") format("ttf")
+}
+@font-face{
+    font-family: 'bevietnam';
+    font-weight: lighter;
+    font-style: italic;
+    src:url("/fonts/BeVietnamPro-ThinItalic.ttf") format("ttf")
+}

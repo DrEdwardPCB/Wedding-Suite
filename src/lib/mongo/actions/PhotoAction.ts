@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use server'
 
-import _ from "lodash"
+import _, { isNil } from "lodash"
 import Photo, { TZodPhotoSchema } from "../schema/Photo"
 export const commitAdd=async (photo:TZodPhotoSchema)=>{
     console.log("[Photo] commit add")
@@ -43,11 +43,14 @@ export const queryPhotoByAlbumId=async(album:string)=>{
     return parsed
 }
 export const getPhotoBySlot=async(slot:string)=>{
-    const parsed = (await Photo.findOne({
+    const query = (await Photo.findOne({
         slot
     }))
-    const result=_.omit(parsed.toJSON(),["_id","__v"])
-    result._id = parsed._id.toHexString()
+    if(isNil(query)){
+        return query
+    }
+    const result=_.omit(query.toJSON(),["_id","__v"])
+    result._id = query._id.toHexString()
     return result
     
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // /api/session
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
@@ -6,6 +7,7 @@ import { defaultSession, sessionOptions } from "../../../lib/ironsession/lib";
 import { redirect } from "next/navigation";
 import { sleep, SessionData } from "../../../lib/ironsession/lib";
 export async function POST(request: NextRequest) {
+  //@ts-ignore
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   
     const formData = await request.formData();
@@ -28,6 +30,7 @@ export async function POST(request: NextRequest) {
   // /api/session
   // /api/session?action=logout
   export async function GET(request: NextRequest) {
+    //@ts-ignore
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   
     const action = new URL(request.url).searchParams.get("action");

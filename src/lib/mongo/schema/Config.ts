@@ -12,7 +12,8 @@ const ConfigSchema = new Schema({
     youtubeStreamKey:{type:String},
     stageDisplayCategory:{type:String},
     stageDisplayId:{type:String},
-    createdAt:{type:Date, require:true}
+    createdAt:{type:Date, require:true},
+    guestSigninable:{type:Boolean, default:false}
 })
 
 export default models?.Config||model('Config', ConfigSchema )
@@ -32,7 +33,8 @@ export const ZodConfigSchema = z.object({
         z.literal("album")
     ]),
     stageDisplayId:z.string().optional(),
-    createdAt:z.date()
+    createdAt:z.date(),
+    guestSigninable:z.boolean(),
 
 })
 export type TZodConfigSchema = z.infer<typeof ZodConfigSchema>
