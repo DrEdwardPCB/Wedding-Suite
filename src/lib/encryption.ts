@@ -1,11 +1,11 @@
 import crypto from 'crypto'
-import { env } from './envalid/env'
 
 const ecnryption_method = "aes-256-cbc"
-const secret_iv=env.PW_ENCRYPTION_KEY
-const secret_key=env.PW_ENCRYPTION_IV
+const secret_iv=process.env.NEXT_PUBLIC_PW_ENCRYPTION_KEY
+const secret_key=process.env.NEXT_PUBLIC_PW_ENCRYPTION_IV
 
 if (!secret_key || !secret_iv || !ecnryption_method) {
+  console.log(secret_key,secret_iv,ecnryption_method)
   throw new Error('secretKey, secretIV, and ecnryptionMethod are required')
 }
 

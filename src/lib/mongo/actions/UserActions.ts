@@ -23,3 +23,12 @@ export const queryAll = async()=>{
     const parsed = (await User.find({})).map(e=>_.omit(e.toJSON(),[,"_id","__v"]))
     return parsed
 }
+
+export const findUserByUserId = async(id:string):Promise<TZodUserSchema|null>=>{
+    const user = await User.findOne({id})
+    if(!user){
+        return null
+    }
+    const parsed = _.omit(user,["_id","__v"]) as TZodUserSchema
+    return parsed
+}

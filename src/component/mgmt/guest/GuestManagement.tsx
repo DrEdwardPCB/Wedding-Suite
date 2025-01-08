@@ -12,7 +12,10 @@ import { DataGridPremium,
     GridRowId,
     GridRowModel,
     GridRowEditStopReasons,
-    GridSlotProps, } from '@mui/x-data-grid-premium';
+    GridSlotProps,
+    GridToolbarQuickFilter,
+    GridToolbarFilterButton,
+    GridToolbarColumnsButton, } from '@mui/x-data-grid-premium';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +28,7 @@ import { newSnowflakeId } from '@/lib/snowflake/generateSnowflake';
 import { commitAdd, commitDelete, commitUpdate, queryAll } from '@/lib/mongo/actions/UserActions';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { decryptData, encryptData } from '@/lib/encryption';
 
 
 declare module '@mui/x-data-grid-premium' {
@@ -57,6 +61,9 @@ declare module '@mui/x-data-grid-premium' {
         <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
           Add record
         </Button>
+        <GridToolbarFilterButton/>
+        <GridToolbarColumnsButton/>
+        <GridToolbarQuickFilter/>
       </GridToolbarContainer>
     );
   }
@@ -78,8 +85,7 @@ const GuestManagement=()=>{
   },[])
   const loadRowsFromDb = async ()=>{
     const rowsFromDb:TZodUserSchema[] = (await queryAll() )as unknown as TZodUserSchema[]
-    console.log(rowsFromDb)
-    setRows(rowsFromDb)
+    setRows(rowsFromDb.map(e=>({...e,password:decryptData(e.password)})))
 
   }
   const handleEditClick = (id: GridRowId) => () => {
@@ -150,9 +156,9 @@ const GuestManagement=()=>{
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     if(newRow.isNew){
-      await commitAdd(newRow)
+      await commitAdd({...newRow, password:encryptData(newRow.password)})
     }else{
-      await commitUpdate(updatedRow)
+      await commitUpdate({...updatedRow, password:encryptData(updatedRow.password)})
     }
     return updatedRow;
   };

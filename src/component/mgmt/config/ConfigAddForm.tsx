@@ -6,11 +6,10 @@ import { getAllVideos, getPhotoById } from "@/lib/mongo/actions/PhotoAction"
 import { TZodAlbumSchema } from "@/lib/mongo/schema/Album"
 import { TZodConfigSchema, ZodConfigSchema } from "@/lib/mongo/schema/Config"
 import { TZodPhotoSchema } from "@/lib/mongo/schema/Photo"
-import { Autocomplete, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material"
+import { Autocomplete, Button, Checkbox, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material"
 import { useEffect, useState } from "react"
 
 // this component is used to add new config and will override old one
-export const ConfigAddForm = ()=>{}
 export interface IAlbumAddFormProps{
     submitCallback?:()=>void
     cancelCallback?:()=>void
@@ -27,7 +26,7 @@ export interface IAutoConfigItem {
     id:string|null
     label:string
   }
-export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProps)=>{
+export const ConfigAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProps)=>{
     const [zoomSDKKey,setzoomSDKKey]=useState<string|undefined>(undefined)
     const [zoomSDKSecret,setzoomSDKSecret]=useState<string|undefined>(undefined)
     const [zoomAPIKey,setzoomAPIKey]=useState<string|undefined>(undefined)
@@ -38,6 +37,15 @@ export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProp
     const [youtubeStreamKey,setyoutubeStreamKey]=useState<string|undefined>(undefined)
     const [stageDisplayCategory,setstageDisplayCategory]=useState<IAutoConfigItem>(defaultOption)
     const [stageDisplayId,setstageDisplayId]=useState<IAutoConfigItem>(defaultOption)
+    const [guestSigninable, setguestSigninable] = useState<boolean>(false)
+    const [ceremonyRSVPLink, setceremonyRSVPLink] = useState<string|undefined>(undefined)
+    const [cocktailRSVPLink, setcocktailRSVPLink] = useState<string|undefined>(undefined)
+    const [banquetRSVPLink, setbanquetRSVPLink] = useState<string|undefined>(undefined)
+    const [emailjsAPIKey, setemailjsAPIKey] = useState<string|undefined>(undefined)
+    const [emailjsServiceId, setemailjsServiceId] = useState<string|undefined>(undefined)
+    const [emailjsTemplateId, setemailjsTemplateId] = useState<string|undefined>(undefined)
+    const [weddingWebsiteUrl, setweddingWebsiteUrl] = useState<string|undefined>(undefined)
+
 
     const [stageDisplayIdOptions, setStageDisplayIdOptions] = useState<IAutoConfigItem[]>([defaultOption])
     
@@ -58,9 +66,17 @@ export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProp
                 zoomVerificationToken,
                 youtubeStreamLink,
                 youtubeStreamKey,
-                stageDisplayCategory,
-                stageDisplayId,
-                createdAt:new Date()
+                stageDisplayCategory:stageDisplayCategory?.id??"album",
+                stageDisplayId:stageDisplayId?.id??"",
+                createdAt:new Date(),
+                guestSigninable,
+                ceremonyRSVPLink,
+                cocktailRSVPLink,
+                banquetRSVPLink,
+                emailjsAPIKey,
+                emailjsServiceId,
+                emailjsTemplateId,
+                weddingWebsiteUrl,
             })
             await commitAdd(validatedData)
             resetForm()
@@ -83,6 +99,14 @@ export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProp
         setyoutubeStreamKey(undefined)
         setstageDisplayCategory(defaultOption)
         setstageDisplayId(defaultOption)
+        setguestSigninable(false)
+        setceremonyRSVPLink(undefined)
+        setcocktailRSVPLink(undefined)
+        setbanquetRSVPLink(undefined)
+        setemailjsAPIKey(undefined)
+        setemailjsServiceId(undefined)
+        setemailjsTemplateId(undefined)
+        setweddingWebsiteUrl(undefined)
     }
 
     useEffect(()=>{
@@ -120,6 +144,14 @@ export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProp
         setyoutubeStreamLink(config.youtubeStreamLink)
         setyoutubeStreamKey(config.youtubeStreamKey)
         setstageDisplayCategory(config.stageDisplayCategory?{id:config.stageDisplayCategory,label:config.stageDisplayCategory}:defaultOption)
+        setguestSigninable(false)
+        setceremonyRSVPLink(config.ceremonyRSVPLink)
+        setcocktailRSVPLink(config.cocktailRSVPLink)
+        setbanquetRSVPLink(config.banquetRSVPLink)
+        setemailjsAPIKey(config.emailjsAPIKey)
+        setemailjsServiceId(config.emailjsServiceId)
+        setemailjsTemplateId(config.emailjsTemplateId)
+        setweddingWebsiteUrl(config.weddingWebsiteUrl)
         if(config.stageDisplayCategory==="album" && config.stageDisplayId){
             const result = await getAlbumById(config.stageDisplayId)
             setstageDisplayId({id:result._id,label:result.title})
@@ -148,29 +180,42 @@ export const AlbumAddForm = ({ submitCallback, cancelCallback}:IAlbumAddFormProp
                     <TextField label="youtubeStreamLink" value={youtubeStreamLink} onChange={(e)=>setyoutubeStreamLink(e.target.value)} ></TextField>
                     <TextField label="youtubeStreamKey" value={youtubeStreamKey} onChange={(e)=>setyoutubeStreamKey(e.target.value)} ></TextField>
                      <Autocomplete<IAutoConfigItem>
-                              disablePortal
-                              options={categoryOptions}
-                              sx={{ width: 300 }}
-                              value={stageDisplayCategory}
-                              onChange={(event: any, newValue: IAutoConfigItem|null) => {
-                                setstageDisplayCategory(newValue===null?defaultOption:newValue);
-                              }}
-                              renderInput={(params) => <TextField {...params} label="stageDisplayCategory" />}
-                              />
+                        disablePortal
+                        options={categoryOptions}
+                        sx={{ width: 300 }}
+                        value={stageDisplayCategory}
+                        onChange={(event: any, newValue: IAutoConfigItem|null) => {
+                            setstageDisplayCategory(newValue===null?defaultOption:newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} label="stageDisplayCategory" />}
+                        />
                     <Autocomplete<IAutoConfigItem>
-                              disablePortal
-                              options={stageDisplayIdOptions}
-                              sx={{ width: 300 }}
-                              value={stageDisplayId}
-                              onChange={(event: any, newValue: IAutoConfigItem|null) => {
-                                setstageDisplayId(newValue===null?defaultOption:newValue);
-                              }}
-                              renderInput={(params) => <TextField {...params} label="stageDisplayCategory" />}
-                              />
+                        disablePortal
+                        options={stageDisplayIdOptions}
+                        sx={{ width: 300 }}
+                        value={stageDisplayId}
+                        onChange={(event: any, newValue: IAutoConfigItem|null) => {
+                            setstageDisplayId(newValue===null?defaultOption:newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} label="stageDisplayId" />}
+                        />
+                    <FormControlLabel 
+                        control={
+                            <Checkbox checked={guestSigninable} onChange={()=>setguestSigninable(!guestSigninable)} ></Checkbox>
+                        }
+                    label="guestSigninable"/>
+                    <TextField label="ceremonyRSVPLink" value={ceremonyRSVPLink} onChange={(e)=>setceremonyRSVPLink(e.target.value)} ></TextField>
+                    <TextField label="cocktailRSVPLink" value={cocktailRSVPLink} onChange={(e)=>setcocktailRSVPLink(e.target.value)} ></TextField>
+                    <TextField label="banquetRSVPLink" value={banquetRSVPLink} onChange={(e)=>setbanquetRSVPLink(e.target.value)} ></TextField>
+                    <TextField label="emailjsAPIKey" value={emailjsAPIKey} onChange={(e)=>setemailjsAPIKey(e.target.value)} ></TextField>
+                    <TextField label="emailjsServiceId" value={emailjsServiceId} onChange={(e)=>setemailjsServiceId(e.target.value)} ></TextField>
+                    <TextField label="emailjsTemplateId" value={emailjsTemplateId} onChange={(e)=>setemailjsTemplateId(e.target.value)} ></TextField>
+                    <TextField label="weddingWebsiteUrl" value={weddingWebsiteUrl} onChange={(e)=>setweddingWebsiteUrl(e.target.value)} ></TextField>
+                    
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button type="button" onClick={handlePopulateFromLatestConfig}>Cancel</Button>
+                <Button type="button" onClick={handlePopulateFromLatestConfig}>Populate</Button>
                 <Button type="button" onClick={handleCancel}>Cancel</Button>
                 <Button type="button" onClick={handleSubmit}>Submit</Button>
             </DialogActions>

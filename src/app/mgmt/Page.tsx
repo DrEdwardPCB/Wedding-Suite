@@ -16,7 +16,7 @@ export default async function MgmtHomePage(){
     return (<div className="flex gap-4 items-center justify-start flex-col">
         <HomeRoute url={"/mgmt/album"} title="Album" icon={<PhotoAlbumIcon></PhotoAlbumIcon>}/>
         <HomeRoute url={"/mgmt/photo"} title="Photo" icon={<PhotoAlbumIcon></PhotoAlbumIcon>}/>
-        <HomeRoute url={"/mgmt/stream"} title="Stream" icon={<CastIcon></CastIcon>}/>
+        <HomeRoute url={"/mgmt/config"} title="Config" icon={<CastIcon></CastIcon>}/>
         <HomeRoute url={"/mgmt/game"} title="Game" icon={<VideogameAssetIcon></VideogameAssetIcon>}/>
         <HomeRoute url={"/mgmt/guest"} title="Guest" icon={<PeopleIcon></PeopleIcon>}/>
         <HomeRoute url={"/mgmt/video"} title="Video" icon={<TheatersIcon></TheatersIcon>}/>

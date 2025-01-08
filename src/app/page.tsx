@@ -2,9 +2,13 @@
 import { FadeInSection } from "@/component/common/FadeInSection";
 import { LoadImageFromDB } from "@/component/common/ImageSlot";
 import { HomeItemDisplay } from "@/component/HomeItemDisplay";
+import { getLatestConfig } from "@/lib/mongo/actions/ConfigActions";
+import { TZodConfigSchema } from "@/lib/mongo/schema/Config";
 import {ToastContainer} from "react-toastify"
+export const dynamic = 'force-dynamic'
 export default async function Home() {
   // p-8 bg-white w-[300px] shadow uppercase mt-8 mb-4 text-black border-black hover:bg-black self-end
+  const config = await getLatestConfig() as TZodConfigSchema
   return (
     <div>
       <div className="relative w-full h-[100vh] flex">
@@ -21,7 +25,7 @@ export default async function Home() {
           <FadeInSection className="flex gap-2 delay-500 m-14">
           {/* rsvp=signup signin=access different function */}
             <button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">RSVP</button>
-            <button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">sign in</button>
+            {config.guestSigninable?<button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">sign in</button>:<></>}
           </FadeInSection>
         </div>
       </div>

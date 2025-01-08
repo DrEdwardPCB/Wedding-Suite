@@ -35,7 +35,7 @@ async function uploadPhotos(
     const response = await fetch(url, { method: "POST", body });
     return await response.json();
   }
-export const PhotoAddForm = ({open, submitCallback, cancelCallback}:IPhotoAddFormProps)=>{
+export const VideoAddForm = ({open, submitCallback, cancelCallback}:IPhotoAddFormProps)=>{
     const [title,setTitle] = useState<string|undefined>(undefined)
     const [description,setDescription]= useState<string|undefined>(undefined)
     const [slot,setSlot] = useState<string|undefined>(undefined)
