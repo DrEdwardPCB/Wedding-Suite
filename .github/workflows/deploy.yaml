@@ -1,15 +1,13 @@
 name: Deploy Next.js to AWS ECS
 
-on:
-  push:
-    branches:
-      - main
+
+on: workflow_dispatch
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: nextjs-app
-  ECS_CLUSTER: my-ecs-cluster
-  ECS_SERVICE: my-ecs-service
+  ECR_REPOSITORY: ekwedding-app-repo
+  ECS_CLUSTER: ekwedding-ecs-cluster
+  ECS_SERVICE: ekwedding-service
 
 jobs:
   build-and-deploy:
