@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     fullChineseName:{type:String},
     fullEnglishName:{type:String},
     phoneNo:{type:String},
-    email:{type:String},
+    email:{type:String,required:true},
     onlineOnly:{type:Boolean,required:true},
     ceremony:{type:Boolean,required:true},
     dinner:{type:Boolean,required:true},
@@ -29,11 +29,11 @@ export const ZodUserSchema=z.object({
     fullChineseName:z.string().optional().nullable(),
     fullEnglishName:z.string().optional().nullable(),
     phoneNo:z.string().optional().nullable(),
-    email:z.string().optional().nullable(),
+    email:z.string(),
     onlineOnly:z.boolean(),
     ceremony:z.boolean(),
     dinner:z.boolean(),
-    password:z.string(),
+    password:z.string().min(8),
     side:z.enum(["GROOM","BRIDE","BOTH"]),
     category:z.string().optional().nullable(),
     remarks:z.string().optional().nullable(),
@@ -43,3 +43,22 @@ export const ZodUserSchema=z.object({
     checkedIn:z.boolean(),// only apply to ceremony==true||dinner==true
 })
 export type TZodUserSchema = z.infer<typeof ZodUserSchema>
+
+export const getDefault = ():Omit<TZodUserSchema,"id">=>({
+    preferredName:"",
+    fullChineseName:"",
+    fullEnglishName:"",
+    phoneNo:"",
+    email:"",
+    onlineOnly:false,
+    ceremony:false,
+    dinner:false,
+    password:"",
+    side:"BOTH",
+    category:"",
+    remarks:"",
+    foodAllergies:"",
+    dinnerDeskNumber:0,
+    ceremonySeatNumber:0,
+    checkedIn:false
+})

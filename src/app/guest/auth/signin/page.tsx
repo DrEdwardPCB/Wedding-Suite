@@ -1,4 +1,4 @@
-import { getSession, loginMgmt } from "@/lib/ironsession/action";
+import { getSession, loginGuest } from "@/lib/ironsession/action";
 import { redirect } from "next/navigation";
 import { SigninForm } from "@/component/SigninForm";
 
@@ -8,8 +8,8 @@ export default async function GuestLoginPage(){
         redirect("/guest/")
     }
     return (<div className="flex gap-4 items-center justify-start flex-col">
-        <form action={loginMgmt} className="flex flex-col items-center justify-center gap-2">
-        <SigninForm/>
+        <form action={loginGuest} className="flex flex-col items-center justify-center gap-2">
+            <SigninForm/>
         </form>
     </div>)
 }

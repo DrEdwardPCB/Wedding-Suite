@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { getPhotoBySlot } from "@/lib/mongo/actions/PhotoAction"
 import { S3Image } from "./images"
-// import Image from "next/image"
 export async function LoadImageFromDB({slot,className}:{slot:string, className?:string}){
     const image = await getPhotoBySlot(slot)
     if(image?.fileLocation){

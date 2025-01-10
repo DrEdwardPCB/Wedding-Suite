@@ -1,0 +1,54 @@
+name: Deploy Next.js to AWS ECS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: nextjs-app
+  ECS_CLUSTER: my-ecs-cluster
+  ECS_SERVICE: my-ecs-service
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Login to AWS
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    # Login to ECR
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    # Build Docker image
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ env.ECR_REPOSITORY }} --build-arg MONGO_URI={secret.MONGO_URI} --build-arg COOKIE_SECRET_KEY={secret.COOKIE_SECRET_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_KEY={secret.NEXT_PUBLIC_PW_ENCRYPTION_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_IV={secret.NEXT_PUBLIC_PW_ENCRYPTION_IV} --build-arg MGMT_USERNAME={secret.MGMT_USERNAME} --build-arg MGMT_PASSWORD={secret.MGMT_PASSWORD} --build-arg AWS_REGION={secret.AWS_REGION} --build-arg AMPLIFY_BUCKET={secret.AMPLIFY_BUCKET} --build-arg AWS_ACCESS_KEY_ID={secret.AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_ACCESS_KEY={secret.AWS_SECRET_ACCESS_KEY} --no-cache .
+        docker tag ${{ env.ECR_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+
+    # Push Docker image to ECR
+    - name: Push Docker image to Amazon ECR
+      run: |
+        docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+
+    # Deploy to ECS
+    - name: Deploy to Amazon ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ecs-task-definition.json
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true

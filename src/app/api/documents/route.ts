@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // app/api/documents/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,6 +22,7 @@ export async function GET() {
 
 // endpoint to upload a file to the bucket
 export async function POST(request: NextRequest) {
+  //@ts-ignore
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isAdmin){
     return NextResponse.error()

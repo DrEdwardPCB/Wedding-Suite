@@ -29,6 +29,16 @@ export const findUserByUserId = async(id:string):Promise<TZodUserSchema|null>=>{
     if(!user){
         return null
     }
-    const parsed = _.omit(user,["_id","__v"]) as TZodUserSchema
+    const parsed = _.omit(user.toJSON(),["_id","__v"]) as TZodUserSchema
+    return parsed
+}
+export const findUserByEmail = async(email:string):Promise<TZodUserSchema|null>=>{
+    const user = await User.findOne({email})
+    if(!user){
+        return null
+    }
+    console.log(user)
+    const parsed = _.omit(user.toJSON(),["_id","__v"]) as TZodUserSchema
+    console.log(parsed)
     return parsed
 }
