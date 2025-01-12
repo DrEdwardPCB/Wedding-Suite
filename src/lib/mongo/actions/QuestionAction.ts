@@ -25,19 +25,19 @@ export const commitUpdate=async (id:string, question:TZodQuestionSchema)=>{
     // console.log(question)
     Question.findOneAndUpdate({_id:id},question).then((question)=>question.save())
 }
-export const queryAll = async()=>{
+export const queryAll = async():Promise<(TZodQuestionSchema&{_id:string})[]>=>{
     //@ts-ignore
         const parsed = (await Question.find({})).map(e=>{
             const result=_.omit(e.toJSON(),["__v"])
             result._id = e._id.toHexString()
             return result
         })
-        return parsed
+        return parsed as (TZodQuestionSchema&{_id:string})[]
 }
 
 export const getQuestionById=async(id:string):Promise<TZodQuestionSchema&{_id:string}> =>{
     const parsed = (await Question.findById(id)).toJSON()
-    const result=_.omit(parsed.toJSON(),["_id","__v"])
+    const result=_.omit(parsed,["_id","__v"])
     result._id = parsed._id.toHexString()
     return result as TZodQuestionSchema&{_id:string}
 }
@@ -52,6 +52,16 @@ export const registerCorrect = async(questionId:string, userId:string)=>{
 export const findWinnerOfQuestion = async(questionId:string):Promise<string[]>=>{
     const question = await QuestionSchema.findById(questionId).populate("winners");
     return question.winners.map((e:TZodUserSchema)=>e.preferredName)
+}
+
+export const findNoWinnersQuestion = async():Promise<(TZodQuestionSchema&{_id:string})[]>=>{
+    //@ts-ignore
+    const parsed = (await Question.find({ winners: { $size: 0 } })).map(e=>{
+        const result=_.omit(e.toJSON(),["__v"])
+        result._id = e._id.toHexString()
+        return result
+    })
+    return parsed as (TZodQuestionSchema&{_id:string})[]
 }
 
 export const getOverallScorePerUser = async():Promise<Record<string,number>>=>{

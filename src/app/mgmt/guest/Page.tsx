@@ -11,12 +11,12 @@ export default async function GuestPage(){
     }
     return(<div>
         <div className="w-full p-10 flex items-center justify-between">
-                <MgmtHome/>
-                    <h1 className="">Guest</h1>
-                <Button onClick = {logoutMgmt}>
-                    logout
-                </Button>
-            </div>
+            <MgmtHome/>
+                <h1 className="">Guest</h1>
+            <Button onClick = {logoutMgmt}>
+                logout
+            </Button>
+        </div>
         <GuestManagement/>
     </div>)
 }

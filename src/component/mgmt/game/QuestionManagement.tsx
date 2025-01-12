@@ -1,28 +1,29 @@
-'use client'
+"use client"
 
-import { queryAll } from "@/lib/mongo/actions/AlbumActions";
+import { queryAll } from "@/lib/mongo/actions/QuestionAction"
 import { Button } from "@mui/material"
-import { useState , useEffect} from "react";
-import { AlbumItem, IAlbumItemProps } from './AlbumItem';
-import { AlbumAddForm } from "./AlbumAddForm";
-import { AlbumEditForm } from "./AlbumEditForm";
+import { useEffect, useState } from "react"
+import { QuestionItem } from "./QuestionItem"
+import { QuestionEditForm } from "./QuestionEditForm"
+import { QuestionAddForm } from "./QuestionAddForm"
+import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema"
 
-export const AlbumManagement =()=>{
-    const [albums,setAlbums]= useState<any[]>([])
+export const QuestionManagement = ()=>{
+    const [questions,setQuestions]= useState<(TZodQuestionSchema&{_id:string})[]>([])
     const [selectedEdit, setSelectedEdit]=useState<undefined|string>()
     const [openAdd, setOpenAdd] = useState<boolean>(false)
      useEffect(()=>{
         refresh()
     },[])
     async function refresh(){
-        const albumList = await queryAll();
-        setAlbums(albumList)
+        const questionList = await queryAll();
+        setQuestions(questionList)
     }
     const AddButton=()=>{
         return (
             <div className="z-100">
                 <Button onClick={()=>{setOpenAdd(true)}}>Add</Button>
-                <AlbumAddForm open={openAdd} 
+                <QuestionAddForm open={openAdd} 
                 submitCallback={()=>{
                     refresh() 
                     setOpenAdd(false)}} 
@@ -30,17 +31,17 @@ export const AlbumManagement =()=>{
             </div>
         )
     }
-    if(albums.length<=0){
+    if(questions.length<=0){
         return <div className="flex-grow h-full w-full self-stretch">
             <AddButton/>
         </div>
     }
     return <div className="flex-grow h-full w-full">
         <AddButton/>
-        {albums.map((e:IAlbumItemProps)=>{
-            return <AlbumItem key={e._id} _id={e._id} title={e.title} description={e.description} hidden={e.hidden} onClick={setSelectedEdit}/>
+        {questions.map((e)=>{
+            return <QuestionItem key={e._id} question={e} onClick={setSelectedEdit}/>
         })}
-        <AlbumEditForm _id={selectedEdit} 
+        <QuestionEditForm _id={selectedEdit} 
             submitCallback={()=>{
                 refresh() 
                 setSelectedEdit(undefined)

@@ -13,7 +13,7 @@ export default async function MgmtHomePage(){
     if(!session.isAdmin||!session.isLoggedIn){
         redirect("/mgmt/auth")
     }
-    return (<div className="flex gap-4 items-center justify-start flex-col">
+    return (<div className="flex gap-4 items-center justify-start flex-col bg-gradient-to-br from-themeLight to-themeSemiLight min-h-[100vh]">
         <HomeRoute url={"/mgmt/album"} title="Album" icon={<PhotoAlbumIcon></PhotoAlbumIcon>}/>
         <HomeRoute url={"/mgmt/photo"} title="Photo" icon={<PhotoAlbumIcon></PhotoAlbumIcon>}/>
         <HomeRoute url={"/mgmt/config"} title="Config" icon={<CastIcon></CastIcon>}/>

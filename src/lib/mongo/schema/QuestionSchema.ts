@@ -1,4 +1,4 @@
-import { Schema, model, Types, models } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import { z } from 'zod';
 import { ZodUserSchema } from './UserSchema';
 
@@ -9,10 +9,10 @@ const QuestionSchema = new Schema({
     C:{type:String, required:true},
     D:{type:String, required:true},
     ans:{type:String, enum:["A","B","C","D"],required:true},
-    winners:[{type: Types.ObjectId,ref:"User"}]
+    winners:[{type: Schema.Types.ObjectId,ref:"User"}]
 })
 
-export default models.Question||model('Question', QuestionSchema)
+export default models?.Question||model('Question', QuestionSchema)
 export const ZodQuestionSchema = z.object({
     question: z.string(),
     A: z.string(),
@@ -25,7 +25,7 @@ export const ZodQuestionSchema = z.object({
         z.literal("C"),
         z.literal("D"),
     ]),
-    winners:z.array(ZodUserSchema)
+    winners:z.array(ZodUserSchema).optional()
 })
 
 export type TZodQuestionSchema = z.infer<typeof ZodQuestionSchema>
