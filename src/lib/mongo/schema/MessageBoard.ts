@@ -1,4 +1,4 @@
-import {Schema, model, Types} from 'mongoose'
+import {Schema, model, Types, models} from 'mongoose'
 
 const MessageBoardSchema = new Schema({
     createdAt:{type:Date, reqired:true},
@@ -7,4 +7,4 @@ const MessageBoardSchema = new Schema({
     User:{type: Types.ObjectId,ref:"User"}
 })
 
-export default model('MessageBoard', MessageBoardSchema)
+export default models.MessageBoard || model('MessageBoard', MessageBoardSchema)

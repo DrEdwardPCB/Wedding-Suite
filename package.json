@@ -40,6 +40,7 @@
     "event-source-plus": "^0.1.8",
     "iron-session": "^8.0.4",
     "lodash": "^4.17.21",
+    "mongodb": "6.12",
     "mongoose": "^8.8.2",
     "mui-file-dropzone": "^4.0.2",
     "next": "15.1.4",

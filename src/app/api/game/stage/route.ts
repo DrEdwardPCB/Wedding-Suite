@@ -4,6 +4,7 @@ import { findNoWinnersQuestion } from '@/lib/mongo/actions/QuestionAction';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server'
+import { lastValueFrom } from 'rxjs';
 
 export const runtime = 'nodejs'
 // This is required to enable streaming
@@ -17,22 +18,27 @@ export async function POST(request:NextRequest){
         return NextResponse.error()
     }
     const formData = await request.formData();
-    const gm = GameManager.GetInstance()
-    const targetState = await formData.get("targetState") as "Prepare"|"Open"|"Display"|"End"
+    const gm = await GameManager.GetInstance()
+    console.log(gm)
+    const targetState = await formData.get("targetState") as "Prepare"|"Open"|"Calculate"|"Display"|"End"
     if(targetState==="Prepare"){
         const nextQuestionsPool = await findNoWinnersQuestion()
+        console.log(nextQuestionsPool)
         if(nextQuestionsPool.length===0){
-            gm?.ActionFinishSession()
+            await gm?.ActionFinishSession()
         }else{
-            gm?.ActionChangeQuestion(nextQuestionsPool[Math.min(Math.random()*(nextQuestionsPool.length-1))]._id)
+            console.log(nextQuestionsPool[Math.min(Math.random()*(nextQuestionsPool.length-1))]._id)
+            await gm?.ActionChangeQuestion(nextQuestionsPool[Math.min(Math.random()*(nextQuestionsPool.length-1))]._id)
+            console.log(await lastValueFrom(gm.getState().asObservable()))
         }
     }else if(targetState==="Open"){
-        gm?.ActionOpen()
-    }else if(targetState==="Display"){
+        await gm?.ActionOpen()
+    }else if(targetState==="Calculate"){
         await gm?.ActionCalculate()
+    }else if(targetState==="Display"){
         await gm?.ActionDisplay()
     }else if (targetState==="End"){
         await gm?.ActionReset()
     }
-    return NextResponse.json({});
+    return NextResponse.json({targetState});
 }

@@ -1,4 +1,4 @@
-import {  GameManager } from '@/lib/game/GameManager'
+import { GameManager } from '@/lib/game/GameManager'
 import { SessionData, sessionOptions } from '@/lib/ironsession/lib';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
@@ -8,12 +8,13 @@ export const runtime = 'nodejs'
 // This is required to enable streaming
 export const dynamic = 'force-dynamic'
 
-// Events
-// Update Question ID
+
+// update question id
+// start question
+// end question
 export async function GET(request: NextRequest){
-  //check 
-  const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-  if (!session.isAdmin){
+    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+  if (!session){
     return NextResponse.error()
   }
 
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest){
   const writer = responseStream.writable.getWriter()
   const encoder = new TextEncoder()
 
-//   Close if client disconnects
+  // Close if client disconnects
   request.signal.onabort = (evt) => {
     console.log("abort")
     console.log(evt)
@@ -32,11 +33,11 @@ export async function GET(request: NextRequest){
   }
   const gm = await GameManager.GetInstance()
   const gameState = gm?.getState()
-//   console.log(gm,gameState)
   const heartbeatInterval = setInterval(() => {
     console.log("heartbeat")
     sendData("heartbeat")
   }, 15000);
+
   function sendData(data: any) {
     const formattedData = `data: ${JSON.stringify(data)}\n\n`
     writer.write(encoder.encode(formattedData))
@@ -67,21 +68,18 @@ export async function GET(request: NextRequest){
   }
   const sub = gameState?.subscribe({
         next:async (v)=>{
-            // console.log("subscription:", v, gm.getCurrentState(), gm)
-            onStateUpdate(v)
+          onStateUpdate(v)
         }
   })
   onStateUpdate(await gm.getCurrentState())
 
-  console.log("presend")
   // Function to send data to the client
-  return new NextResponse(responseStream.readable, {
+  return new Response(responseStream.readable, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Content-Encoding': 'none',
       Connection: 'keep-alive',
-      'Cache-Control': 'no-cache, no-transform',
-      'Access-Control-Allow-Origin': '*'
+      'Cache-Control': 'no-cache, no-transform'
     }
   })
 }
+//submit answer

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 export default async function GamePage(){
     const session = await getSession();
         if(!session.userid||session.isAdmin||!session.isLoggedIn){
-            alert("You have not loggedin we are redirecting you to mgmt login")
             redirect("/guest/auth/signin")
         }
         return(

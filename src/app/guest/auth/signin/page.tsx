@@ -4,7 +4,7 @@ import { SigninForm } from "@/component/SigninForm";
 
 export default async function GuestLoginPage(){
     const session = await getSession();
-    if(session.isAdmin&&session.isLoggedIn){
+    if(!session.isAdmin&&session.isLoggedIn){
         redirect("/guest/")
     }
     return (<div className="flex gap-4 items-center justify-start flex-col">

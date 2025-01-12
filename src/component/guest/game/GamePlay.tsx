@@ -3,8 +3,9 @@
 import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema";
 import { Button } from "@mantine/core";
 import { CircularProgress } from "@mui/material";
+import { EventSourceController, EventSourcePlus } from "event-source-plus";
 import _, { isNil } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"} | TZodQuestionSchema | undefined
@@ -45,16 +46,48 @@ export const GamePlay =({userId}:IGamePlayProps)=>{
     const [question,setQuestion] = useState<TZodQuestionSchema|undefined>()
     const [correct,setCorrect] = useState<boolean|undefined>()
     const [userResponse, setUserResponse] = useState<"A"|"B"|"C"|"D"|undefined>()
-    useEffect(() => {
-        const evtSource = new EventSource("/api/game/user");
-        evtSource.onmessage = (event) => {
-          if (event.data) {
-            setData(JSON.parse(event.data));
-          }
-        };
-        return ()=>evtSource.close()
-    }, []);
+    const evt = useRef<EventSourceController|undefined>()
+    const startEventStream = ()=>{
+        console.log("starting")
+        const evtSource = new EventSourcePlus("/api/game/user/sse");
+        const controller = evtSource.listen({
+            onRequest({ request, options }) {
+                console.log(request, options);
+        
+                // add current time query search params
+                options.query = options.query || {};
+                options.query.t = new Date();
+                options.headers.set("accept-encoding","*")
+            },
+            async onRequestError({ request, error }) {
+                console.log(`[request error]`, request, error);
+            },
+            onMessage(event){
+                console.log(event)
+                const dat = JSON.parse(event.data)
+                console.log(dat)
+                if(dat==="heartbeat"){
+                    return
+                }
+                if (dat) {
+                    setData(dat);
+                }
+            },
+            async onResponse({  response }) {
+                console.log(`Received status code: ${response.status}`);
+            },
 
+        })
+
+        evt.current = controller
+    }
+    useEffect(() => {
+        startEventStream()
+        return ()=>{
+            console.log('EventSource closed:', "effect end")
+            evt.current?.abort()
+        }
+    }, []);
     //ans check
     const submitAnswer=(ans:"A"|"B"|"C"|"D")=>{
         setUserResponse(ans)

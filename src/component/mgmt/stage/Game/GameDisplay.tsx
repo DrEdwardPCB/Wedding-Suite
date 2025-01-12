@@ -3,17 +3,16 @@
 import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema";
 import { Button } from "@mantine/core";
 import { CircularProgress } from "@mui/material";
-import _, { isNil } from "lodash";
+import _ from "lodash";
 import { useEffect, useRef, useState } from "react";
 import useSWRMutation from "swr/mutation";
-import { useInterval, useTimeout } from "usehooks-ts";
+import { EventSourceController, EventSourcePlus } from "event-source-plus";
 
 type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"} | TZodQuestionSchema | undefined
-
 async function updateStage(
     url:string,
     {arg}:{arg:{
-        targetState:"Prepare"|"Open"|"Display"|"End"
+        targetState:"Prepare"|"Open"|"Display"|"End"|"Calculate"
     }}
 ):Promise<object[]>{
     const body = new FormData()
@@ -42,43 +41,47 @@ export const GameDisplay =()=>{
     const { trigger } = useSWRMutation("/api/game/stage", updateStage);
     const [countDown, setCountDown] = useState<number>(0)
     const [question,setQuestion] = useState<TZodQuestionSchema|undefined>()
-    const evt = useRef<EventSource|undefined>()
+    const evt = useRef<EventSourceController|undefined>()
+    const [displayStarted, setDisplayStarted] = useState(false)
     const startEventStream = ()=>{
         console.log("starting")
-        const evtSource = new EventSource("/api/game/stage/sse");
-        evtSource.onopen = () => {
-            console.log('Connection to server opened')
-        }
-        evtSource.onmessage = (event) => {
-            console.log(event)
-            if(event.data==="heartbeat"){
-                return
-            }
-            if (event.data) {
-                setData(JSON.parse(event.data));
-            }
-        };
-        evtSource.onerror = (e) => {
-            console.log('EventSource closed:', e)
-            evtSource.close() // Close the connection if an error occurs
-        }
-        console.log(evtSource)
-        evt.current = evtSource
+        const evtSource = new EventSourcePlus("/api/game/stage/sse");
+        const controller = evtSource.listen({
+            onRequest({ request, options }) {
+                console.log(request, options);
+        
+                // add current time query search params
+                options.query = options.query || {};
+                options.query.t = new Date();
+                options.headers.set("accept-encoding","*")
+            },
+            async onRequestError({ request, error }) {
+                console.log(`[request error]`, request, error);
+            },
+            onMessage(event){
+                console.log(event)
+                const dat = JSON.parse(event.data)
+                console.log(dat)
+                if(dat==="heartbeat"){
+                    return
+                }
+                if (dat) {
+                    setData(dat);
+                }
+            },
+            async onResponse({  response }) {
+                console.log(`Received status code: ${response.status}`);
+            },
+
+        })
+
+        evt.current = controller
     }
-    useInterval(()=>{
-        if(isNil(evt.current)){
-            startEventStream()
-        }
-        if(evt.current?.readyState===EventSource.CLOSED || evt.current?.readyState===EventSource.CONNECTING){
-            evt.current.close()
-            startEventStream()
-        }
-    },5000)
     useEffect(() => {
         startEventStream()
         return ()=>{
             console.log('EventSource closed:', "effect end")
-            evt.current?.close()
+            evt.current?.abort()
         }
     }, []);
 
@@ -88,9 +91,15 @@ export const GameDisplay =()=>{
     }
     const StartQuestion=()=>{
         trigger({targetState:"Open"})
+        setDisplayStarted(false)
+    }
+    const StartCalculate=()=>{
+        trigger({targetState:"Calculate"})
+        setDisplayStarted(true)
     }
     const StartDisplay=()=>{
         trigger({targetState:"Display"})
+        setDisplayStarted(true)
     }
     const ResetGameManager=()=>{
         trigger({targetState:"End"})
@@ -99,19 +108,23 @@ export const GameDisplay =()=>{
     // handle question display countdown
     const interval = useRef<undefined|ReturnType<typeof setInterval>>()
     useEffect(()=>{
-        if(isOpenCommand(data)){
+        if(isOpenCommand(data)&&!displayStarted){
             StartQuestion()
             setCountDown(20)
             interval.current=setInterval(()=>{
                 setCountDown(cd=>cd-1)
             },1000)
             setTimeout(()=>{
-                StartDisplay()
+                StartCalculate()
                 clearInterval(interval.current)
+                interval.current=undefined
 
             },20000)
         }
-    },[data])
+        if(isCloseCommand(data)){
+            StartDisplay()
+        }
+    },[data,displayStarted])
 
     // handle saving current question
     useEffect(()=>{
@@ -119,11 +132,11 @@ export const GameDisplay =()=>{
             setQuestion(data)
         }
     },[data])
-
     //Display
     if(isQuestionWinningData(data)){
         return(
             <div>
+                <p>Display question result</p>
                 {data.toString()}
                 <Button onClick={()=>NextStep()}>Next</Button>
             </div>
@@ -133,12 +146,23 @@ export const GameDisplay =()=>{
     if(_.isNil(data)){
         return(
             <div>
+                <p>initial</p>
                 <Button onClick={()=>NextStep()}>Start</Button>
             </div>
         )
     }
+    //questionArrive
+    if(isQuestion(data)&&question){
+        return(
+            <div>
+                <p>{question!.question}</p>
+                <Button onClick={()=>StartQuestion()}>Start</Button>
+            </div>
+        )
+    }
     //Close
-    if(countDown===0){
+    
+    if(countDown<=0){
         return (
             <div>
                 <CircularProgress/>
@@ -156,6 +180,7 @@ export const GameDisplay =()=>{
     //Overall
     if(isOverallWinningData(data)){
         return (<div>
+            <p>Display overall result</p>
             {JSON.stringify(data)}
             <Button onClick={()=>ResetGameManager()}>End Back to Main</Button>
         </div>)
