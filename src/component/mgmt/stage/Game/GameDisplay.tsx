@@ -3,9 +3,10 @@
 import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema";
 import { Button } from "@mantine/core";
 import { CircularProgress } from "@mui/material";
-import _ from "lodash";
+import _, { isNil } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import useSWRMutation from "swr/mutation";
+import { useInterval, useTimeout } from "usehooks-ts";
 
 type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"} | TZodQuestionSchema | undefined
 
@@ -41,26 +42,43 @@ export const GameDisplay =()=>{
     const { trigger } = useSWRMutation("/api/game/stage", updateStage);
     const [countDown, setCountDown] = useState<number>(0)
     const [question,setQuestion] = useState<TZodQuestionSchema|undefined>()
-    useEffect(() => {
+    const evt = useRef<EventSource|undefined>()
+    const startEventStream = ()=>{
         console.log("starting")
-        const evtSource = new EventSource("/api/game/stage");
+        const evtSource = new EventSource("/api/game/stage/sse");
         evtSource.onopen = () => {
             console.log('Connection to server opened')
-          }
+        }
         evtSource.onmessage = (event) => {
-        console.log(event)
-          if (event.data) {
-            setData(JSON.parse(event.data));
-          }
+            console.log(event)
+            if(event.data==="heartbeat"){
+                return
+            }
+            if (event.data) {
+                setData(JSON.parse(event.data));
+            }
         };
         evtSource.onerror = (e) => {
             console.log('EventSource closed:', e)
             evtSource.close() // Close the connection if an error occurs
         }
         console.log(evtSource)
+        evt.current = evtSource
+    }
+    useInterval(()=>{
+        if(isNil(evt.current)){
+            startEventStream()
+        }
+        if(evt.current?.readyState===EventSource.CLOSED || evt.current?.readyState===EventSource.CONNECTING){
+            evt.current.close()
+            startEventStream()
+        }
+    },5000)
+    useEffect(() => {
+        startEventStream()
         return ()=>{
             console.log('EventSource closed:', "effect end")
-            evtSource.close()
+            evt.current?.close()
         }
     }, []);
 

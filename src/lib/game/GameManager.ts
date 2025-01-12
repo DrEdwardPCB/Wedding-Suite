@@ -1,7 +1,7 @@
 import { isNil } from "lodash"
 import  { TZodQuestionSchema } from "../mongo/schema/QuestionSchema"
 import { findWinnerOfQuestion, getOverallScorePerUser, getQuestionById, registerCorrect } from "../mongo/actions/QuestionAction"
-import { Subject } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 export class GameManager{
     private static instance:GameManager|undefined
     private constructor(){
@@ -77,6 +77,11 @@ export class GameManager{
     public async ActionReset(){
         // destroy the instance, calling GetInstance will recreate
         GameManager.instance=undefined
+    }
+
+    public async getCurrentState():Promise<"Prepare"|"Open"|"Calculate"|"Display"|"Overall">{
+        const currentState = await lastValueFrom(this.state.asObservable())
+        return currentState
     }
 
 }

@@ -37,6 +37,7 @@
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.5.2",
     "envalid": "^8.0.0",
+    "event-source-plus": "^0.1.8",
     "iron-session": "^8.0.4",
     "lodash": "^4.17.21",
     "mongoose": "^8.8.2",
