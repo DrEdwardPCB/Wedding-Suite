@@ -163,6 +163,32 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+# Additional Policy for ECR Access
+resource "aws_iam_policy" "ecr_access_policy" {
+  name        = "ECRAccessPolicy"
+  description = "Policy for ECS tasks to access ECR"
+  
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ],
+        Resource = "arn:aws:ecr:us-east-1:458044237546:repository/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_ecr_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.ecr_access_policy.arn
+}
 
 # ECS Task Definition
 resource "aws_ecs_task_definition" "ekwedding_task" {
@@ -206,11 +232,44 @@ resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_subnet" "my_subnet" {
+resource "aws_subnet" "my_subnet_a" {
   vpc_id                  = aws_vpc.my_vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "my_subnet_b" {
+  vpc_id                  = aws_vpc.my_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+}
+
+# Internet Gateway
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpc.id
+}
+# Route Table for Public Subnet
+resource "aws_route_table" "public_route" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my_igw.id
+  }
+}
+
+# Association for Subnet A
+resource "aws_route_table_association" "public_route_association_a" {
+  subnet_id      = aws_subnet.my_subnet_a.id
+  route_table_id = aws_route_table.public_route.id
+}
+
+# Association for Subnet B
+resource "aws_route_table_association" "public_route_association_b" {
+  subnet_id      = aws_subnet.my_subnet_b.id
+  route_table_id = aws_route_table.public_route.id
 }
 
 # Security Group for ECS
@@ -242,7 +301,53 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type = "FARGATE"
 
   network_configuration {
-    subnets         = aws_subnet.my_subnet[*].id
+    subnets         = [
+      aws_subnet.my_subnet_a.id,
+      aws_subnet.my_subnet_b.id
+    ]
     security_groups = [aws_security_group.ecs_security_group.id]
+  }
+}
+
+# application loadbalancer
+resource "aws_lb" "application_lb" {
+  name               = "my-application-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.ecs_security_group.id]
+  subnets            = [
+    aws_subnet.my_subnet_a.id,
+    aws_subnet.my_subnet_b.id
+  ]
+
+  enable_deletion_protection = false
+}
+
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.application_lb.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = "arn:aws:acm:us-east-1:458044237546:certificate/4eff10d0-9dd5-4eb2-bed0-5c2b73faca0f"
+
+  default_action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.my_target_group.arn
+  }
+}
+
+resource "aws_lb_target_group" "my_target_group" {
+  name     = "my-target-group"
+  port     = 3000
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.my_vpc.id
+
+  health_check {
+    path                = "/"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold  = 2
+    unhealthy_threshold = 2
   }
 }
