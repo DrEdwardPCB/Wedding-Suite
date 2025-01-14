@@ -25,6 +25,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "@statelyai/inspect": "^0.4.0",
     "@xstate/react": "^5.0.2",
+    "@zoom/videosdk": "^2.1.0",
     "dayjs": "^1.11.13",
     "envalid": "^8.0.0",
     "event-source-plus": "^0.1.8",
