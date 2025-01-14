@@ -61,9 +61,10 @@ export async function GET(request: NextRequest){
         case "Overall":
             const overallResult = await gm?.GetOverallScore()
             sendData(overallResult)
-            writer.close()
-            sub?.unsubscribe()
             return 
+        case "End":
+            sendData({state:"end"})
+            return
     }
   }
   const sub = gameState?.subscribe({

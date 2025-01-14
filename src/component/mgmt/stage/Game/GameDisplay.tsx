@@ -3,10 +3,19 @@
 import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema";
 import { Button } from "@mantine/core";
 import { CircularProgress } from "@mui/material";
-import _ from "lodash";
+import _, { isNil } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { EventSourceController, EventSourcePlus } from "event-source-plus";
+import { useMachine } from '@xstate/react';
+import { createBrowserInspector } from '@statelyai/inspect';
+import { gameMachine } from "@/lib/xstate/gameMachine";
+import Link from 'next/link'
+
+const { inspect } = createBrowserInspector({
+  // Comment out the line below to start the inspector
+  autoStart: false
+});
 
 type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"} | TZodQuestionSchema | undefined
 async function updateStage(
@@ -36,15 +45,13 @@ function isCloseCommand(arg:TEventData):arg is {state:"stop"}{
 function isQuestion(arg:TEventData):arg is TZodQuestionSchema{
     return !_.isNil(arg)&&!isQuestionWinningData(arg) && _.has(arg,"ans")
 }
+// use xstate to copy the finite state machine to here
 export const GameDisplay =()=>{
     const [data, setData] = useState<TEventData>()
     const { trigger } = useSWRMutation("/api/game/stage", updateStage);
-    const [countDown, setCountDown] = useState<number>(0)
-    const [question,setQuestion] = useState<TZodQuestionSchema|undefined>()
     const evt = useRef<EventSourceController|undefined>()
-    const [displayStarted, setDisplayStarted] = useState(false)
+    const [state,send]=useMachine(gameMachine,{inspect})
     const startEventStream = ()=>{
-        console.log("starting")
         const evtSource = new EventSourcePlus("/api/game/stage/sse");
         const controller = evtSource.listen({
             onRequest({ request, options }) {
@@ -91,59 +98,73 @@ export const GameDisplay =()=>{
     }
     const StartQuestion=()=>{
         trigger({targetState:"Open"})
-        setDisplayStarted(false)
     }
     const StartCalculate=()=>{
         trigger({targetState:"Calculate"})
-        setDisplayStarted(true)
     }
     const StartDisplay=()=>{
         trigger({targetState:"Display"})
-        setDisplayStarted(true)
     }
     const ResetGameManager=()=>{
         trigger({targetState:"End"})
+        evt.current?.abort()
     }
 
     // handle question display countdown
     const interval = useRef<undefined|ReturnType<typeof setInterval>>()
     useEffect(()=>{
-        if(isOpenCommand(data)&&!displayStarted){
-            StartQuestion()
-            setCountDown(20)
-            interval.current=setInterval(()=>{
-                setCountDown(cd=>cd-1)
-            },1000)
-            setTimeout(()=>{
-                StartCalculate()
-                clearInterval(interval.current)
-                interval.current=undefined
-
-            },20000)
+        if(isQuestion(data)&&state.matches("Prepare")&&state.context.question===undefined){
+            send({type:"Prepare.GetQuestion",value:data})
         }
-        if(isCloseCommand(data)){
+        if(isOpenCommand(data)&&state.matches("Prepare")){
+            send({type:"Prepare.StartGame"})
+            if(interval.current===undefined){
+
+                interval.current=setInterval(()=>{
+                    send({type:"Open.Tick"})
+                },1000)
+            }
+        }
+        if((state.context.countDown<=0&&state.matches("Open")) || (isCloseCommand(data)&&state.matches("Open"))){
+            clearInterval(interval.current)
+            interval.current=undefined
+            StartCalculate()
+            send({type:"Open.TimerEnd"})
+        }
+        if(state.matches("Calculate")){
             StartDisplay()
         }
-    },[data,displayStarted])
-
-    // handle saving current question
-    useEffect(()=>{
-        if(isQuestion(data)){
-            setQuestion(data)
+        if(isQuestionWinningData(data)&&state.matches("Calculate")){
+            send({type:"Calculate.FinishCalculate",value:data})
         }
-    },[data])
+        if(isOverallWinningData(data)&&state.matches("Display")){
+            send({type:"Display.DisplayOverall",value:data})
+        }
+        if(isQuestion(data)&&state.matches("Display")){
+            send({type:"Display.NextQuestion",value:data})
+        }
+    },[data,state])
+
     //Display
-    if(isQuestionWinningData(data)){
+    if(state.matches('Display')){
         return(
             <div>
                 <p>Display question result</p>
-                {data.toString()}
+                {state.context.winnerOfQuestion}
                 <Button onClick={()=>NextStep()}>Next</Button>
             </div>
         )
     }
+    //Overall
+    if(state.matches('Overall')||isOverallWinningData(data)){
+        return (<div>
+            <p>Display overall result</p>
+            {JSON.stringify(state.context.overall)}
+            <Link href="/mgmt"><Button onClick={()=>ResetGameManager()}>End Back to Main</Button></Link>
+        </div>)
+    }
     //initial
-    if(_.isNil(data)){
+    if(state.matches('Prepare')&& isNil(state.context.question)){
         return(
             <div>
                 <p>initial</p>
@@ -152,17 +173,17 @@ export const GameDisplay =()=>{
         )
     }
     //questionArrive
-    if(isQuestion(data)&&question){
+    if(state.matches('Prepare')&& !isNil(state.context.question)){
         return(
             <div>
-                <p>{question!.question}</p>
+                <p>{state.context.question.question}</p>
                 <Button onClick={()=>StartQuestion()}>Start</Button>
             </div>
         )
     }
     //Close
     
-    if(countDown<=0){
+    if(state.matches('Calculate')){
         return (
             <div>
                 <CircularProgress/>
@@ -170,19 +191,12 @@ export const GameDisplay =()=>{
         )
     }
     //Open
-    if(isOpenCommand(data)){
+    if(state.matches('Open')){
         return (<div>
-            {countDown}
-            {JSON.stringify(question)}
+            {state.context.countDown}
+            {JSON.stringify(state.context.question)}
         </div>)
     }
     
-    //Overall
-    if(isOverallWinningData(data)){
-        return (<div>
-            <p>Display overall result</p>
-            {JSON.stringify(data)}
-            <Button onClick={()=>ResetGameManager()}>End Back to Main</Button>
-        </div>)
-    }
+    
 }

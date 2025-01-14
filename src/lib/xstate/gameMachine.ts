@@ -1,0 +1,114 @@
+import {setup,assign} from 'xstate'
+import { TZodQuestionSchema } from '../mongo/schema/QuestionSchema'
+export const gameMachine = setup({
+    types:{
+        context:{} as {
+            question:TZodQuestionSchema|undefined
+            winnerOfQuestion:string[]
+            overall:Record<string, number>
+            countDown:number
+        },
+        events:{} as 
+        |{
+            type:"Prepare.GetQuestion",
+            value:TZodQuestionSchema
+        }|
+        {type:"Prepare.StartGame"}|
+        {type:"Open.TimerEnd"}|
+        {type:"Open.Tick"}|
+        {
+            type:"Calculate.FinishCalculate",
+            value:string[]
+        }|
+        {
+            type:"Display.NextQuestion",
+            value:TZodQuestionSchema,
+        }|
+        {
+            type:"Display.DisplayOverall",
+            value: Record<string, number>
+        }|
+        {type:"Overall.Reset"}
+    }
+}).createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswDoAKAnMADivgMR6HFYDiYALgIoCuctAlgPYB2A2gAwC6iUAXaxWbLkJAAPRADYALAswKAzAHYArL23bVCgBwAaEAE9EAJgCcvTOoM25mgIwXNCq6ueaAvj5OoGDj4RKTkoVgAyrTEtFToYHyCSCAiYhKcUrIIBpoWmJpyFgr2BqoGhoom5giqVs6YqnLqzlZy3hY6vFa+-iCBWADyBGCcJMOjmAAqrBi4AKKcEElSaeIcmSnZzs72mLlW1gZFWhbqqtWIdQaY7S1W5zttx34BCZgTY5-TrADGANYrFJrDJZRDOXiGfaaTz6BS8dQKVqaS4II6YXh1XhyIq5JG8XKvfrvADCKAANr9GOSULQwCQyZTqbSsAAxVicViwAAWjKpNLpQOEonWki24N2NwORxOeXOqIMDW0vBVqm6rWaxSJA0wABEuQQaaYSPrYIaUKZMAA5MDSBjMWAZIWpEWg8UIZxyVR2THOeGqQrnOQ9VFNG6aezOfQ7XJuSHa96m83GpNGvUGo2DABuYFwFPJzpBGzBHq9Pq8-sDTRDZksbgxWLkxx0xXaCgTQWzufz4xzefJ5MwACU4HRC67i+6PLZCsV1OcEVYDATURZ65jHM28go234+px2BA4FIBqsJ2LQNkALRyVFXzSYKxP58vl+qDtYcKUM-pSeX+SeI0LiaJoGjeKBxShvU+zNBqHRdD0H4fCMmzCr+F4yOC2LqLc6htKobg4qB8q1rUT6YDs9yPBqLx9DqfLMnSP6iqhmEegoFjevCRSdC0egIlB3qgeUuLOAYLTqIoSGphazFuv+CAcaGy6PocrRKK4uwKL0bydn2+ZyX+bEiRRs4cZi1hnCipHFDcBGKsGciYuoBJyHuPhAA */
+    id:'game',
+    initial:"Prepare",
+    context:{
+        question:undefined,
+        countDown:20,
+        winnerOfQuestion:[],
+        overall:{}
+    },
+    states:{
+        Prepare:{
+            on:{
+                'Prepare.GetQuestion':{
+                    target:"Prepare",
+                    actions:assign({
+                        question:({event})=>event.value
+                    })
+                },
+                'Prepare.StartGame':{
+                    target:"Open"
+                }
+            }
+        },
+        Open:{
+            on:{
+                'Open.TimerEnd':{
+                    target:"Calculate"
+                },
+                'Open.Tick':{
+                    actions:assign({
+                        countDown:({context})=>context.countDown-1
+                    })
+                }
+            }
+        },
+        Calculate:{
+            on:{
+                'Calculate.FinishCalculate':{
+                    target:"Display",
+                    actions:assign({
+                        winnerOfQuestion:({event})=>event.value
+                    })
+                }
+            }
+        },
+        Display:{
+            on:{
+                "Display.NextQuestion":{
+                    target:"Prepare",
+                    actions:assign({
+                        countDown:20,
+                        winnerOfQuestion:[],
+                        question:({event})=>event.value
+                    })
+                },
+                "Display.DisplayOverall":{
+                    target:"Overall",
+                    actions:assign({
+                        question:undefined,
+                        winnerOfQuestion:[],
+                        countDown:20,
+                        overall:({event})=>event.value
+                    })
+                }
+            }
+        },
+        Overall:{
+            on:{
+                "Overall.Reset":{
+                    target:"Prepare",
+                    actions:assign({
+                        question:undefined,
+                        winnerOfQuestion:[],
+                        countDown:20,
+                        overall:{}
+                    })
+                }
+            }
+        }
+    }
+})

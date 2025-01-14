@@ -5,10 +5,11 @@ import { Button } from "@mantine/core";
 import { CircularProgress } from "@mui/material";
 import { EventSourceController, EventSourcePlus } from "event-source-plus";
 import _, { isNil } from "lodash";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
-type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"} | TZodQuestionSchema | undefined
+type TEventData= Record<string, number> | string[] | {state:"open"} | {state:"stop"}|{state:"end"} | TZodQuestionSchema | undefined
 
 async function updateStage(
     url:string,
@@ -34,6 +35,9 @@ function isOpenCommand(arg:TEventData):arg is {state:"open"}{
 function isCloseCommand(arg:TEventData):arg is {state:"stop"}{
     return !_.isNil(arg)&&!isQuestionWinningData(arg) && _.has(arg,"state") && arg.state==="stop"
 }
+function isEndCommand(arg:TEventData):arg is {state:"end"}{
+    return !_.isNil(arg)&&!isQuestionWinningData(arg) && _.has(arg,"state") && arg.state==="end"
+}
 function isQuestion(arg:TEventData):arg is TZodQuestionSchema{
     return !_.isNil(arg)&&!isQuestionWinningData(arg) && _.has(arg,"ans")
 }
@@ -47,6 +51,7 @@ export const GamePlay =({userId}:IGamePlayProps)=>{
     const [correct,setCorrect] = useState<boolean|undefined>()
     const [userResponse, setUserResponse] = useState<"A"|"B"|"C"|"D"|undefined>()
     const evt = useRef<EventSourceController|undefined>()
+    const router = useRouter()
     const startEventStream = ()=>{
         console.log("starting")
         const evtSource = new EventSourcePlus("/api/game/user/sse");
@@ -103,12 +108,20 @@ export const GamePlay =({userId}:IGamePlayProps)=>{
 
     // handle saving current question
     useEffect(()=>{
-        if(isQuestion(data)){
+        if(isQuestion(data)&&isNil(question)){
             setQuestion(data)
             setCorrect(undefined)
             setUserResponse(undefined)
         }
-    },[data])
+        if(isCloseCommand(data)||isQuestionWinningData(data)||isOverallWinningData(data)){
+            setQuestion(undefined)
+            setCorrect(undefined)
+            setUserResponse(undefined)
+        }
+        if(isEndCommand(data)){
+            router.replace("/guest/")
+        }
+    },[data,question])
 
     //Display
     if(isQuestionWinningData(data)){

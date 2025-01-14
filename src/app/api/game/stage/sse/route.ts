@@ -22,11 +22,13 @@ export async function GET(request: NextRequest){
   const encoder = new TextEncoder()
 
 //   Close if client disconnects
-  request.signal.onabort = (evt) => {
+  request.signal.onabort = async (evt) => {
     console.log("abort")
     console.log(evt)
     console.log('closing writer')
     clearInterval(heartbeatInterval)
+    const gm = await GameManager.GetInstance()
+    gm.ActionReset()
     sub.unsubscribe()
     writer.close()
   }
@@ -60,8 +62,9 @@ export async function GET(request: NextRequest){
         case "Overall":
             const overallResult = await gm?.GetOverallScore()
             sendData(overallResult)
-            writer.close()
-            sub?.unsubscribe()
+            return 
+        case "Overall":
+            sendData({state:"end"})
             return 
     }
   }

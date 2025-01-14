@@ -1,15 +1,15 @@
 import { isNil } from "lodash"
-import { findWinnerOfQuestion, getOverallScorePerUser, getQuestionById, registerCorrect } from "../mongo/actions/QuestionAction"
+import { clearAllWinners, findWinnerOfQuestion, getOverallScorePerUser, getQuestionById, registerCorrect } from "../mongo/actions/QuestionAction"
 import { BehaviorSubject } from 'rxjs';
 import GameManagerInst, { TZodGameManagerInstSchema } from '../mongo/schema/GameManagerInst';
-import { queryAll,commitAdd, commitUpdate ,commitDelete, findGameManagerInstByMongoId} from "../mongo/actions/GameManagerInstActions";
+import { queryAll,commitAdd, commitUpdate , findGameManagerInstByMongoId, deleteAllGameInst} from "../mongo/actions/GameManagerInstActions";
 import { randomUUID } from "crypto";
 import {ChangeStream, ChangeStreamDocument} from "mongodb"
 // use db to keep singleton
 export class GameManager{
     private static instance:GameManager|undefined
     private id:string|undefined = undefined
-    private state:BehaviorSubject<"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"Undefined"> = new BehaviorSubject<"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"Undefined">("Undefined")
+    private state:BehaviorSubject<"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"Undefined"|"End"> = new BehaviorSubject<"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"End"|"Undefined">("Undefined")
     private questionId:string | undefined = undefined
     private ready:boolean =false
     private sub:ChangeStream|undefined=undefined
@@ -52,20 +52,22 @@ export class GameManager{
 
         this.sub = GameManagerInst.watch() as unknown as ChangeStream<Document, ChangeStreamDocument<Document>>
         this.sub.on("change",async (data)=>{
-            // console.log(data)
+            console.log(data)
             if(data.operationType==="update"){
                 const id = data.documentKey._id.toHexString()
                 const latestData = await findGameManagerInstByMongoId(id)
-                this.state.next((latestData as TZodGameManagerInstSchema)?.state)
                 this.questionId=(latestData as TZodGameManagerInstSchema)?.questionId
+                this.state.next((latestData as TZodGameManagerInstSchema)?.state)
 
             }
             if(data.operationType==="delete"){
-                await this.ActionReset()
+                this.state.next("End")
+                // destroy the instance, calling GetInstance will recreate
+                this.sub?.close()
+                GameManager.instance=undefined
             }
         })
         this.ready=true
-        console.log("[gms] init 7")
 
         console.log("[gms] init end")
 
@@ -142,15 +144,14 @@ export class GameManager{
     }
     public async ActionReset(){
         console.log("[ActionReset] start")
-        await commitDelete(this.id!)
+        await deleteAllGameInst()
         // destroy the instance, calling GetInstance will recreate
-        GameManager.instance=undefined
-        this.sub?.close()
+        await clearAllWinners()
         console.log("[ActionReset] end")
 
     }
 
-    public getCurrentState():"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"Undefined"{
+    public getCurrentState():"Prepare"|"Open"|"Calculate"|"Display"|"Overall"|"End"|"Undefined"{
         return this.state.getValue()
     }
 

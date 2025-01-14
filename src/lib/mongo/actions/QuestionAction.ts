@@ -6,6 +6,8 @@ import Question, { TZodQuestionSchema } from "../schema/QuestionSchema"
 import UserSchema  from '../schema/UserSchema';
 import QuestionSchema from "../schema/QuestionSchema";
 import { TZodUserSchema } from '../schema/UserSchema';
+// import { findUserByUserId } from "./UserActions";
+// import { ObjectId } from "mongoose";
 export const commitAdd=async (question:TZodQuestionSchema)=>{
     console.log("[Question] commit add")
     const newQuestion = new Question(question)
@@ -64,11 +66,11 @@ export const findNoWinnersQuestion = async():Promise<(TZodQuestionSchema&{_id:st
     return parsed as (TZodQuestionSchema&{_id:string})[]
 }
 
-export const getOverallScorePerUser = async():Promise<Record<string,number>>=>{
+export const getOverallScorePerUser = async():Promise<Record<string,number>> =>{
     const result:Record<string,number> = {}
     const questions = await QuestionSchema.find();
-    questions.forEach(question=>{
-        question.populate("winners")
+    await Promise.all(questions.map(async question=>{
+        await question.populate("winners")
         question.winners.forEach((e:TZodUserSchema) => {
             if(!result?.[e.preferredName]){
                 result[e.preferredName]=1
@@ -76,6 +78,16 @@ export const getOverallScorePerUser = async():Promise<Record<string,number>>=>{
                 result[e.preferredName]++
             }
         })
-    })
+        return
+    }))
     return result
+}
+export const clearAllWinners = async()=>{
+    const questions = await QuestionSchema.find()
+    if(questions.length>0){
+        await Promise.all(
+            questions.map(e=> e._id.toHexString())
+            .map((id)=>QuestionSchema.findByIdAndUpdate(id,{winners:[]}).then((question)=>question.save()))
+        )
+    }
 }

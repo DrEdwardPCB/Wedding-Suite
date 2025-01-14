@@ -39,3 +39,6 @@ export const findGameManagerInstByMongoId = async(id:string):Promise<TZodGameMan
     const parsed = _.omit(user.toJSON(),["_id","__v"]) as TZodGameManagerInstSchema
     return parsed
 }
+export const deleteAllGameInst = async()=>{
+    return await GameManagerInst.deleteMany({})
+}
