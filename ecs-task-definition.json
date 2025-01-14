@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "ekwedding-app",
-            "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/ekwedding-app-repo:latest",
+            "image": "458044237546.dkr.ecr.ecr:us-east-1.amazonaws.com/ekwedding-app-repo:latest",
             "memory": 512,
             "cpu": 256,
             "essential": true,
