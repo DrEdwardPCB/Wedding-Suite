@@ -1,5 +1,6 @@
 {
     "family": "ekwedding-app",
+    "networkMode": "awsvpc",
     "containerDefinitions": [
         {
             "name": "ekwedding-app",
