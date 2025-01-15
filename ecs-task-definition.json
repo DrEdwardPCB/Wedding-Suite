@@ -8,8 +8,8 @@
         {
             "name": "ekwedding-app",
             "image": "458044237546.dkr.ecr.us-east-1.amazonaws.com/ekwedding-app-repo:latest",
-            "memory": 512,
-            "cpu": 256,
+            "memory": 1025,
+            "cpu": 512,
             "essential": true,
             "portMappings": [
                 {
@@ -20,43 +20,43 @@
             "environment": [
                 {
                     "name": "MONGO_URI",
-                    "value": "${{ secrets.MONGO_URI }}"
+                    "value": "<secrets.MONGO_URI>"
                 },
                 {
                     "name": "COOKIE_SECRET_KEY",
-                    "value": "${{ secrets.COOKIE_SECRET_KEY }}"
+                    "value": "<secrets.COOKIE_SECRET_KEY>"
                 },
                 {
                     "name": "NEXT_PUBLIC_PW_ENCRYPTION_KEY",
-                    "value": "${{ secrets.NEXT_PUBLIC_PW_ENCRYPTION_KEY }}"
+                    "value": "<secrets.NEXT_PUBLIC_PW_ENCRYPTION_KEY>"
                 },
                 {
                     "name": "NEXT_PUBLIC_PW_ENCRYPTION_IV",
-                    "value": "${{ secrets.NEXT_PUBLIC_PW_ENCRYPTION_IV }}"
+                    "value": "<secrets.NEXT_PUBLIC_PW_ENCRYPTION_IV>"
                 },
                 {
                     "name": "MGMT_USERNAME",
-                    "value": "${{ secrets.MGMT_USERNAME }}"
+                    "value": "<secrets.MGMT_USERNAME>"
                 },
                 {
                     "name": "MGMT_PASSWORD",
-                    "value": "${{ secrets.MGMT_PASSWORD }}"
+                    "value": "<secrets.MGMT_PASSWORD>"
                 },
                 {
                     "name": "AWS_REGION",
-                    "value": "${{ secrets.AWS_REGION }}"
+                    "value": "<secrets.AWS_REGION>"
                 },
                 {
                     "name": "AMPLIFY_BUCKET",
-                    "value": "${{ secrets.AMPLIFY_BUCKET }}"
+                    "value": "<secrets.AMPLIFY_BUCKET>"
                 },
                 {
                     "name": "AWS_ACCESS_KEY_ID",
-                    "value": "${{ secrets.AWS_ACCESS_KEY_ID }}"
+                    "value": "<secrets.AWS_ACCESS_KEY_ID>"
                 },
                 {
                     "name": "AWS_SECRET_ACCESS_KEY",
-                    "value": "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+                    "value": "<secrets.AWS_SECRET_ACCESS_KEY>"
                 }
             ]
         }

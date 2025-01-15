@@ -17,6 +17,28 @@ jobs:
     # Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
+      run: |
+          sed -i "s/<secrets.MONGO_URI>/$MONGO_URI/g" ecs-task-definition.json 
+          sed -i "s/<secrets.COOKIE_SECRET_KEY>/$COOKIE_SECRET_KEY/g" ecs-task-definition.json 
+          sed -i "s/<secrets.NEXT_PUBLIC_PW_ENCRYPTION_KEY>/$NEXT_PUBLIC_PW_ENCRYPTION_KEY/g" ecs-task-definition.json 
+          sed -i "s/<secrets.NEXT_PUBLIC_PW_ENCRYPTION_IV>/$NEXT_PUBLIC_PW_ENCRYPTION_IV/g" ecs-task-definition.json 
+          sed -i "s/<secrets.MGMT_USERNAME>/$MGMT_USERNAME/g" ecs-task-definition.json 
+          sed -i "s/<secrets.MGMT_PASSWORD>/$MGMT_PASSWORD/g" ecs-task-definition.json 
+          sed -i "s/<secrets.AWS_REGION>/$AWS_REGION/g" ecs-task-definition.json 
+          sed -i "s/<secrets.AMPLIFY_BUCKET>/$AMPLIFY_BUCKET/g" ecs-task-definition.json 
+          sed -i "s/<secrets.AWS_ACCESS_KEY_ID>/$AWS_ACCESS_KEY_ID/g" ecs-task-definition.json 
+          sed -i "s/<secrets.AWS_SECRET_ACCESS_KEY>/$AWS_SECRET_ACCESS_KEY/g" ecs-task-definition.json 
+      env:
+        MONGO_URI: ${{secrets.MONGO_URI}}
+        COOKIE_SECRET_KEY: ${{secrets.COOKIE_SECRET_KEY}}
+        NEXT_PUBLIC_PW_ENCRYPTION_KEY: ${{secrets.NEXT_PUBLIC_PW_ENCRYPTION_KEY}}
+        NEXT_PUBLIC_PW_ENCRYPTION_IV: ${{secrets.NEXT_PUBLIC_PW_ENCRYPTION_IV}}
+        MGMT_USERNAME: ${{secrets.MGMT_USERNAME}}
+        MGMT_PASSWORD: ${{secrets.MGMT_PASSWORD}}
+        AWS_REGION: ${{secrets.AWS_REGION}}
+        AMPLIFY_BUCKET: ${{secrets.AMPLIFY_BUCKET}}
+        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
     # Login to AWS
     - name: Configure AWS credentials
