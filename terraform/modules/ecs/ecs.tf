@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "demo_app_task" {
   container_definitions    = jsonencode([
     {
       name      = var.demo_app_task_name
-      image     = var.ecr_repo_url
+      image     = "${var.ecr_repo_url}:latest"
       essential = true
       portMappings = [
         {
@@ -71,6 +71,10 @@ resource "aws_ecs_task_definition" "demo_app_task" {
         {
           name  = "AWS_SECRET_ACCESS_KEY"
           value = var.AWS_SECRET_ACCESS_KEY
+        },
+        {
+            name="HOSTNAME"
+            value="0.0.0.0"
         }
       ]
     }
@@ -104,12 +108,30 @@ resource "aws_alb" "application_load_balancer" {
 }
 
 resource "aws_security_group" "load_balancer_security_group" {
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  ingress = [
+    {
+        description = "permit http"
+        from_port   = 80
+        to_port     = 80
+        ipv6_cidr_blocks = []
+        prefix_list_ids  = []
+        protocol    = "tcp"
+        security_groups  = []
+        self             = false
+        cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+        description = "permit https"
+        from_port   = 443
+        to_port     = 443
+        ipv6_cidr_blocks = []
+        prefix_list_ids  = []
+        protocol    = "tcp"
+        security_groups  = []
+        self             = false
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
   egress {
     from_port   = 0
@@ -127,10 +149,22 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id      = aws_default_vpc.default_vpc.id
 }
 
-resource "aws_lb_listener" "listener" {
+resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_alb.application_load_balancer.arn
   port              = "80"
   protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group.arn
+  }
+}
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_alb.application_load_balancer.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08" # Modify as per your security requirements
+  certificate_arn   = var.certificate_arn
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group.arn

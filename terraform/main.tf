@@ -38,6 +38,10 @@ variable "AWS_REGION" {}
 variable "AMPLIFY_BUCKET" {}
 variable "AWS_ACCESS_KEY_ID" {}
 variable "AWS_SECRET_ACCESS_KEY" {}
+variable "certificate_arn" {
+  description = "The ARN of the SSL/TLS certificate in ACM"
+  type        = string
+}
 
 # MongoDB Atlas Cluster
 resource "mongodbatlas_cluster" "atlas_cluster" {
@@ -159,6 +163,8 @@ module "ecsCluster" {
   application_load_balancer_name = local.application_load_balancer_name
   target_group_name              = local.target_group_name
   demo_app_service_name          = local.demo_app_service_name
+  certificate_arn = var.certificate_arn
+
   MONGO_URI= var.MONGO_URI
   COOKIE_SECRET_KEY= var.COOKIE_SECRET_KEY
   NEXT_PUBLIC_PW_ENCRYPTION_KEY= var.NEXT_PUBLIC_PW_ENCRYPTION_KEY
