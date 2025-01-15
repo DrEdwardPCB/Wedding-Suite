@@ -18,69 +18,67 @@ resource "aws_default_subnet" "default_subnet_c" {
 
 resource "aws_ecs_task_definition" "demo_app_task" {
   family                   = var.demo_app_task_famliy
-  container_definitions    = <<DEFINITION
-  [
+  container_definitions    = jsonencode([
     {
-      "name": "${var.demo_app_task_name}",
-      "image": "${var.ecr_repo_url}",
-      "essential": true,
-      "portMappings": [
+      name      = var.demo_app_task_name
+      image     = var.ecr_repo_url
+      essential = true
+      portMappings = [
         {
-          "containerPort": ${var.container_port},
-          "hostPort": ${var.container_port}
+          containerPort = var.container_port
+          hostPort      = var.container_port
         }
-      ],
-      "memory": 1024,
-      "cpu": 512,
-      "environment": [
-            {
-                "name": "MONGO_URI",
-                "value": ${var.MONGO_URI}
-            },
-            {
-                "name": "COOKIE_SECRET_KEY",
-                "value": ${var.COOKIE_SECRET_KEY}
-            },
-            {
-                "name": "NEXT_PUBLIC_PW_ENCRYPTION_KEY",
-                "value": ${var.NEXT_PUBLIC_PW_ENCRYPTION_KEY}
-            },
-            {
-                "name": "NEXT_PUBLIC_PW_ENCRYPTION_IV",
-                "value": ${var.NEXT_PUBLIC_PW_ENCRYPTION_IV}
-            },
-            {
-                "name": "MGMT_USERNAME",
-                "value": ${var.MGMT_USERNAME}
-            },
-            {
-                "name": "MGMT_PASSWORD",
-                "value": ${var.MGMT_PASSWORD}
-            },
-            {
-                "name": "AWS_REGION",
-                "value": ${var.AWS_REGION}
-            },
-            {
-                "name": "AMPLIFY_BUCKET",
-                "value": ${var.AMPLIFY_BUCKET}
-            },
-            {
-                "name": "AWS_ACCESS_KEY_ID",
-                "value": ${var.AWS_ACCESS_KEY_ID}
-            },
-            {
-                "name": "AWS_SECRET_ACCESS_KEY",
-                "value": ${var.AWS_SECRET_ACCESS_KEY}
-            }
-        ]
+      ]
+      memory       = 1024
+      cpu          = 512
+      environment = [
+        {
+          name  = "MONGO_URI"
+          value = var.MONGO_URI
+        },
+        {
+          name  = "COOKIE_SECRET_KEY"
+          value = var.COOKIE_SECRET_KEY
+        },
+        {
+          name  = "NEXT_PUBLIC_PW_ENCRYPTION_KEY"
+          value = var.NEXT_PUBLIC_PW_ENCRYPTION_KEY
+        },
+        {
+          name  = "NEXT_PUBLIC_PW_ENCRYPTION_IV"
+          value = var.NEXT_PUBLIC_PW_ENCRYPTION_IV
+        },
+        {
+          name  = "MGMT_USERNAME"
+          value = var.MGMT_USERNAME
+        },
+        {
+          name  = "MGMT_PASSWORD"
+          value = var.MGMT_PASSWORD
+        },
+        {
+          name  = "AWS_REGION"
+          value = var.AWS_REGION
+        },
+        {
+          name  = "AMPLIFY_BUCKET"
+          value = var.AMPLIFY_BUCKET
+        },
+        {
+          name  = "AWS_ACCESS_KEY_ID"
+          value = var.AWS_ACCESS_KEY_ID
+        },
+        {
+          name  = "AWS_SECRET_ACCESS_KEY"
+          value = var.AWS_SECRET_ACCESS_KEY
+        }
+      ]
     }
-  ]
-  DEFINITION
+  ])
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  memory                   = 512
-  cpu                      = 256
+  memory                   = 1024
+  cpu                      = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
 }
 
