@@ -20,16 +20,16 @@ jobs:
     # Add secret to task defintion
     - name: Add secrets to Task Definition
       run: |
-          sed -i "s/<MONGO_URI>/$MONGO_URI/g" ecs-task-definition.json 
-          sed -i "s/<COOKIE_SECRET_KEY>/$COOKIE_SECRET_KEY/g" ecs-task-definition.json 
-          sed -i "s/<NEXT_PUBLIC_PW_ENCRYPTION_KEY>/$NEXT_PUBLIC_PW_ENCRYPTION_KEY/g" ecs-task-definition.json 
-          sed -i "s/<NEXT_PUBLIC_PW_ENCRYPTION_IV>/$NEXT_PUBLIC_PW_ENCRYPTION_IV/g" ecs-task-definition.json 
-          sed -i "s/<MGMT_USERNAME>/$MGMT_USERNAME/g" ecs-task-definition.json 
-          sed -i "s/<MGMT_PASSWORD>/$MGMT_PASSWORD/g" ecs-task-definition.json 
-          sed -i "s/<AWS_REGION>/$AWS_REGION/g" ecs-task-definition.json 
-          sed -i "s/<AMPLIFY_BUCKET>/$AMPLIFY_BUCKET/g" ecs-task-definition.json 
-          sed -i "s/<AWS_ACCESS_KEY_ID>/$AWS_ACCESS_KEY_ID/g" ecs-task-definition.json 
-          sed -i "s/<AWS_SECRET_ACCESS_KEY>/$AWS_SECRET_ACCESS_KEY/g" ecs-task-definition.json 
+          sed -i "s|<MONGO_URI>|$MONGO_URI|g" ecs-task-definition.json 
+          sed -i "s|<COOKIE_SECRET_KEY>|$COOKIE_SECRET_KEY|g" ecs-task-definition.json 
+          sed -i "s|<NEXT_PUBLIC_PW_ENCRYPTION_KEY>|$NEXT_PUBLIC_PW_ENCRYPTION_KEY|g" ecs-task-definition.json 
+          sed -i "s|<NEXT_PUBLIC_PW_ENCRYPTION_IV>|$NEXT_PUBLIC_PW_ENCRYPTION_IV|g" ecs-task-definition.json 
+          sed -i "s|<MGMT_USERNAME>|$MGMT_USERNAME|g" ecs-task-definition.json 
+          sed -i "s|<MGMT_PASSWORD>|$MGMT_PASSWORD|g" ecs-task-definition.json 
+          sed -i "s|<AWS_REGION>|$AWS_REGION|g" ecs-task-definition.json 
+          sed -i "s|<AMPLIFY_BUCKET>|$AMPLIFY_BUCKET|g" ecs-task-definition.json 
+          sed -i "s|<AWS_ACCESS_KEY_ID>|$AWS_ACCESS_KEY_ID|g" ecs-task-definition.json 
+          sed -i "s|<AWS_SECRET_ACCESS_KEY>|$AWS_SECRET_ACCESS_KEY|g" ecs-task-definition.json 
       env:
         MONGO_URI: ${{secrets.MONGO_URI}}
         COOKIE_SECRET_KEY: ${{secrets.COOKIE_SECRET_KEY}}
