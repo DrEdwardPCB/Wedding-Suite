@@ -1,6 +1,8 @@
 {
     "family": "ekwedding-app",
     "networkMode": "awsvpc",
+    "memory": "512",
+    "cpu": "256",
     "containerDefinitions": [
         {
             "name": "ekwedding-app",
@@ -57,5 +59,8 @@
                 }
             ]
         }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
     ]
 }
