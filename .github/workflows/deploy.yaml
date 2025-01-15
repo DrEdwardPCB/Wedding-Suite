@@ -17,6 +17,8 @@ jobs:
     # Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
+    # Add secret to task defintion
+    - name: Add secrets to Task Definition
       run: |
           sed -i "s/<secrets.MONGO_URI>/$MONGO_URI/g" ecs-task-definition.json 
           sed -i "s/<secrets.COOKIE_SECRET_KEY>/$COOKIE_SECRET_KEY/g" ecs-task-definition.json 
