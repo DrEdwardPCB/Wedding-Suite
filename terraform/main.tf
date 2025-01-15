@@ -28,6 +28,17 @@ variable "mongodb_private_key" {}
 variable "mongodb_org_id" {}
 variable "mongodb_project_id" {}
 
+variable "MONGO_URI" {}
+variable "COOKIE_SECRET_KEY" {}
+variable "NEXT_PUBLIC_PW_ENCRYPTION_KEY" {}
+variable "NEXT_PUBLIC_PW_ENCRYPTION_IV" {}
+variable "MGMT_USERNAME" {}
+variable "MGMT_PASSWORD" {}
+variable "AWS_REGION" {}
+variable "AMPLIFY_BUCKET" {}
+variable "AWS_ACCESS_KEY_ID" {}
+variable "AWS_SECRET_ACCESS_KEY" {}
+
 # MongoDB Atlas Cluster
 resource "mongodbatlas_cluster" "atlas_cluster" {
   project_id   = var.mongodb_project_id
@@ -127,249 +138,37 @@ resource "aws_s3_object" "public_objects_policy" {
   })
 }
 
-# AWS ECR Repository
-resource "aws_ecr_repository" "ekwedding_repo" {
-  name = "ekwedding-app-repo"
+module "ecrRepo" {
+  source = "./modules/ecr"
 
-  image_tag_mutability = "MUTABLE"
-  tags = {
-    Name        = "ekwedding ECR Repo"
-    Environment = "Production"
-  }
+  ecr_repo_name = local.ecr_repo_name
 }
 
-# AWS ECS Cluster
-resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "ekwedding-ecs-cluster"
-}
+module "ecsCluster" {
+  source = "./modules/ecs"
 
-# ECS Task Execution Role
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole"
+  demo_app_cluster_name = local.demo_app_cluster_name
+  availability_zones    = local.availability_zones
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action    = "sts:AssumeRole"
-        Effect    = "Allow"
-        Principal = { Service = "ecs-tasks.amazonaws.com" }
-      },
-    ]
-  })
-}
+  demo_app_task_famliy         = local.demo_app_task_famliy
+  ecr_repo_url                 = module.ecrRepo.repository_url
+  container_port               = local.container_port
+  demo_app_task_name           = local.demo_app_task_name
+  ecs_task_execution_role_name = local.ecs_task_execution_role_name
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-# Additional Policy for ECR Access
-resource "aws_iam_policy" "ecr_access_policy" {
-  name        = "ECRAccessPolicy"
-  description = "Policy for ECS tasks to access ECR"
-  
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "ecr:GetAuthorizationToken",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage"
-        ],
-        Resource = "arn:aws:ecr:us-east-1:458044237546:repository/*"
-      }
-    ]
-  })
-}
+  application_load_balancer_name = local.application_load_balancer_name
+  target_group_name              = local.target_group_name
+  demo_app_service_name          = local.demo_app_service_name
+  MONGO_URI= var.MONGO_URI
+  COOKIE_SECRET_KEY= var.COOKIE_SECRET_KEY
+  NEXT_PUBLIC_PW_ENCRYPTION_KEY= var.NEXT_PUBLIC_PW_ENCRYPTION_KEY
+  NEXT_PUBLIC_PW_ENCRYPTION_IV= var.NEXT_PUBLIC_PW_ENCRYPTION_IV
+  MGMT_USERNAME= var.MGMT_USERNAME
+  MGMT_PASSWORD= var.MGMT_PASSWORD
+  AWS_REGION= var.AWS_REGION
+  AMPLIFY_BUCKET= var.AMPLIFY_BUCKET
+  AWS_ACCESS_KEY_ID= var.AWS_ACCESS_KEY_ID
+  AWS_SECRET_ACCESS_KEY= var.AWS_SECRET_ACCESS_KEY
+            
 
-resource "aws_iam_role_policy_attachment" "ecs_ecr_policy_attachment" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = aws_iam_policy.ecr_access_policy.arn
-}
-
-# ECS Task Definition
-resource "aws_ecs_task_definition" "ekwedding_task" {
-  family                   = "ekwedding-task"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = "512"
-  memory                   = "1024"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-
-  container_definitions = jsonencode([
-    {
-      name  = "ekwedding-app"
-      image = "${aws_ecr_repository.ekwedding_repo.repository_url}:latest"
-      portMappings = [
-        {
-          containerPort = 3000
-          hostPort      = 3000
-          protocol      = "tcp"
-        }
-      ]
-      environment = [
-        {
-          name  = "MONGO_URI"
-          value = mongodbatlas_cluster.atlas_cluster.connection_strings[0].standard_srv
-        },
-        {
-          name  = "S3_BUCKET"
-          value = aws_s3_bucket.app_bucket.bucket
-        }
-      ]
-    }
-  ])
-}
-
-
-
-
-# VPC and Subnet (New Resource for `vpc_id`)
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
-  enable_dns_hostnames = true
-}
-
-resource "aws_subnet" "my_subnet_a" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
-}
-
-resource "aws_subnet" "my_subnet_b" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
-}
-
-# vpc endpoint
-resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id       = aws_vpc.my_vpc.id
-  service_name = "com.amazonaws.us-east-1.ecr.api"
-  vpc_endpoint_type = "Interface"
-  subnet_ids = [
-    aws_subnet.my_subnet_a.id,
-    aws_subnet.my_subnet_b.id,
-  ]  # Use the route table of your private subnet
-}
-
-resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id       = aws_vpc.my_vpc.id
-  service_name = "com.amazonaws.us-east-1.ecr.dkr"
-  vpc_endpoint_type = "Interface"
-  subnet_ids = [
-    aws_subnet.my_subnet_a.id,
-    aws_subnet.my_subnet_b.id,
-  ]  # Use the route table of your private subnet
-}
-# Internet Gateway
-resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
-}
-# Route Table for Public Subnet
-resource "aws_route_table" "public_route" {
-  vpc_id = aws_vpc.my_vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.my_igw.id
-  }
-}
-
-# Association for Subnet A
-resource "aws_route_table_association" "public_route_association_a" {
-  subnet_id      = aws_subnet.my_subnet_a.id
-  route_table_id = aws_route_table.public_route.id
-}
-
-# Association for Subnet B
-resource "aws_route_table_association" "public_route_association_b" {
-  subnet_id      = aws_subnet.my_subnet_b.id
-  route_table_id = aws_route_table.public_route.id
-}
-
-# Security Group for ECS
-resource "aws_security_group" "ecs_security_group" {
-  name_prefix = "ecs-security-group"
-  vpc_id      = aws_vpc.my_vpc.id
-  ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-# ECS Service
-resource "aws_ecs_service" "ecs_service" {
-  name            = "ekwedding-service"
-  cluster         = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.ekwedding_task.arn
-  desired_count   = 1
-
-  launch_type = "FARGATE"
-
-  network_configuration {
-    subnets         = [
-      aws_subnet.my_subnet_a.id,
-      aws_subnet.my_subnet_b.id
-    ]
-    security_groups = [aws_security_group.ecs_security_group.id]
-  }
-}
-
-# application loadbalancer
-resource "aws_lb" "application_lb" {
-  name               = "my-application-lb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.ecs_security_group.id]
-  subnets            = [
-    aws_subnet.my_subnet_a.id,
-    aws_subnet.my_subnet_b.id
-  ]
-
-  enable_deletion_protection = false
-}
-
-resource "aws_lb_listener" "https_listener" {
-  load_balancer_arn = aws_lb.application_lb.arn
-  port              = 443
-  protocol          = "HTTPS"
-
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = "arn:aws:acm:us-east-1:458044237546:certificate/4eff10d0-9dd5-4eb2-bed0-5c2b73faca0f"
-
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.my_target_group.arn
-  }
-}
-
-resource "aws_lb_target_group" "my_target_group" {
-  name     = "my-target-group"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.my_vpc.id
-
-  health_check {
-    path                = "/"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold  = 2
-    unhealthy_threshold = 2
-  }
 }
