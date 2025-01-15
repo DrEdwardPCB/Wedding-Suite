@@ -230,6 +230,8 @@ resource "aws_ecs_task_definition" "ekwedding_task" {
 # VPC and Subnet (New Resource for `vpc_id`)
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
 }
 
 resource "aws_subnet" "my_subnet_a" {
@@ -246,6 +248,26 @@ resource "aws_subnet" "my_subnet_b" {
   map_public_ip_on_launch = true
 }
 
+# vpc endpoint
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id       = aws_vpc.my_vpc.id
+  service_name = "com.amazonaws.us-east-1.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = [
+    aws_subnet.my_subnet_a.id,
+    aws_subnet.my_subnet_b.id,
+  ]  # Use the route table of your private subnet
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id       = aws_vpc.my_vpc.id
+  service_name = "com.amazonaws.us-east-1.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = [
+    aws_subnet.my_subnet_a.id,
+    aws_subnet.my_subnet_b.id,
+  ]  # Use the route table of your private subnet
+}
 # Internet Gateway
 resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
