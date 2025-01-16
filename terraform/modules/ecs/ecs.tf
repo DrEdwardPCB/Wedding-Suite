@@ -147,6 +147,14 @@ resource "aws_lb_target_group" "target_group" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_default_vpc.default_vpc.id
+  health_check {
+    path                = "/api/health"         # Health check endpoint exposed by ECS tasks
+    interval            = 60                # Time between health checks (in seconds)
+    timeout             = 30                 # Timeout for each health check
+    healthy_threshold   = 2                 # Healthy response threshold
+    unhealthy_threshold = 2                 # Unhealthy response threshold
+    matcher             = "200"             # Expected HTTP status code
+  }
 }
 
 resource "aws_lb_listener" "http_listener" {
@@ -177,6 +185,8 @@ resource "aws_ecs_service" "demo_app_service" {
   task_definition = aws_ecs_task_definition.demo_app_task.arn
   launch_type     = "FARGATE"
   desired_count   = 1
+  deployment_maximum_percent         = 100 
+  deployment_minimum_healthy_percent = 0
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group.arn
