@@ -17,18 +17,18 @@ export const commitUpdate=async (id:string, album:TZodAlbumSchema)=>{
     console.log(album)
     Album.findOneAndUpdate({_id:id},album).then((album)=>album.save())
 }
-export const queryAll = async()=>{
+export const queryAll = async():Promise<(TZodAlbumSchema&{_id:string})[]>=>{
     //@ts-ignore
     const parsed = (await Album.find({})).map(e=>{
         const result=_.omit(e.toJSON(),["_id","__v"])
         result._id = e._id.toHexString()
         return result
     })
-    return parsed
+    return parsed as (TZodAlbumSchema&{_id:string})[]
 }
-export const getAlbumById = async(_id:string)=>{
+export const getAlbumById = async(_id:string):Promise<TZodAlbumSchema&{_id:string}>=>{
     const data = (await Album.findById(_id)).toJSON()
     const result = _.omit(data,["_id","__v"])
     result._id = data._id.toHexString()
-    return result
+    return result as TZodAlbumSchema&{_id:string}
 }

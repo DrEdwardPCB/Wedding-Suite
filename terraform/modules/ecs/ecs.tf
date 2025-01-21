@@ -73,6 +73,18 @@ resource "aws_ecs_task_definition" "demo_app_task" {
           value = var.AWS_SECRET_ACCESS_KEY
         },
         {
+          name  = "GOOGLE_CLIENT_ID"
+          value = var.GOOGLE_CLIENT_ID
+        },
+        {
+          name  = "GOOGLE_CLIENT_SECRET"
+          value = var.GOOGLE_CLIENT_SECRET
+        },
+        {
+          name  = "BASE_URL"
+          value = var.BASE_URL
+        },
+        {
             name="HOSTNAME"
             value="0.0.0.0"
         }

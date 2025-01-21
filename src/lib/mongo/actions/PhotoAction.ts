@@ -31,16 +31,22 @@ export const queryAll = async()=>{
         })
         return parsed
 }
-export const queryPhotoByAlbumId=async(album:string)=>{
-    const parsed = (await Photo.find({
+export const queryPhotoByAlbumId=async(album:string, limit?:number):Promise<(TZodPhotoSchema&{_id:string,album?:string})[]>=>{
+    const parsed = limit?(await Photo.find({
         album: album
-    })).map(e=>{
+    }).limit(limit)):(await Photo.find({
+        album: album
+    }))
+    if(parsed.length<=0){
+        return []
+    }
+    const result = parsed.map(e=>{
         const result=_.omit(e.toJSON(),["__v"])
         result._id = e._id.toHexString()
         result.album = e.album.toHexString()
         return result
     })
-    return parsed
+    return result as (TZodPhotoSchema&{_id:string,album?:string})[]
 }
 export const getPhotoBySlot=async(slot:string)=>{
     const query = (await Photo.findOne({

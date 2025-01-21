@@ -1,11 +1,13 @@
 import { FadeInSection } from "@/component/common/FadeInSection";
 import { LoadImageFromDB } from "@/component/common/ImageSlot";
-import { SubmitButton } from "@/component/SubmitButton";
-import { getSession, logoutGuest } from "@/lib/ironsession/action";
+import GuestHomeRoute from "@/component/guest/guestHomeRoute";
+import GuestNav from "@/component/guest/GuestNav";
+import { getSession } from "@/lib/ironsession/action";
 import { findUserByUserId } from "@/lib/mongo/actions/UserActions";
 import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic'
+// hover:rotate-3 hover:scale-105 w-[300px] h-[300px] object-cover
 export default async function GuestHomePage(){
     const session = await getSession();
     if(!session.isLoggedIn){
@@ -16,7 +18,7 @@ export default async function GuestHomePage(){
         const renderList = []
         if(user?.ceremony){
             renderList.push(
-            <div className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-14">
+            <div className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-2 md:m-7 xl:m-14">
                 <div className="mb-2">
                   Ceremony
                 </div>
@@ -27,7 +29,7 @@ export default async function GuestHomePage(){
         )}
         if(user?.ceremony){
             renderList.push(
-            <div className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-14">
+            <div className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-2 md:m-7 xl:m-14">
                 <div className="mb-2">
                   Banquet
                 </div>
@@ -51,18 +53,19 @@ export default async function GuestHomePage(){
                 August 3, 2025
                 </div>
             </FadeInSection>
-            <FadeInSection className="flex gap-2 delay-500 m-14">
+            <FadeInSection className=" flex gap-2 delay-500 justify-around">
                 {renderSeatInformation()}
             </FadeInSection>
             </div>
         </div>
-        <nav className="h-[10vh] w-full bg-themeLight">
-            <form action={logoutGuest} >
-                <div>
-                    <SubmitButton value="Logout" />
-                </div>
-            </form>
-        </nav>
+        <GuestNav title="Wedding Links"/>
+        <div className="flex gap-8 flex-wrap items-center justify-around p-8 from-themeLight to-themeSemiLight bg-gradient-to-br">
+            <GuestHomeRoute href="/guest/album" slot="guestAlbum" title="Album"></GuestHomeRoute>
+            <GuestHomeRoute href="/guest/game" slot="guestGame" title="Game"></GuestHomeRoute>
+            <GuestHomeRoute href="/guest/menu" slot="guestMenu" title="Menu"></GuestHomeRoute>
+            <GuestHomeRoute href="/guest/rundown" slot="guestRundown" title="Rundown"></GuestHomeRoute>
+            <GuestHomeRoute href="/guest/stream" slot="guestStream" title="Live Stream"></GuestHomeRoute>
+        </div>
     </div>
 )
 } 

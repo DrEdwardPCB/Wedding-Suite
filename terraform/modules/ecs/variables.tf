@@ -57,6 +57,9 @@ variable "AWS_REGION" {}
 variable "AMPLIFY_BUCKET" {}
 variable "AWS_ACCESS_KEY_ID" {}
 variable "AWS_SECRET_ACCESS_KEY" {}
+variable "GOOGLE_CLIENT_ID" {}
+variable "GOOGLE_CLIENT_SECRET" {}
+variable "BASE_URL" {}
 
 variable "certificate_arn" {
   description = "The ARN of the SSL/TLS certificate in ACM"

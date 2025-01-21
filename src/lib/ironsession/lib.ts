@@ -1,6 +1,7 @@
 import { SessionOptions } from "iron-session";
 import { env } from "../envalid/env";
 
+
 export interface SessionData {
   username: string;
   userid: string;

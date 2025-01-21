@@ -77,7 +77,7 @@ export const SignupForm= ()=>{
                 <div className="flex w-full shadow rounded flex-wrap gap-2 p-4 justify-between items-center">
                     <h1 className="font-bevietnam text-xl italic w-full text-themeSemiDark">Email information</h1>
                     <TextField disabled ={stage.length>1} label="email" value={form.email} className="flex-1 min-w-[300px]" onChange={(evt)=>{setForm((prev)=>({...prev,email:evt.target.value}))}}
-                        helperText="We will check if the email has already registered or not"
+                        helperText="We will check if the email has already registered or not, this will also be your login"
                         ></TextField>
                     <LoadingButton variant="contained" disabled={form.email.length==0} loading={loading} onClick={()=>{checkUser()}}>Next</LoadingButton>
                 </div>
@@ -93,7 +93,7 @@ export const SignupForm= ()=>{
                     <TextField  label="Phone#" className="flex-1 min-w-[300px]" helperText="Please start with +852/+1/+44/+86" value={form.phoneNo} onChange={(evt)=>setForm((prev)=>({...prev,phoneNo:evt.target.value}))}></TextField>
                     <TextField  label="password" className="flex-1 min-w-[300px]" required type="password" value={form.password} onChange={(evt)=>setForm((prev)=>({...prev,password:evt.target.value}))} error={confirmPassword!==form.password}></TextField>
                     <TextField  label="confirm password" className="flex-1 min-w-[300px]" required type="password" value={confirmPassword} onChange={(evt)=>setConfirmPassword(evt.target.value)} error={confirmPassword!==form.password}></TextField>
-                    <TextField  label="Category" className="flex-1 min-w-[300px]" helperText="What are your relationship with Edward/Kiki" value={form.category} onChange={(evt)=>setForm((prev)=>({...prev,category:evt.target.value}))}></TextField>
+                    <TextField  label="Relationship" className="flex-1 min-w-[300px]" helperText="What are your relationship with Edward/Kiki" value={form.category} onChange={(evt)=>setForm((prev)=>({...prev,category:evt.target.value}))}></TextField>
                     <Autocomplete<"BOTH"|"BRIDE"|"GROOM">
                         disablePortal
                         options={["BOTH","BRIDE","GROOM"]}

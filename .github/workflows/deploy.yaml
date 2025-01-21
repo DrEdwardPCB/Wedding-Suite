@@ -17,30 +17,6 @@ jobs:
     # Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
-    # Add secret to task defintion
-    - name: Add secrets to Task Definition
-      run: |
-          sed -i "s|<MONGO_URI>|$MONGO_URI|g" ecs-task-definition.json 
-          sed -i "s|<COOKIE_SECRET_KEY>|$COOKIE_SECRET_KEY|g" ecs-task-definition.json 
-          sed -i "s|<NEXT_PUBLIC_PW_ENCRYPTION_KEY>|$NEXT_PUBLIC_PW_ENCRYPTION_KEY|g" ecs-task-definition.json 
-          sed -i "s|<NEXT_PUBLIC_PW_ENCRYPTION_IV>|$NEXT_PUBLIC_PW_ENCRYPTION_IV|g" ecs-task-definition.json 
-          sed -i "s|<MGMT_USERNAME>|$MGMT_USERNAME|g" ecs-task-definition.json 
-          sed -i "s|<MGMT_PASSWORD>|$MGMT_PASSWORD|g" ecs-task-definition.json 
-          sed -i "s|<AWS_REGION>|$AWS_REGION|g" ecs-task-definition.json 
-          sed -i "s|<AMPLIFY_BUCKET>|$AMPLIFY_BUCKET|g" ecs-task-definition.json 
-          sed -i "s|<AWS_ACCESS_KEY_ID>|$AWS_ACCESS_KEY_ID|g" ecs-task-definition.json 
-          sed -i "s|<AWS_SECRET_ACCESS_KEY>|$AWS_SECRET_ACCESS_KEY|g" ecs-task-definition.json 
-      env:
-        MONGO_URI: ${{secrets.MONGO_URI}}
-        COOKIE_SECRET_KEY: ${{secrets.COOKIE_SECRET_KEY}}
-        NEXT_PUBLIC_PW_ENCRYPTION_KEY: ${{secrets.NEXT_PUBLIC_PW_ENCRYPTION_KEY}}
-        NEXT_PUBLIC_PW_ENCRYPTION_IV: ${{secrets.NEXT_PUBLIC_PW_ENCRYPTION_IV}}
-        MGMT_USERNAME: ${{secrets.MGMT_USERNAME}}
-        MGMT_PASSWORD: ${{secrets.MGMT_PASSWORD}}
-        AWS_REGION: ${{secrets.AWS_REGION}}
-        AMPLIFY_BUCKET: ${{secrets.AMPLIFY_BUCKET}}
-        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
     # Login to AWS
     - name: Configure AWS credentials
@@ -58,10 +34,25 @@ jobs:
     # Build Docker image
     - name: Build Docker image
       run: |
-        docker build -t ${{ env.ECR_REPOSITORY }} --build-arg MONGO_URI={secret.MONGO_URI} --build-arg COOKIE_SECRET_KEY={secret.COOKIE_SECRET_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_KEY={secret.NEXT_PUBLIC_PW_ENCRYPTION_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_IV={secret.NEXT_PUBLIC_PW_ENCRYPTION_IV} --build-arg MGMT_USERNAME={secret.MGMT_USERNAME} --build-arg MGMT_PASSWORD={secret.MGMT_PASSWORD} --build-arg AWS_REGION={secret.AWS_REGION} --build-arg AMPLIFY_BUCKET={secret.AMPLIFY_BUCKET} --build-arg AWS_ACCESS_KEY_ID={secret.AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_ACCESS_KEY={secret.AWS_SECRET_ACCESS_KEY} --no-cache .
+        docker build -t ${{ env.ECR_REPOSITORY }} --build-arg MONGO_URI={secret.MONGO_URI} --build-arg COOKIE_SECRET_KEY={secret.COOKIE_SECRET_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_KEY={secret.NEXT_PUBLIC_PW_ENCRYPTION_KEY} --build-arg NEXT_PUBLIC_PW_ENCRYPTION_IV={secret.NEXT_PUBLIC_PW_ENCRYPTION_IV} --build-arg MGMT_USERNAME={secret.MGMT_USERNAME} --build-arg MGMT_PASSWORD={secret.MGMT_PASSWORD} --build-arg AWS_REGION={secret.AWS_REGION} --build-arg AMPLIFY_BUCKET={secret.AMPLIFY_BUCKET} --build-arg AWS_ACCESS_KEY_ID={secret.AWS_ACCESS_KEY_ID} --build-arg AWS_SECRET_ACCESS_KEY={secret.AWS_SECRET_ACCESS_KEY} --build-arg GOOGLE_CLIENT_ID={secret.GOOGLE_CLIENT_ID} --build-arg GOOGLE_CLIENT_SECRET={secret.GOOGLE_CLIENT_SECRET} --build-arg BASE_URL={secret.BASE_URL} --no-cache .
         docker tag ${{ env.ECR_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
 
     # Push Docker image to ECR
     - name: Push Docker image to Amazon ECR
       run: |
         docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+
+    
+    # Update ECS Service
+    - name: Update ECS service
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        cluster: ekwedding-ecs-cluster
+        service: ekwedding-service 
+        task-definition: ekwedding-task
+        container-name: ekwedding-task
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
