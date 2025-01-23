@@ -1,5 +1,5 @@
 import { getLatestConfig } from "@/lib/mongo/actions/ConfigActions"
-
+export const dynamic = 'force-dynamic';
 export default async function StreamPage(){
     const config = await getLatestConfig()
     return <div>

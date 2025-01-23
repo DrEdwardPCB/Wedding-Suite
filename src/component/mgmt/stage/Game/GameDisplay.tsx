@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { TZodQuestionSchema } from "@/lib/mongo/schema/QuestionSchema";

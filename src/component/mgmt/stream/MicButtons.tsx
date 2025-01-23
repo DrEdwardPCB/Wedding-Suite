@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { type Dispatch, type MutableRefObject, type SetStateAction } from "react";
 import type { VideoClient } from "@zoom/videosdk";
 import { Mic, MicOff, Video, VideoOff } from "lucide-react";

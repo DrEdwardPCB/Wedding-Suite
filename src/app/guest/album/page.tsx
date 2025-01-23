@@ -1,6 +1,7 @@
 import { AlbumItem } from "@/component/guest/album/AlbumItem";
 import { queryAll } from "@/lib/mongo/actions/AlbumActions";
 import { queryPhotoByAlbumId } from "@/lib/mongo/actions/PhotoAction";
+export const dynamic = 'force-dynamic';
 
 // absolute w-[300px] h-[400px] shadow z-200 bg-white -rotate-2 -rotate-3 scale-75 -translate-x-10 translate-x-10 rotate-2 rotate-12 -rotate-12 rotate-2 rotate-3 -translate-y-1 p-3 transition-all object-cover w-[300px] h-[400px]
 export default async function AlbumPage(){

@@ -134,7 +134,7 @@ export const GamePlay =({userId}:IGamePlayProps)=>{
     //initial
     if(_.isNil(data)||isQuestion(data)){
         return(
-            <div>
+            <div className="">
                 <h1>Ready</h1>
             </div>
         )
