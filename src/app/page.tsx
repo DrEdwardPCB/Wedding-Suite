@@ -27,7 +27,7 @@ export default async function Home() {
           </FadeInSection>
         </div>
       </div>
-      <nav className="h-[10vh] w-full bg-themeLight shadow-inner flex items-center justify-between p-4">
+      <nav className="h-[10vh] w-full bg-themeLight shadow-inner flex items-center justify-between p-4 sticky top-0 z-50">
         <div className="flex-1"></div>
             <div className="font-theseasons italic font-bold text-themeSemiDark text-2xl font-theseasons flex-1">EK<span className="font-serif font-thin">-</span>Wedding</div>
             <Link href="/guest/auth/signin" className=""><button className="transition-all px-6 py-2 min-w-[120px] text-center text-black border border-black hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">sign in</button></Link>
@@ -36,7 +36,7 @@ export default async function Home() {
         {/* our story */}
         <div className=" flex flex-col items-start justify-around ">
 
-          <FadeInSection className="text-themeDark text-6xl font-theseasons"><p>Our Story</p></FadeInSection>
+          <FadeInSection className="text-themeDark text-6xl font-theseasons mb-4"><p>Our Story</p></FadeInSection>
           <FadeInSection className="ring ring-2 ring-themeReg p-2  md:w-5/6 self-center delay-150">
             <LoadImageFromDB slot="ourstory1" className="ring ring-2 ring-themeReg aspect-square object-cover"></LoadImageFromDB>
           </FadeInSection>

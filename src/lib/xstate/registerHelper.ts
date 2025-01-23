@@ -4,7 +4,9 @@ export const ZodRegisterEmailEntry = z.object({
     reenterEmail:z.string().email()
 }).refine(schema=>{
     return schema.email===schema.reenterEmail
-},{message:"email and re-enter email are not the same"})
+},{
+    path:["reenterEmail"],
+    message:"email and re-enter email are not the same"})
 export const DefaultZodRegisterEmailEntry:z.infer<typeof ZodRegisterEmailEntry> ={
         email:"",
         reenterEmail:""

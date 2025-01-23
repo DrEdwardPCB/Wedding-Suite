@@ -29,6 +29,7 @@ import { commitAdd, commitDelete, commitUpdate, queryAll } from '@/lib/mongo/act
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { decryptData, encryptData } from '@/lib/encryption';
+import { Tooltip } from '@mantine/core';
 
 
 declare module '@mui/x-data-grid-premium' {
@@ -45,7 +46,30 @@ declare module '@mui/x-data-grid-premium' {
   
     const handleClick = async () => {
       const id = await newSnowflakeId()
-      const newRow:TZodUserSchema&{isNew?:boolean|null}={id,preferredName:"",fullChineseName:"",fullEnglishName:"",phoneNo:"",email:"",onlineOnly:false,ceremony:true, dinner:true,password:"", side:"BOTH",category:"", remarks:"", dinnerDeskNumber:0,ceremonySeatNumber:0,checkedIn:false,isNew:true}
+      const newRow:TZodUserSchema&{isNew?:boolean|null}={
+        id,
+        preferredName:"",
+        surname:"",
+        firstName:"",
+        fullChineseName:"",
+        phonePrefix:"",
+        phoneNumber:"",
+        relationship:"",
+        email:"",
+        side:"BOTH",
+        online:false,
+        ceremony:false,
+        cocktail:false,
+        banquet:false,
+        remarks:"",
+        foodAllergies:"",
+        foodChoice:"",
+        password:"",
+        dinnerDeskNumber:0,
+        ceremonySeatNumber:0,
+        checkedIn:false,
+
+        isNew:true}
       setRows((oldRows) => [
         ...oldRows,
         newRow,
@@ -136,8 +160,8 @@ const GuestManagement=()=>{
   }
 
   const handleDeleteClick = (id: GridRowId) => async () => {
-    setRows(rows.filter((row) => row.id !== id));
     await commitDelete(String(id));
+    setRows(rows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -170,8 +194,32 @@ const GuestManagement=()=>{
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'id', width: 180, editable: true },
     {
+      field: 'email',
+      headerName: 'email',
+      width: 240,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
+    {
       field: 'preferredName',
       headerName: 'preferredName',
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
+    {
+      field: 'surname',
+      headerName: 'surname',
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
+    {
+      field: 'firstName',
+      headerName: 'firstName',
       width: 120,
       align: 'left',
       headerAlign: 'left',
@@ -186,32 +234,40 @@ const GuestManagement=()=>{
       editable: true,
     },
     {
-      field: 'fullEnglishName',
-      headerName: 'fullEnglishName',
+      field: 'phonePrefix',
+      headerName: 'phonePrefix',
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      type: 'singleSelect',
+      valueOptions: ["+852","+1","+86","+44","+61",""],
+      editable: true,
+    },
+    {
+      field: 'phoneNumber',
+      headerName: 'phoneNumber',
       width: 120,
       align: 'left',
       headerAlign: 'left',
       editable: true,
     },
     {
-      field: 'phoneNo',
-      headerName: 'phoneNo',
+      field: 'relationship',
+      headerName: 'relationship',
+      width: 220,
+      editable: true,
+    },
+    {
+      field: 'side',
+      headerName: 'side',
       width: 120,
-      align: 'left',
-      headerAlign: 'left',
       editable: true,
+      type: 'singleSelect',
+      valueOptions: ['GROOM', 'BRIDE', 'BOTH'],
     },
     {
-      field: 'email',
-      headerName: 'email',
-      width: 240,
-      align: 'left',
-      headerAlign: 'left',
-      editable: true,
-    },
-    {
-      field: 'onlineOnly',
-      headerName: 'onlineOnly',
+      field: 'online',
+      headerName: 'online',
       type: 'boolean',
       width: 100,
       editable: true,
@@ -224,30 +280,17 @@ const GuestManagement=()=>{
       editable: true,
     },
     {
-      field: 'dinner',
-      headerName: 'dinner',
+      field: 'cocktail',
+      headerName: 'cocktail',
       type: 'boolean',
       width: 80,
       editable: true,
     },
     {
-      field: 'password',
-      headerName: 'password',
-      width: 120,
-      editable: true,
-    },
-    {
-      field: 'side',
-      headerName: 'side',
-      width: 120,
-      editable: true,
-      type: 'singleSelect',
-      valueOptions: ['GROOM', 'BRIDE', 'BOTH'],
-    },
-    {
-      field: 'category',
-      headerName: 'category',
-      width: 220,
+      field: 'banquet',
+      headerName: 'banquet',
+      type: 'boolean',
+      width: 80,
       editable: true,
     },
     {
@@ -260,6 +303,20 @@ const GuestManagement=()=>{
       field: 'foodAllergies',
       headerName: 'foodAllergies',
       width: 220,
+      editable: true,
+    },
+    {
+      field: 'foodChoice',
+      headerName: 'foodChoice',
+      width: 220,
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: ["beef","fish&shrimp","vegetarian"],
+    },
+    {
+      field: 'password',
+      headerName: 'password',
+      width: 120,
       editable: true,
     },
     {
@@ -295,7 +352,11 @@ const GuestManagement=()=>{
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={
+              <Tooltip label="save">
+                <SaveIcon />
+              </Tooltip>
+              }
               label="Save"
               sx={{
                 color: 'primary.main',
@@ -303,7 +364,10 @@ const GuestManagement=()=>{
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={
+                <Tooltip label="cancel">
+              <CancelIcon />
+              </Tooltip>}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -314,28 +378,48 @@ const GuestManagement=()=>{
 
         return [
           <GridActionsCellItem
-            icon={<ContentCopyIcon />}
+            icon={
+            <Tooltip label="dubplicate record">
+
+            <ContentCopyIcon />
+            </Tooltip>
+          }
             label="Duplicate"
             className="textPrimary"
             onClick={handleDuplicateClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<CheckIcon />}
+            icon={
+            <Tooltip label="checkin">
+
+            <CheckIcon />
+            </Tooltip>
+          }
             label="Edit"
             className="textPrimary"
             onClick={handleCheckinClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={
+            <Tooltip label="Edit">
+
+            <EditIcon />
+            </Tooltip>
+          }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={
+            <Tooltip label="Delete">
+
+              <DeleteIcon />
+            </Tooltip>
+          }
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"

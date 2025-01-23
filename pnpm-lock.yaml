@@ -59,6 +59,9 @@ importers:
       '@statelyai/inspect':
         specifier: ^0.4.0
         version: 0.4.0(ws@8.18.0)(xstate@5.19.2)
+      '@xstate-ninja/react':
+        specifier: ^1.1.3
+        version: 1.1.3(@xstate/react@5.0.2(@types/react@18.3.12)(react@19.0.0)(xstate@5.19.2))(react@19.0.0)(xstate-ninja@1.3.10(xstate@5.19.2))(xstate@5.19.2)
       '@xstate/react':
         specifier: ^5.0.2
         version: 5.0.2(@types/react@18.3.12)(react@19.0.0)(xstate@5.19.2)
@@ -80,6 +83,15 @@ importers:
       event-source-plus:
         specifier: ^0.1.8
         version: 0.1.8
+      formik:
+        specifier: ^2.4.6
+        version: 2.4.6(react@19.0.0)
+      formik-validator-zod:
+        specifier: ^2.0.1
+        version: 2.0.1(formik@2.4.6(react@19.0.0))(zod@3.23.8)
+      generate-password:
+        specifier: ^1.7.1
+        version: 1.7.1
       google-auth-library:
         specifier: ^9.15.0
         version: 9.15.0
@@ -1283,6 +1295,9 @@ packages:
   '@types/format-util@1.0.4':
     resolution: {integrity: sha512-xrCYOdHh5zA3LUrn6CvspYwlzSWxPso11Lx32WnAG6KvLCRecKZ/Rh21PLXUkzUFsQmrGcx/traJAFjR6dVS5Q==}
 
+  '@types/hoist-non-react-statics@3.3.6':
+    resolution: {integrity: sha512-lPByRJUer/iN/xa4qpyL0qmL11DqNW81iU/IG1S3uvRUq4oKagz8VCxZjiWkumgt66YT3vOdDgZ0o32sGKtCEw==}
+
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
@@ -1396,6 +1411,14 @@ packages:
 
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+
+  '@xstate-ninja/react@1.1.3':
+    resolution: {integrity: sha512-AZjD7uGG501msRv8hmY5HmSUbjqK8agC4ju+PPYQcaHMrPSbWrfAAEuLJaeG6QieCBP3pbKf4YmwPABA2g30DQ==}
+    peerDependencies:
+      '@xstate/react': ^3.0.1
+      react: ^18.2.0
+      xstate: ^4.33.6
+      xstate-ninja: ^1.0.0
 
   '@xstate/react@5.0.2':
     resolution: {integrity: sha512-x5GOrE0ZYjU2ba986u0CCp7SaPwzElSn1SW0mZ9MuBgsZ+BW7vTLVOvGmURynwojdso8d6nVbK3c2+MRVqGVgA==}
@@ -1778,6 +1801,10 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
+  deepmerge@2.2.1:
+    resolution: {integrity: sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==}
+    engines: {node: '>=0.10.0'}
+
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
     engines: {node: '>= 0.4'}
@@ -2070,6 +2097,17 @@ packages:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
 
+  formik-validator-zod@2.0.1:
+    resolution: {integrity: sha512-+Jz/YnA04IRcImKlrwbG8vKvgx1Zb0HfsDwH36e03zYOUGf6seUrgm4XyBdrr2vg6IO+n9b5oSWPNSUHBewHDw==}
+    peerDependencies:
+      formik: ^2.2.9
+      zod: ^3.19.1
+
+  formik@2.4.6:
+    resolution: {integrity: sha512-A+2EI7U7aG296q2TLGvNapDNTZp1khVt5Vk0Q/fyfSROss0V/V6+txt2aJnwEos44IxTCW/LYAi/zgWzlevj+g==}
+    peerDependencies:
+      react: '>=16.8.0'
+
   fs-constants@1.0.0:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
 
@@ -2103,6 +2141,9 @@ packages:
   gcp-metadata@6.1.0:
     resolution: {integrity: sha512-Jh/AIwwgaxan+7ZUUmRLCjtchyDiqh4KjBJ5tW3plBZb5iL/BPcso8A5DlzeD9qlw0duCamnNdpFjxwaT0KyKg==}
     engines: {node: '>=14'}
+
+  generate-password@1.7.1:
+    resolution: {integrity: sha512-9bVYY+16m7W7GczRBDqXE+VVuCX+bWNrfYKC/2p2JkZukFb2sKxT6E3zZ3mJGz7GMe5iRK0A/WawSL3jQfJuNQ==}
 
   get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
@@ -2489,6 +2530,9 @@ packages:
   locate-path@6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
+
+  lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -2932,6 +2976,9 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-fast-compare@2.0.4:
+    resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -3329,6 +3376,9 @@ packages:
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
+  tiny-warning@1.0.3:
+    resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
+
   tmp@0.2.3:
     resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
     engines: {node: '>=14.14'}
@@ -3552,6 +3602,11 @@ packages:
 
   xmlchars@2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
+
+  xstate-ninja@1.3.10:
+    resolution: {integrity: sha512-IA6ns/FPmtpSkddxo70IhoekbZoXTEmKW3ug4jqoApzfAVlCjTqediw/r+4RW3l9r7la48pbKOTf8bDkfb+nOw==}
+    peerDependencies:
+      xstate: ^4.33.6
 
   xstate@5.19.2:
     resolution: {integrity: sha512-B8fL2aP0ogn5aviAXFzI5oZseAMqN00fg/TeDa3ZtatyDcViYLIfuQl4y8qmHCiKZgGEzmnTyNtNQL9oeJE2gw==}
@@ -5175,6 +5230,11 @@ snapshots:
 
   '@types/format-util@1.0.4': {}
 
+  '@types/hoist-non-react-statics@3.3.6':
+    dependencies:
+      '@types/react': 18.3.12
+      hoist-non-react-statics: 3.3.2
+
   '@types/json5@0.0.29': {}
 
   '@types/jsrsasign@10.5.15': {}
@@ -5314,6 +5374,13 @@ snapshots:
       eslint-visitor-keys: 4.2.0
 
   '@ungap/structured-clone@1.2.0': {}
+
+  '@xstate-ninja/react@1.1.3(@xstate/react@5.0.2(@types/react@18.3.12)(react@19.0.0)(xstate@5.19.2))(react@19.0.0)(xstate-ninja@1.3.10(xstate@5.19.2))(xstate@5.19.2)':
+    dependencies:
+      '@xstate/react': 5.0.2(@types/react@18.3.12)(react@19.0.0)(xstate@5.19.2)
+      react: 19.0.0
+      xstate: 5.19.2
+      xstate-ninja: 1.3.10(xstate@5.19.2)
 
   '@xstate/react@5.0.2(@types/react@18.3.12)(react@19.0.0)(xstate@5.19.2)':
     dependencies:
@@ -5721,6 +5788,8 @@ snapshots:
   decimal.js-light@2.5.1: {}
 
   deep-is@0.1.4: {}
+
+  deepmerge@2.2.1: {}
 
   define-data-property@1.1.4:
     dependencies:
@@ -6179,6 +6248,23 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
+  formik-validator-zod@2.0.1(formik@2.4.6(react@19.0.0))(zod@3.23.8):
+    dependencies:
+      formik: 2.4.6(react@19.0.0)
+      zod: 3.23.8
+
+  formik@2.4.6(react@19.0.0):
+    dependencies:
+      '@types/hoist-non-react-statics': 3.3.6
+      deepmerge: 2.2.1
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      react: 19.0.0
+      react-fast-compare: 2.0.4
+      tiny-warning: 1.0.3
+      tslib: 2.8.1
+
   fs-constants@1.0.0: {}
 
   fs.realpath@1.0.0: {}
@@ -6222,6 +6308,8 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+
+  generate-password@1.7.1: {}
 
   get-intrinsic@1.2.4:
     dependencies:
@@ -6610,6 +6698,8 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  lodash-es@4.17.21: {}
+
   lodash.debounce@4.0.8: {}
 
   lodash.defaults@4.2.0: {}
@@ -6988,6 +7078,8 @@ snapshots:
     dependencies:
       prop-types: 15.8.1
       react: 19.0.0
+
+  react-fast-compare@2.0.4: {}
 
   react-is@16.13.1: {}
 
@@ -7458,6 +7550,8 @@ snapshots:
 
   tiny-invariant@1.3.3: {}
 
+  tiny-warning@1.0.3: {}
+
   tmp@0.2.3: {}
 
   to-regex-range@5.0.1:
@@ -7704,6 +7798,10 @@ snapshots:
   ws@8.18.0: {}
 
   xmlchars@2.2.0: {}
+
+  xstate-ninja@1.3.10(xstate@5.19.2):
+    dependencies:
+      xstate: 5.19.2
 
   xstate@5.19.2: {}
 

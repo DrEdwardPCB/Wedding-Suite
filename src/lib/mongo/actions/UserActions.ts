@@ -7,16 +7,17 @@ import User, { TZodUserSchema } from "../schema/UserSchema"
 export const commitAdd=async (user:TZodUserSchema)=>{
     console.log("[User] commit add")
     const newUser = new User(user)
-     newUser.save()
+    await newUser.save()
 }
 export const commitDelete=async (id:string)=>{
     console.log("[User] commit delete")
-     User.deleteOne({id})
+    console.log(id)
+     await User.findOneAndDelete({id:id})
 }
 export const commitUpdate=async (user:TZodUserSchema)=>{
     console.log("[User] commit update")
     // console.log(user)
-    User.findOneAndUpdate({id:user.id},user).then((user)=>user.save())
+    await User.findOneAndUpdate({id:user.id},user).then((user)=>user.save())
 }
 export const queryAll = async()=>{
     //@ts-ignore
