@@ -12,15 +12,16 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        themeLight:"#FBF6D1",
-        themeSemiLight:"#F3D777",
-        themeReg:"#6C5A70",
-        themeSemiDark: "#A74501",
-        themeDark: "#260F05"
+        themeLight:"#F8F4E3",
+        themeSemiLight:"#D4CDC3",
+        themeReg:"#946846",
+        themeSemiDark: "#535014",
+        themeDark: "#3A3703"
       },
       fontFamily:{
-        theseasons: ['theseasons'],
-        bevietnam: ['bevietnam']
+        theseasons: "var(--font-theseasons)",
+        bevietnam: "var(--font-bevietnam)",
+        modelsignature: "var(--font-modelsignature)"
       }
     },
   },

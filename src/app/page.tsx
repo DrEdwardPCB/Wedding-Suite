@@ -2,14 +2,12 @@
 import { FadeInSection } from "@/component/common/FadeInSection";
 import { LoadImageFromDB } from "@/component/common/ImageSlot";
 import { HomeItemDisplay } from "@/component/HomeItemDisplay";
-import { getLatestConfig } from "@/lib/mongo/actions/ConfigActions";
-import { TZodConfigSchema } from "@/lib/mongo/schema/Config";
 import Link from "next/link";
+import dayjs from 'dayjs'
 import {ToastContainer} from "react-toastify"
 export const dynamic = 'force-dynamic'
 export default async function Home() {
   // p-8 bg-white w-[300px] shadow uppercase mt-8 mb-4 text-black border-black hover:bg-black self-end
-  const config = await getLatestConfig() as TZodConfigSchema
   return (
     <div>
       <div className="relative w-full h-[100vh] flex">
@@ -17,7 +15,7 @@ export default async function Home() {
         <div className="z-100 absolute w-full h-full flex flex-wrap items-end justify-around">
           <FadeInSection className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-14">
             <div className="text-2xl md:text-6xl font-light">
-              Edward Wong<br></br> & <br></br> Kiki Cho
+              Edward Wong<br></br> <span className="font-serif font-thin">&</span> <br></br> Kiki Cho
             </div>
             <div className="mt-2">
               August 3, 2025
@@ -25,14 +23,18 @@ export default async function Home() {
           </FadeInSection>
           <FadeInSection className="flex gap-2 delay-500 m-14">
           {/* rsvp=signup signin=access different function */}
-            <Link href="/guest/auth/signup"><button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">RSVP</button></Link>
-            {config.guestSigninable?<Link href="/guest/auth/signin"><button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">sign in</button></Link>:<></>}
+          <Link href="/guest/auth/signup" className="p-6 bg-[rgba(0,0,0,.5)]"><button className="transition-all px-6 py-2 min-w-[120px] text-center text-white border border-white hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">RSVP</button></Link>
           </FadeInSection>
         </div>
       </div>
+      <nav className="h-[10vh] w-full bg-themeLight shadow-inner flex items-center justify-between p-4">
+        <div className="flex-1"></div>
+            <div className="font-theseasons italic font-bold text-themeSemiDark text-2xl font-theseasons flex-1">EK<span className="font-serif font-thin">-</span>Wedding</div>
+            <Link href="/guest/auth/signin" className=""><button className="transition-all px-6 py-2 min-w-[120px] text-center text-black border border-black hover:bg-white hover:text-black active:bg-slate-100 focus:outline-none focus:ring">sign in</button></Link>
+        </nav>
       <div className="p-14 pt-2 bg-themeLight text-themeDark flex flex-col md:flex-row gap-6">
         {/* our story */}
-        <div className=" flex flex-col items-start justify-around flex-1">
+        <div className=" flex flex-col items-start justify-around ">
 
           <FadeInSection className="text-themeDark text-6xl font-theseasons"><p>Our Story</p></FadeInSection>
           <FadeInSection className="ring ring-2 ring-themeReg p-2  md:w-5/6 self-center delay-150">
@@ -47,12 +49,15 @@ export default async function Home() {
           </FadeInSection>
         </div>
       </div>
-      <div className="p-14 bg-themeSemiLight text-themeDark flex items-center flex-col md:flex-row">
+      <div className="p-14 bg-themeReg text-themeLight flex items-center flex-col md:flex-row">
         <div className="flex flex-col items-start gap-10 items-start justify-center flex-1 p-24">
-          <FadeInSection className="text-themeDark text-6xl font-theseasons"><p>Join us as we tie the Knot!</p></FadeInSection>
+          <FadeInSection className="text-themeLight text-6xl font-theseasons"><p>Join us as we tie the Knot<span className="font-serif font-thin">!</span></p></FadeInSection>
           <FadeInSection className="font-bevietnam delay-200">
             <p><span className="font-bold">When</span> August 3, 2025 | 4:00 pm onwards</p>
             <p><span className="font-bold">Where:</span> < a href="https://www.hmwineries.ca" className="cursor-pointer underline hover:text-white transition-all">Holland Marsh Wineries</a>, <a className="cursor-pointer underline hover:text-white transition-all" href="https://www.google.com/maps/place/Holland+Marsh+Wineries/@44.0564073,-79.5604865,1629m/data=!3m2!1e3!4b1!4m6!3m5!1s0x882ad00a64e3c227:0xc7c4f6a970480adb!8m2!3d44.0564073!4d-79.5604865!16s%2Fg%2F1tfscgq6?entry=ttu&g_ep=EgoyMDI1MDEwMi4wIKXMDSoASAFQAw%3D%3D">18270 Keele St, Newmarket, ON, Canada L3Y 4V9</a></p>
+          </FadeInSection>
+          <FadeInSection className="delay-250">
+          <Link href="/guest/auth/signup" className=""><button className="transition-all px-6 py-2 min-w-[120px] text-center text-themeLight border border-themeLight hover:bg-themeLight hover:text-black active:bg-slate-100 focus:outline-none focus:ring">RSVP</button></Link>
           </FadeInSection>
         </div>
         <div className="flex-1 flex items-center justify-center">
@@ -77,6 +82,11 @@ export default async function Home() {
         <div className="z-100 absolute w-full h-full flex items-center justify-center">
           <FadeInSection className="text-2xl md:text-6xl font-light text-white font-theseasons italic p-7 bg-black bg-opacity-50"><p>see you there</p></FadeInSection>
         </div>
+      </div>
+      <div className="w-full h-40 flex justify-around items-center bg-black">
+        <p className="text-white text-center">
+          Created and Managed by Edward Wong 1997-{dayjs().year()}<br></br><a href="/privacypolicy" className="cursour-pointer underline hover:white hover:text-blue-600">Privacy Policy</a>
+        </p>
       </div>
       <ToastContainer />
     </div>

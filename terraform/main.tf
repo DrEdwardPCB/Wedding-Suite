@@ -42,6 +42,9 @@ variable "certificate_arn" {
   description = "The ARN of the SSL/TLS certificate in ACM"
   type        = string
 }
+variable "GOOGLE_CLIENT_ID"{}
+variable "GOOGLE_CLIENT_SECRET"{}
+variable "BASE_URL"{}
 
 # MongoDB Atlas Cluster
 resource "mongodbatlas_cluster" "atlas_cluster" {
