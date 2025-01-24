@@ -15,6 +15,10 @@ resource "aws_default_subnet" "default_subnet_b" {
 resource "aws_default_subnet" "default_subnet_c" {
   availability_zone = var.availability_zones[2]
 }
+resource "aws_cloudwatch_log_group" "demo_app" {
+  name              = "/ecs/${var.demo_app_task_name}"
+  retention_in_days = 30
+}
 
 resource "aws_ecs_task_definition" "demo_app_task" {
   family                   = var.demo_app_task_famliy
@@ -31,6 +35,14 @@ resource "aws_ecs_task_definition" "demo_app_task" {
       ]
       memory       = 1024
       cpu          = 512
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/${var.demo_app_task_name}"
+          "awslogs-region"        = var.AWS_REGION
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
       environment = [
         {
           name  = "MONGO_URI"
