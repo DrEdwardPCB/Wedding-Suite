@@ -5,7 +5,6 @@ import { LoadingButton } from '@mui/lab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { commitAdd, findUserByEmail } from "@/lib/mongo/actions/UserActions";
 import useSWRMutation from 'swr/mutation';
-import { newSnowflakeId } from "@/lib/snowflake/generateSnowflake";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useMachine } from "@xstate/react";
@@ -16,6 +15,7 @@ import { ZodRegisterEmailEntry, ZodRegisterPersonalDetail } from "@/lib/xstate/r
 import _ from "lodash";
 import generator from 'generate-password'
 import { encryptData } from '@/lib/encryption';
+import {v4} from 'uuid'
 async function sendRSVP(
     url:string,
     {arg}:{arg:{
@@ -45,7 +45,7 @@ export const SignupForm= ()=>{
         
     }
     const handleCreateUserAndRsvp=async()=>{
-        const newId = await newSnowflakeId()
+        const newId = v4()
         await commitAdd({
             id:newId,
             password:encryptData(generator.generate({length:10,numbers:true})),

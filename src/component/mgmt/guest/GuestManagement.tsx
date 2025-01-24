@@ -24,12 +24,12 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { TZodUserSchema } from '@/lib/mongo/schema/UserSchema';
-import { newSnowflakeId } from '@/lib/snowflake/generateSnowflake';
 import { commitAdd, commitDelete, commitUpdate, queryAll } from '@/lib/mongo/actions/UserActions';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import { decryptData, encryptData } from '@/lib/encryption';
 import { Tooltip } from '@mantine/core';
+import { v4 } from 'uuid';
 
 
 declare module '@mui/x-data-grid-premium' {
@@ -45,7 +45,7 @@ declare module '@mui/x-data-grid-premium' {
     const { setRows, setRowModesModel } = props;
   
     const handleClick = async () => {
-      const id = await newSnowflakeId()
+      const id = v4()
       const newRow:TZodUserSchema&{isNew?:boolean|null}={
         id,
         preferredName:"",
@@ -131,7 +131,7 @@ const GuestManagement=()=>{
       return
     }
     
-    const newid = await newSnowflakeId()
+    const newid = v4()
     const newRow:TZodUserSchema&{isNew?:boolean|null}={...fromRow, id:newid, isNew:true}
     setRows((oldRows) => [
       ...oldRows,

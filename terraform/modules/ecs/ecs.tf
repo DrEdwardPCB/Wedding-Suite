@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "demo_app_task" {
           name  = "MONGO_URI"
           value = var.MONGO_URI
         },
-        {
+        {s
           name  = "COOKIE_SECRET_KEY"
           value = var.COOKIE_SECRET_KEY
         },

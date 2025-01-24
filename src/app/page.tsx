@@ -85,7 +85,7 @@ export default async function Home() {
       </div>
       <div className="w-full h-40 flex justify-around items-center bg-black">
         <p className="text-white text-center">
-          Created and Managed by Edward Wong 1997-{dayjs().year()}<br></br><a href="/privacypolicy" className="cursour-pointer underline hover:white hover:text-blue-600">Privacy Policy</a>
+          Created and <Link className="cursor-pointer" href="/mgmt/auth">Managed</Link> by Edward Wong 1997-{dayjs().year()}<br></br><a href="/privacypolicy" className="cursour-pointer underline hover:white hover:text-blue-600">Privacy Policy</a>
         </p>
       </div>
       <ToastContainer />
