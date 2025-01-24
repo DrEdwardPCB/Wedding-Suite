@@ -7,11 +7,8 @@ export default async function GamePage(){
             redirect("/guest/auth/signin")
         }
         return(
-            <div className="flex flex-col items-center">
-                <div className="w-full p-10 flex items-center justify-between ">
-                        <h1 className="">Game</h1>
-                  
-                </div>
+            <div className="flex h-full flex-col items-center justify-around">
+                    <h1 className=" font-modelsignature text-5xl md:text-9xl  p-12">Game</h1>
                 <GamePlay userId={session.userid}/>
             </div>
         )
