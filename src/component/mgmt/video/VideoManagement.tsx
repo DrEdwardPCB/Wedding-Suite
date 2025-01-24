@@ -33,7 +33,7 @@ export const VideoManagement=()=>{
         </div>
         <div className="flex flex-col w-full p-10 gap-2">
 
-            {videos.map((e)=><VideoDisplay video={e} key={e._id}></VideoDisplay>)}
+            {(videos??[]).map((e)=><VideoDisplay video={e} key={e._id}></VideoDisplay>)}
         </div>
     </>
 
