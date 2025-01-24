@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const runtime = 'nodejs'
 // This is required to enable streaming
 export const dynamic = 'force-dynamic'
-
+let count = 0
 // Events
 // Update Question ID
 export async function GET(request: NextRequest){
@@ -34,9 +34,15 @@ export async function GET(request: NextRequest){
   }
   const gm = await GameManager.GetInstance()
   const gameState = gm?.getState()
-//   console.log(gm,gameState)
   const heartbeatInterval = setInterval(() => {
-    console.log("heartbeat")
+    if(count>200){
+      console.log('timeout of 200*15000 ms reached , terminating')
+      clearInterval(heartbeatInterval)
+      sub.unsubscribe()
+      writer.close()
+    }
+    count++
+    console.log("admin","heartbeat", count)
     sendData("heartbeat")
   }, 15000);
   function sendData(data: any) {

@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 // update question id
 // start question
 // end question
+let count=0
 export async function GET(request: NextRequest){
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session){
@@ -34,7 +35,14 @@ export async function GET(request: NextRequest){
   const gm = await GameManager.GetInstance()
   const gameState = gm?.getState()
   const heartbeatInterval = setInterval(() => {
-    console.log("heartbeat")
+    if(count>200){
+      console.log('timeout of 200*15000 ms reached , terminating')
+      clearInterval(heartbeatInterval)
+      sub.unsubscribe()
+      writer.close()
+    }
+    count++
+    console.log("guest","heartbeat", count)
     sendData("heartbeat")
   }, 15000);
 
