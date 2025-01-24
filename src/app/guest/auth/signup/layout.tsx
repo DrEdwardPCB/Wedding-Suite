@@ -5,7 +5,7 @@ export default function RSVPLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-[100vh] w-[100vw] from-[#F8F4E3] to bg-[#D4CDC3] bg-gradient-to-br relative p-2 flex flex-col items-stretch overflow-hidden relative flex flex-col justify-center items-center">
+    <div className="h-[100vh] w-[100vw] from-[#F8F4E3] to bg-[#D4CDC3] bg-gradient-to-br relative p-2 flex flex-col items-stretch overflow-hidden relative flex flex-col justify-center items-center">
         <div className="absolute flex top-0 left-0 right-0 bottom-0 p-4">
             <div className="flex-1 relative">
                 {/* Top border */}
@@ -48,7 +48,7 @@ export default function RSVPLayout({
             <img className="absolute left-[-5px] bottom-[-50px] sm:left-[-5px] sm:bottom-[-100px]  w-40 sm:w-72 rotate-[15deg] aspect-square" src="/sprite/plantCorner2.png"></img>
         </div>
     </div>
-            <div className="flex-1">
+            <div className="flex-1 z-50">
 
                 {children}
             </div>
