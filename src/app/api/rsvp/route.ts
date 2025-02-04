@@ -28,6 +28,7 @@ export async function POST(request:NextRequest){
     emailjs.init({publicKey:config.emailjsAPIKey as string});
     emailjs.send(config.emailjsServiceId,config.emailjsTemplateId,{
         to_name:guest.preferredName,
+        title:guest.online?"You're All Set for Edward & Kiki's Wedding! Join Us Virtually!":"You're All Set for Edward & Kiki's Wedding ✨ ",
         email:guest.email,
         message:guest.online?virtualTemplate(guest,config):physicalTemplate(guest,config)
     })
@@ -86,7 +87,7 @@ const virtualTemplate = (guest:TZodUserSchema,config:TZodConfigSchema)=>{
 }
 const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
     return `
-        <p>Thank you so much for joining us virtually on our special day! We're thrilled to have you celebrate with us from wherever you are.</p>
+        <p>We're thrilled that you'll be joining us in person to celebrate our big day! It means the world to us to have you there.</p>
         <br/>
         <br/>
         <p><strong>Here's all the wedding info you'll need:</strong></p>
@@ -94,7 +95,6 @@ const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
             <li><strong>Date: </strong> August 3, 2025 (Sunday)</li>
             <li><strong>Wedding Time: </strong> Starting at 3:00 PM EDT (don't forget to double-check your local time zone!)</li>
             <li><strong>Wedding Location: </strong> Holland Marsh Wineries (though you'll be joining us online!)</li>
-            <li><strong>Watch the Ceremony Live:</strong><a href=https://youtube.com/live/ovEW5SCEmng> https://youtube.com/live/ovEW5SCEmng</a></li>
         </ul>
         <br/>
         <br/>

@@ -569,12 +569,15 @@ export const SignupForm= ()=>{
                             }
                         })
                         console.log(1)
-                        if(values.banquet||values.cocktail){
-                            console.log(2)
+                        if(values.banquet){
                             send({
-                                type:"EGotoCockTailBanquet"
+                                type:"EGotoBanquet"
                             })
-                        }else{
+                        }else if(values.cocktail){
+                            send({
+                                type:"EGotoCockTail"
+                            })
+                        }{
                             console.log(3)
                             send({
                                 type:"EGotoCeremony"
@@ -691,6 +694,7 @@ export const SignupForm= ()=>{
                         <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
                             
                             <TextField 
+                                size="small"
                                 name="remarks" 
                                 aria-label="Remarks" 
                                 label="Remarks" 
@@ -725,7 +729,7 @@ export const SignupForm= ()=>{
             </div>
         )
     }
-    if (state.matches("SCocktailBanquet")){
+    if (state.matches("SCocktail")){
         return (
             <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
@@ -743,12 +747,10 @@ export const SignupForm= ()=>{
                 <Formik
                     initialValues={{foodAllergies:"",remarks:""}}
                     onSubmit={async(values)=>{
-                        console.log(values)
                         send({
                             type:"EFillRemarks",
                             value:values.remarks
                         })
-                        console.log(1)
                         send({
                             type:"EFillFoodAllergies",
                             value:values.foodAllergies
@@ -776,8 +778,26 @@ export const SignupForm= ()=>{
                         handleSubmit,
                     })=>(
                         <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
-                            
                             <TextField 
+                                size="small"
+                                name="foodAllergies" 
+                                aria-label="Food Allergies" 
+                                label="Food Allergies " 
+                                placeholder="Shrimp..." 
+                                helperText={errors.foodAllergies&&touched.foodAllergies?errors.foodAllergies:"Enter any food allergies" }
+                                onPaste={(e)=>e.preventDefault()} 
+                                sx={{
+                                    '& .MuiFormHelperText-root': {
+                                        width: 250,
+                                    },
+                                }}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.foodAllergies}
+                                error={touched.foodAllergies && !!errors.foodAllergies}
+                            />
+                            <TextField 
+                                size="small"
                                 name="remarks" 
                                 aria-label="Remarks" 
                                 label="Remarks" 
@@ -795,24 +815,6 @@ export const SignupForm= ()=>{
                                 value={values.remarks}
                                 error={touched.remarks && !!errors.remarks}
                                 />
-                                
-                            <TextField 
-                                name="foodAllergies" 
-                                aria-label="Food Allergies" 
-                                label="Food Allergies " 
-                                placeholder="Shrimp..." 
-                                helperText={errors.foodAllergies&&touched.foodAllergies?errors.foodAllergies:"Enter any food allergies" }
-                                onPaste={(e)=>e.preventDefault()} 
-                                sx={{
-                                    '& .MuiFormHelperText-root': {
-                                        width: 250,
-                                    },
-                                }}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.foodAllergies}
-                                error={touched.foodAllergies && !!errors.foodAllergies}
-                            />
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton
                                     className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
@@ -834,7 +836,7 @@ export const SignupForm= ()=>{
             <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                         <Tooltip title="Food Allergies">
-                        <IconButton className="" onClick={()=>send({type:"EBackToCockTailBanquet"})}>
+                        <IconButton className="" onClick={()=>send({type:"EBackToPhysical"})}>
                             <ArrowBackIcon className="text-3xl"/>
                         </IconButton>
                         </Tooltip>
@@ -845,11 +847,19 @@ export const SignupForm= ()=>{
                     <div className="flex-1"></div>
                 </div>
                 <Formik
-                    initialValues={{foodChoice:"beef"}}
+                    initialValues={{foodChoice:"beef", foodAllergies:"",remarks:""}}
                     onSubmit={async(values)=>{
                         send({
                             type:"EFillFoodChoice",
                             value:values.foodChoice as "beef"|"fish&shrimp"|"vegetarian"
+                        })
+                        send({
+                            type:"EFillRemarks",
+                            value:values.remarks
+                        })
+                        send({
+                            type:"EFillFoodAllergies",
+                            value:values.foodAllergies
                         })
                         send({
                             type:"EGotoRSVP"
@@ -863,12 +873,14 @@ export const SignupForm= ()=>{
                         touched,
                         handleChange,
                         handleSubmit,
+                        handleBlur,
                     })=>(
                         <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
                             
-                            <FormControl className="max-w-[250px] min-w-[120px]" error={touched.foodChoice && !!errors.foodChoice} required>
+                            <FormControl className="max-w-[250px] min-w-[120px]" error={touched.foodChoice && !!errors.foodChoice} required size="small">
                                 <InputLabel id="SBanquetFoodChoice-label">Main Course selection</InputLabel>
                                 <Select
+                                    
                                     labelId="SBanquetFoodChoice-label"
                                     id="SBanquetFoodChoice"
                                     name="foodChoice"
@@ -884,6 +896,45 @@ export const SignupForm= ()=>{
                                     <MenuItem value={"vegetarian"}>Parmigiana (Breaded Eggplant Layered With Tomato Sauce And Mozzarella Nestled On Soft Polenta)</MenuItem>
                                 </Select>
                                 <FormHelperText>{errors.foodChoice && touched.foodChoice ? errors.foodChoice:"Please select a main course" }</FormHelperText>
+                            <TextField 
+                                size="small"
+                                name="foodAllergies" 
+                                aria-label="Food Allergies" 
+                                label="Food Allergies " 
+                                placeholder="Shrimp..." 
+                                helperText={errors.foodAllergies&&touched.foodAllergies?errors.foodAllergies:"Enter any food allergies" }
+                                onPaste={(e)=>e.preventDefault()} 
+                                sx={{
+                                    '& .MuiFormHelperText-root': {
+                                        width: 250,
+                                    },
+                                }}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.foodAllergies}
+                                error={touched.foodAllergies && !!errors.foodAllergies}
+                            />
+                            <TextField 
+                                size="small"
+                                name="remarks" 
+                                aria-label="Remarks" 
+                                label="Remarks" 
+                                placeholder="Enter your remarks " 
+                                helperText= {errors.remarks && touched.remarks ? errors.remarks:"Any remarks for the day" }
+                                onCopy={(e)=>e.preventDefault()} 
+                                onCut={(e)=>e.preventDefault()}
+                                sx={{
+                                    '& .MuiFormHelperText-root': {
+                                        width: 250,
+                                    },
+                                }}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.remarks}
+                                error={touched.remarks && !!errors.remarks}
+                                />
+                                
+                            
                             </FormControl>
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
@@ -922,7 +973,7 @@ export const SignupForm= ()=>{
                                 })
                             }else if(state.context.otherField.cocktail){
                                 send({
-                                    type:"EBackToCockTailBanquet"
+                                    type:"EBackToCocktail"
                                 })
                             }else if(state.context.otherField.ceremony){
                                 send({
@@ -943,7 +994,6 @@ export const SignupForm= ()=>{
                     <div className="flex flex-col items-center justify-start gap-4 p-7 " >
                         <div className=" shadow-inner h-40 -z-10 overflow-y-scroll w-full">
                             {Object.entries(state.context.emailField).map(([key,value],i)=>{
-                                console.log(key,value)
                                 if(key==="reenterEmail"){
                                     return(<></>)
                                 }

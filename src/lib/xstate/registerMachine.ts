@@ -79,19 +79,13 @@ export const registerMachine = setup({
             type:"EBackToCeremony"
         }
         |{
-            type:"EBackToCockTailBanquet"
-        }
-        |{
-            type:"EBackToBanquet"
-        }
-        |{
-            type:"EBackToBanquet"
+            type:"EBackToCocktail"
         }
         |{
             type:"EGotoAlreadyHave"
         }|
         {
-            type:"EGotoCockTailBanquet"
+            type:"EGotoCockTail"
         }|
         {
             type:"EGotoBanquet"
@@ -102,7 +96,7 @@ export const registerMachine = setup({
         
     }
 }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QCcxQJawC5mQOgGUBRAWwEN0AbAYiICU4wsBtABgF1FQAHAe1nRZ0vAHZcQAD0QBGAKwB2AGx5ZAZgCcrACyzp6xevUAOADQgAnjOmt1edfPlGNWgExG36rQF8vZ1BmxcQlIKGiIAMSpKEKo2TiQQPgEhUXEpBDlFeTwdVWsXQ0U3bTNLDNZpLTxWFy15GqN5VSyXaR8-NEwcfGJyKloAcV4sXgAFXFhRMko48STBYTEE9Ol6qptVeRcXRT1rdVVSmVZZVjxGorl1aUUjV1V2kH8uoIJx5EmRadoGWCZZhLzFJLUArdzZCqyXabdyqVStI4ZazSPCbIpaTZaYysJyPZ6BHrvT7fIgAITIAGMANYAFV4MRmHDm-AWqWWMgcylu8jq6M0NRciOkemy8IORlYqm0rjUeM6BMIRKmYUilEoSq+jPiPBZwLSMnUslkOTuqixrElW0UhwsiC00hcKm0qiMqzq2JcD18T3l3UVE2Vg2GvAAauhkFgAK7TAE65KLfUZeR6c6yA4Y1ouC3qQW2hC6FE5+zWTasRTaRSyOUBP1vAOaoMjUYAC3MAgpMaZgN1CfZSbLdm50nhkrcGkRrqdFpOaiMWU0Xo6NdeYYj0bCv3+XbjrJBkiscnOGJ5RnstWa8kR1sd862rkaOIc1ZePVXUZJ5OpdI1ne1iR7bKggexqmieZ4YlkiJmsaVqyI0TS1PUsrevitZvuutCqpQDDkMgVKwLG-7xoB+4IEWeC1K0PKqFCWLSKYeaKIoVSrPY+haO4Y5GM+CoEOhJJDCMdB8aMhFAr2QFIoeoEceBF6Ig4tjDm4RhzjyWQnDxtYtm26AdhujAsNuRG7omTG2KwjjClCShwjmE4OHgmRmrCo7yOoWmvDp7YfpStJjPWv7MsRe7pOZ1RWZktkaLmZRZo6LinBUnhGjceguJ5hKtj5KpRN5elBd2IWJuaditKerg5jsDpCjijr5HOllaJKDqLj6y5Zbp+mNrwADCuBgCQojmGJAGhYg4WWa6UXWjFQoitURqGgU8IGB5KG+l52UFWEgl9bwX6hOSIgAI6Rluf7iSR6Q7MoZa1K67haLcOJaPNA7uOKBSrFmzGZYQ-WoENIjmD8hmjcVfbCtJx6yXe8l5sKjR4GsLqeC6lSGv9BCA4Nw20J+-n5fpEOmX2TQovszQnFmrrjojyJOQ0NwwnV2O48DoMRFEOFkHhBHGVd41ka0KNYoYcKWYaDFlPsSkNBxUJZsO3gbR1AMDZzPXCSGomC2NibQyBsOnvDkGIzUZzXtclaWda1rswdVJYEdZCnedWBg38RmXQbfa3dU6KPbUL13EK5aU2a1jMRxmwuo71Iu1Qx1nUwBN+d+20k-rkOSQH90cfRIcSmHDMKKiBT2pZpw-arS4vgDTtJ5QKce5hUThLwvAQAAgmquAYHApN6n2OgmhBmY7EYuiXojpxGHY1e3LstwOooCfO677tp9zaq8-zw8SaR1oqM909wvacHyEaQr2o6hpaBm916FCG-N63O97R-PvBWTedMYHB6Rcz6vVvlkaoNhkRMShHIbG38vYXV-iPSSRsjyYlNuec2ssdDZErNfDGyYyyyDru1BuBB4G70oJ3buvVmy8D0mAQ+11EDXBRM1IocEKjNTyLPWWzQLJLTPJ4IsbVUKvAoYTOkvUnY0i3qnH+RU-7HwMBFaaNlZr2URlKM4Eo0zuRqCeNoasyEUL2jrPWvtc6kVQTJDBEFeEyBolyBQHFEonGHGabG5iEEKJ3Mg6xGIF7GHsQ4Dic4bSy2lBRFwjhWg3FekY+uvFvFkgzrwb+TDhbCgKCjJKzhp5qG2LfSyTkFC6ElC6GwOYvEiXTl+PqmthqZMNtZNBYEzYOPKMmJyYpH5mjLDUURm0egpMkaGcM74tRIKPisSojp3CukfPkT0nStgL2vI1O4qxtDyB8N6EQ3c4DiDEcgaZzCEAAFpHS6ChDCBweRY4nERBc40hg3nvI+UM9WvRQhnKyQoWwGgBlX2uEoTpDprB2ClPYNMn0yyJNIbxH8lA-mG30NkSqLQ4J6DyBExAuhVA5DKfRKUiUzzY34iixR-j0ieHWZCLEMS5DXxlogJQxplIHClPwi03FjFIqztMVFfZTjzKyPRKEc41CnDegzJwi00xCMZQcdmjSQbCskjmBeJxnropuJfIUWYzgzmMAWJiUoSEnMbonORHsNWkTqOHGw5xyxIVWHM-QcC3byPtbS5oqJgnwm4UaDit96gQOuHCO4D8Hb8trOY31jiaIUTNGiPQdQri1XAToR+lkkJ6L5T4IAA */
+    /** @xstate-layout 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 */
     id:"register",
     initial:"SEmail",
     context:{
@@ -246,8 +240,11 @@ export const registerMachine = setup({
                 "EGotoCeremony":{
                     target:"SCeremony"
                 },
-                "EGotoCockTailBanquet":{
-                    target:"SCocktailBanquet"
+                "EGotoCockTail":{
+                    target:"SCocktail"
+                },
+                "EGotoBanquet":{
+                    target:"SBanquet"
                 },
             }
 
@@ -279,7 +276,7 @@ export const registerMachine = setup({
             }
 
         },
-        SCocktailBanquet:{
+        SCocktail:{
             on:{
                 "EReset":{
                     target:"SEmail",
@@ -305,9 +302,6 @@ export const registerMachine = setup({
                         otherField:({event,context})=>({...context.otherField,remarks:event.value})
                     })
                 },
-                "EGotoBanquet":{
-                    target:"SBanquet"
-                },
                 "EGotoRSVP":{
                     target:"SRSVP"
                 }
@@ -324,13 +318,23 @@ export const registerMachine = setup({
                         otherField:structuredClone(DefaultZodRegisterRemaining)
                     })
                 },
+                "EFillFoodAllergies":{
+                    actions:assign({
+                        otherField:({event,context})=>({...context.otherField,foodAllergies:event.value})
+                    })
+                },
+                "EFillRemarks":{
+                    actions:assign({
+                        otherField:({event,context})=>({...context.otherField,remarks:event.value})
+                    })
+                },
                 "EFillFoodChoice":{
                     actions:assign({
                         otherField:({event,context})=>({...context.otherField, foodChoice:event.value})
                     })
                 },
-                "EBackToCockTailBanquet":{
-                    target:"SCocktailBanquet",
+                "EBackToPhysical":{
+                    target:"SPhysical",
                     actions:assign({
                         otherField:({context})=>({...context.otherField,foodChoice:""})
                     })
@@ -358,8 +362,8 @@ export const registerMachine = setup({
                 "EBackToCeremony":{
                     target:"SCeremony"
                 },
-                "EBackToCockTailBanquet":{
-                    target:"SCocktailBanquet",
+                "EBackToCocktail":{
+                    target:"SCocktail",
                 },
                 "EBackToVirtual":{
                     target:"SVirtual"
