@@ -5,7 +5,7 @@ export default function RSVPLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-[100vh] w-[100vw] from-[#F8F4E3] to bg-[#D4CDC3] bg-gradient-to-br relative p-2 flex flex-col items-stretch overflow-hidden relative flex flex-col justify-center items-center">
+    <div className="h-[100vh] w-[100vw] bg-[#EFEEEA] relative p-2 flex flex-col items-stretch overflow-hidden relative flex flex-col justify-center items-center">
         <div className="absolute flex top-0 left-0 right-0 bottom-0 p-4">
             <div className="flex-1 relative">
                 {/* Top border */}

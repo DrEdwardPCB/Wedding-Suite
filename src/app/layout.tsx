@@ -5,7 +5,10 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import MuiXLicense from "@/lib/license/MuiXLicense";
 import '@mantine/core/styles.css';
 
-
+const zapfino = localFont({
+  src: "../../public/fonts/Zapfino.ttf",
+  variable: "--font-zapfino",
+})
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -91,7 +94,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${modelsignature.variable} ${theseasons.variable} ${bevietnam.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${modelsignature.variable} ${theseasons.variable} ${bevietnam.variable} ${zapfino.variable} antialiased`}
         cz-shortcut-listen="true"
       >
         <MantineProvider>

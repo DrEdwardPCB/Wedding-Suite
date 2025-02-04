@@ -11,7 +11,7 @@ import { useMachine } from "@xstate/react";
 import { registerMachine } from "@/lib/xstate/registerMachine";
 import {Formik, FormikErrors} from 'formik'
 import { withZodSchema } from "formik-validator-zod";
-import { ZodRegisterEmailEntry, ZodRegisterPersonalDetail } from "@/lib/xstate/registerHelper";
+import { keyToDisplay, ZodRegisterEmailEntry, ZodRegisterPersonalDetail } from "@/lib/xstate/registerHelper";
 import _ from "lodash";
 import generator from 'generate-password'
 import { encryptData } from '@/lib/encryption';
@@ -74,8 +74,8 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SEmail")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
-                <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
+                <div className="w-full flex items-center mt-7 justify-between gap-4 md:px-2">
                     <Link href="/" className="">
                         <Tooltip title="homepage">
                         <IconButton className="">
@@ -138,6 +138,7 @@ export const SignupForm= ()=>{
                                         width: 250,
                                     },
                                 }}
+                                size="small"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.email}
@@ -157,6 +158,7 @@ export const SignupForm= ()=>{
                                         width: 250,
                                     },
                                 }}
+                                size="small"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.reenterEmail}
@@ -164,13 +166,16 @@ export const SignupForm= ()=>{
                             />
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
+                                    variant="contained"
                                     loading={isSubmitting} 
                                     disabled={_.size(errors)>0&&_.size(touched)===_.size(structuredClone(state.context.emailField))} 
                                     type="submit"
-                                    variant="contained">
+                                    >
                                     Next
                                 </LoadingButton>
                                 <Button 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                     type="button" 
                                     variant="contained" 
                                     onClick={()=>{resetForm(); send({type:"EReset"})}}>
@@ -185,7 +190,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SAlreadyHave")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                     
                     <Tooltip title="Fill Email information">
@@ -203,6 +208,7 @@ export const SignupForm= ()=>{
                     <div className="flex flex-col items-center justify-start gap-4 p-7" >
                         <div className="flex justify-end items-center gap-2 w-full">
                             <LoadingButton 
+                                className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                 onClick={async()=> await handleSendRsvp(await getUserIdByEmail(state.context.emailField.email as string) as string)}
                                 type="button"
                                 variant="contained">
@@ -215,7 +221,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SPersonal")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96  flex-col">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[400px] md:max-h-[450px] w-82 md:w-2/3  flex-col">
                 <div className="overflow-y-auto w-full">
                     <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                         
@@ -248,8 +254,8 @@ export const SignupForm= ()=>{
                             handleBlur,
                             handleSubmit,
                         })=>(
-                            <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
-                                <FormControl className="max-w-[250px] min-w-[120px]" error={touched.prefix && !!errors.prefix} required>
+                            <form className="flex flex-col items-center justify-start gap-4 p-7 md:grid md:grid-cols-6" onSubmit={handleSubmit}>
+                                <FormControl className="max-w-[250px] min-w-[120px] md:max-w-full md:col-span-2" error={touched.prefix && !!errors.prefix} required size="small">
                                     <InputLabel id="SPersonalPrefix-label">Prefix</InputLabel>
                                     <Select
                                         labelId="SPersonalPrefix-label"
@@ -266,16 +272,18 @@ export const SignupForm= ()=>{
                                         <MenuItem value={"Miss."}>Miss.</MenuItem>
                                         <MenuItem value={"Mrs."}>Mrs.</MenuItem>
                                     </Select>
-                                    <FormHelperText>{errors.prefix && touched.prefix ? errors.prefix:"The prefix we used to address you" }</FormHelperText>
+                                    <FormHelperText>{errors.prefix && touched.prefix ? errors.prefix:"Your prefix" }</FormHelperText>
                                 </FormControl>
+                                
                                 <TextField 
+                                    className="md:col-span-2"
                                     required
-                                    name="preferredName" 
-                                    aria-label="Preferred Name" 
-                                    label="Preferred Name" 
-                                    placeholder="Enter your Preferred Name" 
-                                    helperText= {errors.preferredName && touched.preferredName ? errors.preferredName:"Your preferred name or nickname" }
-                                    
+                                    name="firstname" 
+                                    aria-label="First Name" 
+                                    label="First Name" 
+                                    placeholder="Enter your First Name" 
+                                    helperText= {errors.firstname && touched.firstname ? errors.firstname:"Your First Name (E.g. Tai Ming)" }
+                                    size="small"
                                     sx={{
                                         '& .MuiFormHelperText-root': {
                                             width: 250,
@@ -283,17 +291,18 @@ export const SignupForm= ()=>{
                                     }}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.preferredName}
-                                    error={touched.preferredName && !!errors.preferredName}
+                                    value={values.firstname}
+                                    error={touched.firstname && !!errors.firstname}
                                     />
                                 <TextField 
+                                    className="md:col-span-2"
                                     required
                                     name="surname" 
                                     aria-label="Surname" 
                                     label="Surname" 
                                     placeholder="Enter your Surname" 
-                                    helperText= {errors.surname && touched.surname ? errors.surname:"Your Surname" }
-                                    
+                                    helperText= {errors.surname && touched.surname ? errors.surname:"Your Surname (E.g. Chan)" }
+                                    size="small"
                                     sx={{
                                         '& .MuiFormHelperText-root': {
                                             width: 250,
@@ -305,13 +314,14 @@ export const SignupForm= ()=>{
                                     error={touched.surname && !!errors.surname}
                                     />
                                 <TextField 
+                                    className="md:col-span-3 md:self-start"
                                     required
-                                    name="firstname" 
-                                    aria-label="First Name" 
-                                    label="First Name" 
-                                    placeholder="Enter your First Name" 
-                                    helperText= {errors.firstname && touched.firstname ? errors.firstname:"Your First Name" }
-                                    
+                                    name="preferredName" 
+                                    aria-label="Preferred Name" 
+                                    label="Preferred Name" 
+                                    placeholder="Enter your Preferred Name" 
+                                    helperText= {errors.preferredName && touched.preferredName ? errors.preferredName:"Your preferred name or nickname (E.g. Thomas)" }
+                                    size="small"
                                     sx={{
                                         '& .MuiFormHelperText-root': {
                                             width: 250,
@@ -319,17 +329,18 @@ export const SignupForm= ()=>{
                                     }}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    value={values.firstname}
-                                    error={touched.firstname && !!errors.firstname}
+                                    value={values.preferredName}
+                                    error={touched.preferredName && !!errors.preferredName}
                                     />
                                 
                                 <TextField 
+                                    className="md:col-span-3 md:self-start"
                                     name="fullChineseName" 
                                     aria-label="Full Chinese Name" 
                                     label="Full Chinese Name" 
                                     placeholder="Enter your Full Chinese Name" 
-                                    helperText= {errors.fullChineseName && touched.fullChineseName ? errors.fullChineseName:"Your Full Chinese Name" }
-                                    
+                                    helperText= {errors.fullChineseName && touched.fullChineseName ? errors.fullChineseName:"Your Full Chinese Name (E.g. 陳大明)" }
+                                    size="small"
                                     sx={{
                                         '& .MuiFormHelperText-root': {
                                             width: 250,
@@ -340,7 +351,7 @@ export const SignupForm= ()=>{
                                     value={values.fullChineseName}
                                     error={touched.fullChineseName && !!errors.fullChineseName}
                                     />
-                                <FormControl className="max-w-[250px] min-w-[120px]" error={touched.phonePrefix && !!errors.phonePrefix} required>
+                                <FormControl className="max-w-[250px] min-w-[120px] md:max-w-full md:col-span-3 " error={touched.phonePrefix && !!errors.phonePrefix} required size="small" >
                                     <InputLabel id="SPersonalPhonePrefix-label">Phone Prefix</InputLabel>
                                     <Select
                                         labelId="SPersonalPhonePrefix-label"
@@ -359,15 +370,16 @@ export const SignupForm= ()=>{
                                         <MenuItem value={"+44"}>United Kingdom (+44)</MenuItem>
                                         <MenuItem value={"+61"}>Austrialia (+61)</MenuItem>
                                     </Select>
-                                    <FormHelperText>{errors.phonePrefix && touched.phonePrefix ? errors.phonePrefix:"The prefix we of your phone" }</FormHelperText>
+                                    <FormHelperText>{errors.phonePrefix && touched.phonePrefix ? errors.phonePrefix:"Area code of your phone" }</FormHelperText>
                                 </FormControl>
                                 <TextField 
+                                    className="md:col-span-3"
                                     name="phoneNumber" 
                                     aria-label="Phone #" 
                                     label="Phone #" 
                                     placeholder="Enter your Phone #" 
                                     helperText= {errors.phoneNumber && touched.phoneNumber ? errors.phoneNumber:"Your Phone #" }
-                                    
+                                    size="small"
                                     sx={{
                                         '& .MuiFormHelperText-root': {
                                             width: 250,
@@ -378,24 +390,8 @@ export const SignupForm= ()=>{
                                     value={values.phoneNumber}
                                     error={touched.phoneNumber && !!errors.phoneNumber}
                                     />
-                                <TextField 
-                                    name="relationship" 
-                                    aria-label="Relationship" 
-                                    label="Relationship" 
-                                    placeholder="Friends from University" 
-                                    helperText= {errors.relationship && touched.relationship ? errors.relationship:"Your Relationship with Edward & Kiki" }
-                                    
-                                    sx={{
-                                        '& .MuiFormHelperText-root': {
-                                            width: 250,
-                                        },
-                                    }}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    value={values.relationship}
-                                    error={touched.relationship && !!errors.relationship}
-                                    />
-                                <FormControl className="max-w-[250px] min-w-[120px]" error={touched.side && !!errors.side} required>
+                                
+                                <FormControl className="max-w-[250px] min-w-[120px] md:max-w-full md:col-span-3 md:self-start" error={touched.side && !!errors.side} required size="small">
                                     <InputLabel id="SPersonalSide-label">Side</InputLabel>
                                     <Select
                                         labelId="SPersonalSide-label"
@@ -408,10 +404,29 @@ export const SignupForm= ()=>{
                                         <MenuItem value={"GROOM"}>GROOM (Male)</MenuItem>
                                         <MenuItem value={"BRIDE"}>BRIDE (Female)</MenuItem>
                                     </Select>
-                                    <FormHelperText>{errors.side && touched.side ? errors.side:"Which side of relatives are you belong to" }</FormHelperText>
+                                    <FormHelperText>{errors.side && touched.side ? errors.side:"Which side of the family do you belong to" }</FormHelperText>
                                 </FormControl>
-                                <div className="flex justify-end items-center gap-2 w-full">
+                                <TextField 
+                                    className="md:col-span-3 md:self-start"
+                                    name="relationship" 
+                                    aria-label="Relationship" 
+                                    label="Relationship" 
+                                    placeholder="Friends from University" 
+                                    helperText= {errors.relationship && touched.relationship ? errors.relationship:"Your relationship with Edward and/ or Kiki (E.g. HKUST Classmate, HKT Colleagues, Aunt)" }
+                                    size="small"
+                                    sx={{
+                                        '& .MuiFormHelperText-root': {
+                                            width: 250,
+                                        },
+                                    }}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.relationship}
+                                    error={touched.relationship && !!errors.relationship}
+                                    />
+                                <div className="flex justify-center items-center gap-2 w-full md:col-span-6">
                                     <LoadingButton 
+                                        className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50 px-2"
                                         disabled={_.size(errors)>0&&_.size(touched)===_.size(structuredClone(state.context.personalField))} 
                                         type="submit"
                                         onClick={()=>{
@@ -423,6 +438,7 @@ export const SignupForm= ()=>{
                                         Join Virtually
                                     </LoadingButton>
                                     <LoadingButton 
+                                        className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50 px-1"
                                         disabled={_.size(errors)>0&&_.size(touched)===_.size(structuredClone(state.context.personalField))} 
                                         type="submit"
                                         onClick={()=>{
@@ -444,7 +460,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SVirtual")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                     
                         <Tooltip title="homepage">
@@ -502,6 +518,7 @@ export const SignupForm= ()=>{
                                 
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50 px-1"
                                     disabled={_.size(errors)>0} 
                                     type="submit"
                                     variant="contained">
@@ -517,7 +534,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SPhysical")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                         <Tooltip title="back to personal">
                         <IconButton className="" onClick={()=>send({type:"EBackToPersonal"})}>
@@ -620,6 +637,7 @@ export const SignupForm= ()=>{
                        
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                     disabled={_.size(errors)>0} 
                                     type="submit"
                                     variant="contained">
@@ -635,7 +653,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SCeremony")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                     
                         <Tooltip title="back">
@@ -693,6 +711,7 @@ export const SignupForm= ()=>{
                                 
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                     disabled={_.size(errors)>0} 
                                     type="submit"
                                     variant="contained">
@@ -708,7 +727,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SCocktailBanquet")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                         <Tooltip title="homepage">
                         <IconButton className="" onClick={()=>send({type:"EBackToPhysical"})}>
@@ -795,7 +814,8 @@ export const SignupForm= ()=>{
                                 error={touched.foodAllergies && !!errors.foodAllergies}
                             />
                             <div className="flex justify-end items-center gap-2 w-full">
-                                <LoadingButton 
+                                <LoadingButton
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                     disabled={_.size(errors)>0} 
                                     type="submit"
                                     variant="contained">
@@ -811,7 +831,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SBanquet")){
         return(
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                         <Tooltip title="Food Allergies">
                         <IconButton className="" onClick={()=>send({type:"EBackToCockTailBanquet"})}>
@@ -847,26 +867,27 @@ export const SignupForm= ()=>{
                         <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
                             
                             <FormControl className="max-w-[250px] min-w-[120px]" error={touched.foodChoice && !!errors.foodChoice} required>
-                                <InputLabel id="SBanquetFoodChoice-label">Main dish selection</InputLabel>
+                                <InputLabel id="SBanquetFoodChoice-label">Main Course selection</InputLabel>
                                 <Select
                                     labelId="SBanquetFoodChoice-label"
                                     id="SBanquetFoodChoice"
                                     name="foodChoice"
                                     value={values.foodChoice}
-                                    label="Food choice"
+                                    label="Main Course selection"
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="">
-                                        <em>None</em>
+                                        <em>No Preference</em>
                                     </MenuItem>
                                     <MenuItem value={"beef"}>Short Rib (Slow-Braised Beef Short Rib in a Red Wine Sauce)</MenuItem>
-                                    <MenuItem value={"fish&shrimp"}>Surf & Surf(Panko Crusted Cod Loin With Grilled Shrimp and Lobster Sauce)</MenuItem>
-                                    <MenuItem value={"vegetarian"}>Parmigiana(Breaded Eggplant Layered With Tomato Sauce And Mozzarella Nestled On Soft Polenta)</MenuItem>
+                                    <MenuItem value={"fish&shrimp"}>Surf & Turf (Panko Crusted Cod Loin With Grilled Shrimp and Lobster Sauce)</MenuItem>
+                                    <MenuItem value={"vegetarian"}>Parmigiana (Breaded Eggplant Layered With Tomato Sauce And Mozzarella Nestled On Soft Polenta)</MenuItem>
                                 </Select>
-                                <FormHelperText>{errors.foodChoice && touched.foodChoice ? errors.foodChoice:"select a main dish from the drop down list" }</FormHelperText>
+                                <FormHelperText>{errors.foodChoice && touched.foodChoice ? errors.foodChoice:"Please select a main course" }</FormHelperText>
                             </FormControl>
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
+                                    className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                     disabled={_.size(errors)>0} 
                                     type="submit"
                                     variant="contained">
@@ -882,7 +903,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SRSVP")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px] max-h-[500px]  max-h-[500px] md:w-96  flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px] max-h-[450px] w-82 md:w-96  flex-col relative">
                 <div className="h-full">
 
                 
@@ -928,7 +949,7 @@ export const SignupForm= ()=>{
                                 }
                                 return (
                                     <div key={`${i}emailfield`} className="flex items-center justify-between">
-                                        <p className="text-themeSemiDark">{key}</p>
+                                        <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p >{value.toString()}</p>
                                     </div>
                                 )
@@ -937,7 +958,7 @@ export const SignupForm= ()=>{
                                 console.log(key,value)
                                 return (
                                     <div key={`${i}personalField`} className="flex items-center justify-between">
-                                        <p className="text-themeSemiDark">{key}</p>
+                                        <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p>{value?.toString()}</p>
                                     </div>
                                 )
@@ -946,7 +967,7 @@ export const SignupForm= ()=>{
                                 console.log(key,value)
                                 return (
                                     <div key={`${i}otherField`} className="flex items-center justify-between">
-                                        <p className="text-themeSemiDark">{key}</p>
+                                        <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p>{value?.toString()}</p>
                                     </div>
                                 )
@@ -957,6 +978,7 @@ export const SignupForm= ()=>{
                         </div>
                         <div className="flex justify-end items-center gap-2 w-full">
                             <LoadingButton 
+                                className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
                                 onClick={async()=> {
                                     await handleCreateUserAndRsvp()
                                     send({type:"EGotoFinish"})
@@ -973,7 +995,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SFinish")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px]  max-h-[500px] md:w-96 overflow-y-auto flex-col relative">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white  max-h-[450px] w-82 md:w-96 overflow-y-auto flex-col relative">
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2">
                     
                     <div className='w-[40px]'></div>
@@ -991,6 +1013,7 @@ export const SignupForm= ()=>{
                         </div>
                         <div className="flex justify-end items-center gap-2 w-full">
                             <LoadingButton 
+                                className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50 px-1"
                                 onClick={()=>{
                                     router.push("/")
                                 }}

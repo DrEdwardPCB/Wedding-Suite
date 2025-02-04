@@ -18,6 +18,10 @@
     transition-duration: 500ms;
     transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
   }
+  @font-face{
+    font-family: "zapfino";
+    src:url("/fonts/Zapfino.otf") format("ttf");
+}
 @font-face{
     font-family: "modelsignature";
     src:url("/fonts/Modelistasignature-ownAV.otf") format("otf");
