@@ -14,7 +14,7 @@ export default async function GuestSignupPage(){
                     <div className="font-bold">August</div>
                     <div className="flex  gap-2 items-center">
                         <p className="font-thin">sunday</p>
-                        <p className="border-l-[1px] border-r-[1px] border-themeDark px-2 font-bold text-xl font-serif">18</p>
+                        <p className="border-l-[1px] border-r-[1px] border-themeDark px-2 font-bold text-xl font-serif">3</p>
                         <p className="font-thin">AT 3 PM</p>
                     </div>
                     <div className="font-bold">2025</div>
