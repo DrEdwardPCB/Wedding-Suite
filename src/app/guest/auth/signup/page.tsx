@@ -23,6 +23,5 @@ export default async function GuestSignupPage(){
             </div>
         </FadeInSection>
         <SignupForm/>
-        <div className="flex-1"></div>
     </div>)
 }

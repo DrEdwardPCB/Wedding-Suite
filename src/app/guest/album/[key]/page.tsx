@@ -16,7 +16,7 @@ export default async function AlbumPhotoPage({params}:{params:Promise<{key:strin
     const album = await getAlbumById(key)
     const photos = await queryPhotoByAlbumId(key)
     return (
-        <div className="from-themeLight to-themeSemiLight bg-gradient-to-br min-h-[100vh]">
+        <div className="overflow-y-auto">
             <AlbumCarousel photos={photos}/>
             <GuestNav title={album.title} home/>
             <AlbumPhotoList albumId={key} />

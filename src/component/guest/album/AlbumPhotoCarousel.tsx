@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import './style.css';
 
 // import required modules
-import { EffectCoverflow, Pagination,Autoplay } from 'swiper/modules';
+import {  Pagination,Autoplay, EffectFade, Navigation } from 'swiper/modules';
 import { AlbumPhotoCarouselItem } from './AlbumPhotoCarouselItem';
 import { TZodPhotoSchema } from '@/lib/mongo/schema/Photo';
 
@@ -23,9 +23,13 @@ export function AlbumCarousel({photos}:IAlbumCarouselProps) {
   return (
     <>
       <Swiper
-        effect={'coverflow'}
+        effect={'fade'}
         grabCursor={true}
         centeredSlides={true}
+        navigation={true}
+        pagination={{
+          clickable: true,
+        }}
         slidesPerView={'auto'}
         coverflowEffect={{
           rotate: 50,
@@ -39,8 +43,7 @@ export function AlbumCarousel({photos}:IAlbumCarouselProps) {
           delay: 2500,
           disableOnInteraction: false,
         }}
-        pagination={true}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
+        modules={[EffectFade, Pagination, Autoplay , Navigation]}
         className="mySwiper"
       >{
         photos.map(e=>(<SwiperSlide key={e._id}>

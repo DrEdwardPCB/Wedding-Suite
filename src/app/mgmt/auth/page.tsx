@@ -13,9 +13,7 @@ export default async function MgmtLoginPage(){
                 <h1 className="">mgmt login</h1>
             <></>
         </div>
-        <form action={loginMgmt} className="flex flex-col items-scratch justify-center gap-2 outline outline-1 p-4 rounded-lg">
-            <SigninForm/>
-        </form>
+        <SigninForm submitFnc={loginMgmt}/>
         <div></div>
     </div>)
 }

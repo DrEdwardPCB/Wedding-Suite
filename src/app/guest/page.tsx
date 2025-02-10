@@ -45,11 +45,11 @@ export default async function GuestHomePage(){
         <div className="relative w-full h-[90vh] flex">
             <LoadImageFromDB slot="welcome" className="w-full h-full object-cover"></LoadImageFromDB>
             <div className="z-100 absolute w-full h-full flex flex-wrap items-end justify-around">
-            <FadeInSection className="flex flex-col font-theseasons italic font-bold text-white text-xl bg-black bg-opacity-50 p-14 m-14">
-                <div className="text-2xl md:text-6xl font-light">
-                Edward Wong<br></br> & <br></br> Kiki Cho
+            <FadeInSection className="flex flex-col font-zapfino italic font-bold text-white  bg-black bg-opacity-50 p-14 m-14">
+                <div className="text-2xl md:text-4xl font-light">
+                Edward Wong<br/><div className="mt-6"> & </div><br/> Kiki Cho
                 </div>
-                <div className="mt-2">
+                <div className="mt-10 text-lg md:text-xl">
                 August 3, 2025
                 </div>
             </FadeInSection>
