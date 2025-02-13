@@ -16,10 +16,13 @@ export default async function AlbumPhotoPage({params}:{params:Promise<{key:strin
     const album = await getAlbumById(key)
     const photos = await queryPhotoByAlbumId(key)
     return (
-        <div className="overflow-y-auto">
+        <div className="flex flex-col max-h-[100vh]">
             <AlbumCarousel photos={photos}/>
             <GuestNav title={album.title} home/>
+            <div className="flex-1 overflow-y-auto">
+
             <AlbumPhotoList albumId={key} />
+            </div>
         </div>
     )
 }

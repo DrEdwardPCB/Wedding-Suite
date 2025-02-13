@@ -58,7 +58,6 @@ const virtualTemplate = (guest:TZodUserSchema,config:TZodConfigSchema)=>{
     return `
         <p>Thank you so much for joining us virtually on our special day! We're thrilled to have you celebrate with us from wherever you are.</p>
         <br/>
-        <br/>
         <p><strong>Here's all the wedding info you'll need:</strong></p>
         <ul>
             <li><strong>Date: </strong> August 3, 2025 (Sunday)</li>
@@ -67,18 +66,13 @@ const virtualTemplate = (guest:TZodUserSchema,config:TZodConfigSchema)=>{
             <li><strong>Watch the Ceremony Live:</strong><a href=https://youtube.com/live/ovEW5SCEmng> https://youtube.com/live/ovEW5SCEmng</a></li>
         </ul>
         <br/>
-        <br/>
         <p>We've also created a Google Calendar invitation to help you save the date and keep track of the time. Simply add it to your calendar, and you'll be all set!</p>
-        <br/>
         <br/>
         ${invitationLink(guest,config)}
         <br/>
-        <br/>
         <p>Feel free to visit our wedding website anytime before the big day for the latest updates and details. We'll be keeping it updated with everything you need to know!</p>
         <br/>
-        <br/>
         ${loginCredentials(guest)}
-        <br/>
         <br/>
         <p>If you'd like to contribute to our next journey, please visit our website for more details:</p>
         <br/>
@@ -89,7 +83,6 @@ const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
     return `
         <p>We're thrilled that you'll be joining us in person to celebrate our big day! It means the world to us to have you there.</p>
         <br/>
-        <br/>
         <p><strong>Here's all the wedding info you'll need:</strong></p>
         <ul>
             <li><strong>Date: </strong> August 3, 2025 (Sunday)</li>
@@ -97,15 +90,11 @@ const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
             <li><strong>Wedding Location: </strong> Holland Marsh Wineries (though you'll be joining us online!)</li>
         </ul>
         <br/>
-        <br/>
         <p>We've also created a Google Calendar invitation to help you save the date and keep track of the time. Simply add it to your calendar, and you'll be all set!</p>
-        <br/>
         <br/>
         ${invitationLink(guest,config)}
         <br/>
-        <br/>
         ${loginCredentials(guest)}
-        <br/>
         <br/>
         <p>Simply visit <a href="https://wedding.ekhome.life">wedding.ekhome.life</a>, sign in with the details above, and feel free to update your RSVP or make any changes if needed.</p>
         <br>

@@ -13,7 +13,7 @@ export default async function GuestHomeRoute({slot,href,className, title}:IGuest
             <div className={`${className}  bg-white p-4` }>
 
                 <LoadImageFromDB slot={slot} className="w-[300px] h-[300px] object-cover"></LoadImageFromDB>
-                <h1 className="text-center font-theseasons italic font-bold text-themeDark text-xl">{title}</h1>
+                <h1 className="text-center font-bevietnam font-bold text-themeDark text-xl pt-4 font-bold">{title}</h1>
             </div>
         </Link>
     )

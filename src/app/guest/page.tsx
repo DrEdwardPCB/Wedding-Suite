@@ -7,7 +7,7 @@ import { findUserByUserId } from "@/lib/mongo/actions/UserActions";
 import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic'
-// hover:rotate-3 hover:scale-105 w-[300px] h-[300px] object-cover
+// hover:rotate-3 hover:scale-105 w-[300px] h-[300px] object-cover pt-4 font-bold
 export default async function GuestHomePage(){
     const session = await getSession();
     if(!session.isLoggedIn){

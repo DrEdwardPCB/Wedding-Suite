@@ -1,7 +1,7 @@
 export default async function MenuPage(){
     const renderFood = (foodSection:Record<string,any>)=>{
         return(
-            <div className="pt-8">
+            <div className="pt-10">
                 <h1 className="uppercase text-base font-zapfino">
                     {foodSection.name}
                 </h1>
