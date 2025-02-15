@@ -1,4 +1,10 @@
+import { getSession } from "@/lib/ironsession/action";
+import { redirect } from "next/navigation";
 export default async function MenuPage(){
+    const session = await getSession();
+            if(!session.userid||session.isAdmin||!session.isLoggedIn){
+                redirect("/guest/auth/signin")
+            }
     const renderFood = (foodSection:Record<string,any>)=>{
         return(
             <div className="pt-10">

@@ -20,10 +20,13 @@ export default async function MgmtHomePage(){
         <HomeRoute url={"/mgmt/game"} title="Game" icon={<VideogameAssetIcon></VideogameAssetIcon>}/>
         <HomeRoute url={"/mgmt/guest"} title="Guest" icon={<PeopleIcon></PeopleIcon>}/>
         <HomeRoute url={"/mgmt/video"} title="Video" icon={<TheatersIcon></TheatersIcon>}/>
-        <div className="">
+        <HomeRoute url={"/mgmt/comment"} title="Comment" icon={<TheatersIcon></TheatersIcon>}/>
+        <HomeRoute url={"/mgmt/broadcast"} title="Broadcast" icon={<TheatersIcon></TheatersIcon>}/>
+        <div className="ml-2">
           <HomeRoute url={"/mgmt/stage/album"} title="Stage Album" icon={<StadiumIcon></StadiumIcon>}/>
           <HomeRoute url={"/mgmt/stage/game"} title="Stage Game" icon={<StadiumIcon></StadiumIcon>}/>
           <HomeRoute url={"/mgmt/stage/video"} title="Stage Video" icon={<StadiumIcon></StadiumIcon>}/>
+          <HomeRoute url={"/mgmt/stage/comment"} title="Stage Comment" icon={<StadiumIcon></StadiumIcon>}/>
         </div>
         <form action={logoutMgmt} >
           <div>

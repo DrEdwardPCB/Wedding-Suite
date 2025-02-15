@@ -3,12 +3,12 @@ import {Schema, model, models} from 'mongoose'
 import {z} from 'zod'
 
 const BroadcastSchema = new Schema({
-    comment:{type:String},
+    message:{type:String},
     lastUpdate:{type:Date, require:true}
 
 })
 
-export default models?.BroadcastSchema||model('Broadcast',BroadcastSchema)
+export default models?.Broadcast||model('Broadcast',BroadcastSchema)
 
 export const ZodBroadcastSchema = z.object({
     message:z.string().nullable().optional(),

@@ -21,11 +21,36 @@ export const commitUpdate=async (id:string,comment:TZodCommentSchema)=>{
 }
 export const queryAll = async()=>{
     //@ts-ignore
-    const parsed = (await Comment.find({})).map(e=>_.omit(e.toJSON(),[,"__v"]))
+    const parsed = (await Comment.find({})).map(e=>{
+        const intermediate = _.omit(e.toJSON(),["_id","__v"]) 
+        intermediate._id = e._id.toHexString()
+        return intermediate
+    }) as (TZodCommentSchema&{_id:string})[]
+    console.log(parsed)
     return parsed
 }
-export const queryCommentByUser = async(userId:string)=>{
+export const queryCommentByUser = async(userId:string):Promise<(TZodCommentSchema&{_id:string})[]>=>{
     //@ts-ignore
-    const parsed = (await Comment.find({userId:userId})).map(e=>_.omit(e.toJSON(),[,"__v"]))
+    const parsed = (await Comment.find({userId:userId})).map(e=>{
+        const intermediate = _.omit(e.toJSON(),["_id","__v"]) 
+        intermediate._id = e._id.toHexString()
+        return intermediate
+    }) as (TZodCommentSchema&{_id:string})[]
+    return parsed
+}
+export const getSelectedComment = async():Promise<(TZodCommentSchema&{_id:string})[]>=>{
+    //@ts-ignore
+    const parsed = (await Comment.find({selected:true})).map(e=>{
+        const intermediate = _.omit(e.toJSON(),["_id","__v"]) 
+        intermediate._id = e._id.toHexString()
+        return intermediate
+    }) as (TZodCommentSchema&{_id:string})[]
+    
+    return parsed
+}
+export const getCommentById = async(commentId:string):Promise<(TZodCommentSchema&{_id:string})>=>{
+    const raw = (await Comment.findById(commentId))
+    const parsed =  _.omit(raw.toJSON(),["_id","__v"]) as (TZodCommentSchema&{_id:string})
+    parsed._id = raw._id.toHexString() 
     return parsed
 }

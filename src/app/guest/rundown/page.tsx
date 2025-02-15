@@ -1,3 +1,5 @@
+import { getSession } from "@/lib/ironsession/action";
+import { redirect } from "next/navigation";
 import dayjs from "dayjs"
 import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 // import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -10,7 +12,13 @@ import CustomParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(CustomParseFormat)
 export default async function RundownPage(){
-    return <div></div>
+    const session = await getSession();
+            if(!session.userid||session.isAdmin||!session.isLoggedIn){
+                redirect("/guest/auth/signin")
+            }
+    return <div className=" w-full h-full flex items-center justify-center font-theseasons text-2xl text-themeDark">
+        Coming Soon
+    </div>
 }
 
 // const Rundown = [
