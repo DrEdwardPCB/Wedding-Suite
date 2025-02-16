@@ -9,7 +9,7 @@ export default async function Home() {
       
       <div className="p-1 md:p-10  text-themeDark flex flex-col md:flex-row gap-6 flex-wrap justify-around">
       <div className="flex flex-col items-start gap-10 items-start justify-center flex-1 md:p-4">
-      <FadeInSection className="text-themeDark text-2xl md:text-6xl font-theseasons pl-14 md:p-0"><p>Donation</p></FadeInSection>
+      <FadeInSection className="text-themeDark text-2xl md:text-6xl font-theseasons pl-14 md:p-0"><p>Cash Gift</p></FadeInSection>
       <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 text-xs md:text-base">
 
         {/* <HomeItemDisplay className="rotate-2" imageSlot="dresscode" title="What to Wear" description="Semi-Formal or Dressy Casual" copyText="https://www.brides.com/story/wedding-dress-code-explained" copyMessage="Dress code explain website is being copied to your clipboard"></HomeItemDisplay> */}

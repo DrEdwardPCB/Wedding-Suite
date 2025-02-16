@@ -777,7 +777,7 @@ export const SignupForm= ()=>{
                         handleBlur,
                         handleSubmit,
                     })=>(
-                        <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
+                        <form className="flex flex-col items-center justify-start gap-6 p-7" onSubmit={handleSubmit}>
                             <TextField 
                                 size="small"
                                 name="foodAllergies" 
@@ -875,9 +875,9 @@ export const SignupForm= ()=>{
                         handleSubmit,
                         handleBlur,
                     })=>(
-                        <form className="flex flex-col items-center justify-start gap-4 p-7" onSubmit={handleSubmit}>
+                        <form className="flex flex-col items-center justify-start gap-6 p-7" onSubmit={handleSubmit}>
                             
-                            <FormControl className="max-w-[250px] min-w-[120px]" error={touched.foodChoice && !!errors.foodChoice} required size="small">
+                            <FormControl className="max-w-[278px] min-w-[120px] w-full" error={touched.foodChoice && !!errors.foodChoice} required size="small">
                                 <InputLabel id="SBanquetFoodChoice-label">Main Course selection</InputLabel>
                                 <Select
                                     
@@ -896,6 +896,7 @@ export const SignupForm= ()=>{
                                     <MenuItem value={"vegetarian"}>Parmigiana (Breaded Eggplant Layered With Tomato Sauce And Mozzarella Nestled On Soft Polenta)</MenuItem>
                                 </Select>
                                 <FormHelperText>{errors.foodChoice && touched.foodChoice ? errors.foodChoice:"Please select a main course" }</FormHelperText>
+                                </FormControl>
                             <TextField 
                                 size="small"
                                 name="foodAllergies" 
@@ -935,7 +936,7 @@ export const SignupForm= ()=>{
                                 />
                                 
                             
-                            </FormControl>
+                            
                             <div className="flex justify-end items-center gap-2 w-full">
                                 <LoadingButton 
                                     className="font-bevietnam text-white bg-themeDark shadow-black disabled:bg-slate-400 disabled:opacity-50"
@@ -954,8 +955,7 @@ export const SignupForm= ()=>{
     }
     if (state.matches("SRSVP")){
         return (
-            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px] max-h-[450px] w-82 md:w-96  flex-col relative">
-                <div className="h-full">
+            <div className="shadow rounded-xl flex items-center justify-center bg-white h-[500px] max-h-[450px] w-82 md:w-2/3  flex-col relative">
 
                 
                 <div className="w-full flex items-center mt-7 justify-between gap-4 px-2 ">
@@ -991,14 +991,14 @@ export const SignupForm= ()=>{
                     <div className="flex-1"></div>
                 </div>
                 
-                    <div className="flex flex-col items-center justify-start gap-4 p-7 " >
-                        <div className=" shadow-inner h-40 -z-10 overflow-y-scroll w-full">
+                    <div className="flex flex-col items-center justify-start gap-6 p-7 w-full" >
+                        <div className=" shadow-inner h-40 md:h-52 -z-10 overflow-y-scroll w-full">
                             {Object.entries(state.context.emailField).map(([key,value],i)=>{
                                 if(key==="reenterEmail"){
                                     return(<></>)
                                 }
                                 return (
-                                    <div key={`${i}emailfield`} className="flex items-center justify-between">
+                                    <div key={`${i}emailfield`} className="flex items-center justify-between px-4 py-2 border-b border-b-[1px] border-slate300">
                                         <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p >{value.toString()}</p>
                                     </div>
@@ -1007,7 +1007,7 @@ export const SignupForm= ()=>{
                             {Object.entries(state.context.personalField).map(([key,value],i)=>{
                                 console.log(key,value)
                                 return (
-                                    <div key={`${i}personalField`} className="flex items-center justify-between">
+                                    <div key={`${i}personalField`} className="flex items-center justify-between px-4  py-2 border-b border-b-[1px] border-slate300">
                                         <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p>{value?.toString()}</p>
                                     </div>
@@ -1016,7 +1016,7 @@ export const SignupForm= ()=>{
                             {Object.entries(state.context.otherField).map(([key,value],i)=>{
                                 console.log(key,value)
                                 return (
-                                    <div key={`${i}otherField`} className="flex items-center justify-between">
+                                    <div key={`${i}otherField`} className="flex items-center justify-between px-4  py-2 border-b border-b-[1px] border-slate300">
                                         <p className="text-themeSemiDark uppercase">{keyToDisplay(key)}</p>
                                         <p>{value?.toString()}</p>
                                     </div>
@@ -1038,7 +1038,6 @@ export const SignupForm= ()=>{
                                 Send
                             </LoadingButton>
                         </div>
-                    </div>
                     </div>
             </div>
         )

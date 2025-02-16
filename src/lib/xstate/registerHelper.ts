@@ -139,7 +139,7 @@ export const keyToDisplay = (key:string):string=>{
         phonePrefix:"Phone Prefix",
         phoneNumber:"Phone #",
         relationship:"Replationship",
-        Side:"side",
+        side:"Side",
         online:"Join Virtually",
         ceremony:"Join Ceremony(on-site)",
         cocktail:"Join Cocktail(on-site)",
