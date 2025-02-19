@@ -26,6 +26,15 @@ export const queryAll = async():Promise<(TZodAlbumSchema&{_id:string})[]>=>{
     })
     return parsed as (TZodAlbumSchema&{_id:string})[]
 }
+export const queryAllEnabled = async():Promise<(TZodAlbumSchema&{_id:string})[]>=>{
+    //@ts-ignore
+    const parsed = (await Album.find({hidden:false})).map(e=>{
+        const result=_.omit(e.toJSON(),["_id","__v"])
+        result._id = e._id.toHexString()
+        return result
+    })
+    return parsed as (TZodAlbumSchema&{_id:string})[]
+}
 export const getAlbumById = async(_id:string):Promise<TZodAlbumSchema&{_id:string}>=>{
     const data = (await Album.findById(_id)).toJSON()
     const result = _.omit(data,["_id","__v"])

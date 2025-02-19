@@ -5,7 +5,7 @@ export default async function GuestSignupPage(){
     /** min-w-[300px] p-4 px-14 mx-14 text-themeSemiDark text-gray-600 text-xs text-blue-600 hover:text-blue-200 cursor-pointer underline text-themeSemiLight text-slate-400 mt-7 h-96 w-72 md:w-96 max-w-52 max-w-40 md:max-w-52 justify-end px-2 max-w-[250px] min-w-[120px] h-40 h-[500px] max-h-[400px] md:max-h-[450px] w-[40px] mt-4 overflow-y-auto overflow-y-scroll w-82 px-1 px-2 md:px-2 md:w-2/3 md:col-span-3 md:col-span-2 md:col-span-6 md:grid md:grid-cols-6 md:max-w-full md:self-start
      * grid grid-cols-2 grid-rows-2 bg-red-500 bg-yellow-500  bg-blue-500  bg-green-500 w-40 h-20 p-4 text-wrap  break-all text-xs md:text-base pt-8
      * text-amber-300 text-zinc-400 text-yellow-700 font-bold bg-green-400 bg-red-400 outline-2 outline-offset-2  outline-green-400 outline-red-400 outline bg-themeDark disabled:bg-slate-400 disabled:opacity-50 gap-6
-     * max-w-[278px] border-b border-b-[1px] border-themeReg md:h-52
+     * max-w-[278px]  w-[300px] border-b border-b-[1px] border-themeReg md:h-52 md:max-w-full w-80 md:w-full
     */
     return (<div className="flex h-full flex-col items-center justify-start gap-4">
         <div className="flex flex-col items-center justify-around gap-4">
@@ -26,8 +26,10 @@ export default async function GuestSignupPage(){
                 </div>
             </FadeInSection>
         </div>
-        <div className="flex-1 items-center justify-center flex w-full">
+        <div className="flex-1 items-center justify-center flex w-full flex-col">
+            <div className="flex-1"></div>
             <SignupForm/>
+            <div className="flex-[4]"></div>
         </div>
     </div>)
 }

@@ -19,7 +19,7 @@ export default async function Home() {
             <div className="text-2xl md:text-4xl font-light">
               Edward Wong<br/><div className="mt-6"> & </div><br/> Kiki Cho
             </div>
-            <div className="mt-10 text-lg md:text-xl">
+            <div className="mt-10 text-base md:text-xl">
               August 3, 2025
             </div>
           </FadeInSection>

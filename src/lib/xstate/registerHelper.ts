@@ -138,16 +138,25 @@ export const keyToDisplay = (key:string):string=>{
         fullChineseName:"Full Chinese Name",
         phonePrefix:"Phone Prefix",
         phoneNumber:"Phone #",
-        relationship:"Replationship",
+        relationship:"relationship",
         side:"Side",
         online:"Join Virtually",
         ceremony:"Join Ceremony(on-site)",
         cocktail:"Join Cocktail(on-site)",
         banquet:"Join Banquet(on-site)",
         remarks:"Remarks",
-        foodAllergies:"foodAllergies",
+        foodAllergies:"food Allergies",
         foodChoice:"Selected Main Course"
 
 
     },key)
+}
+export const valueToDisplay = (value:any):string=>{
+    const temp = value?.toString()
+    if(temp==="true"){
+        return "Yes"
+    }else if (temp==="false"){
+        return "No"
+    }
+    return temp??""
 }

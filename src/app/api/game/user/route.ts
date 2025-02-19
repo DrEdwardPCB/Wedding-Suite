@@ -16,6 +16,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(request:NextRequest){
     const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
         if (!session.userid){
+            console.error("no session")
             return NextResponse.error()
         }
         const formData = await request.formData();

@@ -20,7 +20,7 @@ async function updateStage(
     const body = new FormData()
     body.append("userId", arg.userId)
     const response = await fetch(url,{method:"POST",body})
-    return await response.json()
+    return []
 } 
 // Type Deterministic function
 function isOverallWinningData(arg:TEventData):arg is Record<string,number>{
