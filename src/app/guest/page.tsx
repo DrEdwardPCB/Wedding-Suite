@@ -69,7 +69,7 @@ export default async function GuestHomePage(){
                     <FadeInSection className="text-themeLight text-2xl md:text-6xl font-theseasons mb-4 pl-14 md:p-0"><p>Important Info</p></FadeInSection>
                     <HomeItemDisplay className="m-10 text-themeDark" imageSlot="dresscode" title="What to Wear" description="Semi-Formal or Dressy Casual" copyText="https://www.brides.com/story/wedding-dress-code-explained" copyMessage="Dress code explain website is being copied to your clipboard"></HomeItemDisplay>
                 </div>
-                <div className="flex gap-8 flex-wrap items-center justify-around p-8 pt-0 flex-1 flex-col">
+                <div className="flex gap-8 flex-wrap items-center p-4 pt-0 flex-1 flex-col">
                     <FadeInSection className="text-themeLight self-start text-2xl md:text-6xl font-theseasons mb-4 pl-14 md:p-0"><p>Broadcast</p></FadeInSection>
                     <div className="max-h-[500px] flex-1 overflow-y-auto w-full flex flex-col gap-4 items-center justify-start">
 

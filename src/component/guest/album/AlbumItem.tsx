@@ -23,7 +23,7 @@ export  function AlbumItem({title,photos, albumId}:IAlbumItemProps){
     const hoverRef = useRef(null)
     const isHover = useHover(hoverRef)
     return (
-        <Link  href ={`/guest/album/${albumId}`} ref = {hoverRef} className="flex flex-col items-center relative">
+        <Link  href ={`/guest/albumdetails/${albumId}`} ref = {hoverRef} className="flex flex-col items-center relative">
             <div className="relative w-[250px] h-[300px] ">
             <div className={(isHover ?`rotate-12 translate-x-10 -translate-y-1 scale-75 `:`rotate-2 ` )+`absolute w-[250px] h-[300px] shadow z-100 bg-white   transition-all`}>
                 {(photos[2]?.fileLocation??"null")==="null"?

@@ -31,20 +31,13 @@ export function AlbumCarousel({photos}:IAlbumCarouselProps) {
           clickable: true,
         }}
         slidesPerView={'auto'}
-        coverflowEffect={{
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
-        }}
         loop={true}
         autoplay={{
-          delay: 2500,
+          delay: 5,
           disableOnInteraction: false,
         }}
         modules={[EffectFade, Pagination, Autoplay , Navigation]}
-        className="mySwiper"
+        className="mySwiper p-0"
       >{
         photos.map(e=>(<SwiperSlide key={e._id}>
           <AlbumPhotoCarouselItem photo={e}/>

@@ -1,5 +1,5 @@
 import { AlbumItem } from "@/component/guest/album/AlbumItem";
-import { queryAll, queryAllEnabled } from "@/lib/mongo/actions/AlbumActions";
+import { queryAllEnabled } from "@/lib/mongo/actions/AlbumActions";
 import { queryPhotoByAlbumId } from "@/lib/mongo/actions/PhotoAction";
 export const dynamic = 'force-dynamic';
 
