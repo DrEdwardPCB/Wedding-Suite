@@ -76,7 +76,7 @@ const virtualTemplate = (guest:TZodUserSchema,config:TZodConfigSchema)=>{
         <br/>
         <p>If you'd like to contribute to our next journey, please visit our website for more details:</p>
         <br/>
-        <a href="https://wedding.ekhome.life/donation">https://wedding.ekhome.life/donation</a>
+        <a href="https://wedding.ekhome.life/contribution">https://wedding.ekhome.life/contribution</a>
     `
 }
 const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
