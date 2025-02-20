@@ -3,7 +3,6 @@ import { FadeInSection } from "@/component/common/FadeInSection";
 import { LoadImageFromDB } from "@/component/common/ImageSlot";
 import { HomeItemDisplay } from "@/component/HomeItemDisplay";
 import Link from "next/link";
-import dayjs from 'dayjs'
 import {ToastContainer} from "react-toastify"
 import StoryTimeline from "@/component/common/StoryLine";
 import FlatIcon from "@/component/common/FlatIcon";
@@ -70,7 +69,7 @@ export default async function Home() {
         <div className="flex flex-col items-start gap-10 items-start justify-center flex-1 p-10 md:p-24">
           <FadeInSection className="text-themeLight text-2xl md:text-6xl font-theseasons"><p>Join us as we tie the Knot<span className="font-serif font-thin">!</span></p></FadeInSection>
           <FadeInSection className="font-bevietnam delay-200">
-            <p><span className="font-bold">When</span> August 3, 2025 | 4:00 pm onwards</p>
+            <p><span className="font-bold">When</span> August 3, 2025 | 3:00 pm onwards</p>
             <p><span className="font-bold">Where:</span> < a href="https://www.hmwineries.ca" className="cursor-pointer underline hover:text-white transition-all">Holland Marsh Wineries</a>, <a className="cursor-pointer underline hover:text-white transition-all" href="https://www.google.com/maps/place/Holland+Marsh+Wineries/@44.0564073,-79.5604865,1629m/data=!3m2!1e3!4b1!4m6!3m5!1s0x882ad00a64e3c227:0xc7c4f6a970480adb!8m2!3d44.0564073!4d-79.5604865!16s%2Fg%2F1tfscgq6?entry=ttu&g_ep=EgoyMDI1MDEwMi4wIKXMDSoASAFQAw%3D%3D">18270 Keele St, Newmarket, ON, Canada L3Y 4V9</a></p>
           </FadeInSection>
           <FadeInSection className="delay-250">
@@ -107,7 +106,7 @@ export default async function Home() {
       </div>
       <div className="w-full h-40 flex justify-around items-center bg-black">
         <p className="text-white text-center">
-          Created and <Link className="cursor-pointer" href="/mgmt/auth">Managed</Link> by Edward Wong 1997-{dayjs().year()}<br></br><a href="/privacypolicy" className="cursour-pointer underline hover:white hover:text-blue-600">Privacy Policy</a>
+          Created and <Link className="cursor-pointer" href="/mgmt/auth">Managed</Link> by Edward Wong<br></br><a href="/privacypolicy" className="cursour-pointer underline hover:white hover:text-blue-600">Privacy Policy</a>
         </p>
       </div>
       <ToastContainer />
