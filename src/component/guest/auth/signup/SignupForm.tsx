@@ -986,7 +986,7 @@ export const SignupForm= ()=>{
                     </Tooltip>
                     <div className="flex flex-col max-w-40 md:max-w-full">
                         <p>Send RSVP</p>
-                        <p className="text-xs text-slate-400">Click the below button to createAccount and receive RSVP Email </p>
+                        <p className="text-xs text-slate-400">Click the below button to create account and receive RSVP Email </p>
                     </div>
                     <div className="flex-1"></div>
                 </div>

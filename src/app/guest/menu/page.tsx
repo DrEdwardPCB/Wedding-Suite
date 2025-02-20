@@ -214,7 +214,7 @@ const DrinkMenu=[
         choice:[
             "Coors Light",
             "Canadian",
-            "AStella Artois",
+            "Stella Artois",
             "1 Local Craft Beer"
         ]
     },

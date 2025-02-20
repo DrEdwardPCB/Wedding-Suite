@@ -87,7 +87,7 @@ const physicalTemplate = (guest:TZodUserSchema,config:TZodConfigSchema) =>{
         <ul>
             <li><strong>Date: </strong> August 3, 2025 (Sunday)</li>
             <li><strong>Wedding Time: </strong> Starting at 3:00 PM EDT (don't forget to double-check your local time zone!)</li>
-            <li><strong>Wedding Location: </strong> Holland Marsh Wineries (though you'll be joining us online!)</li>
+            <li><strong>Wedding Location: </strong> Holland Marsh Wineries</li>
         </ul>
         <br/>
         <p>We've also created a Google Calendar invitation to help you save the date and keep track of the time. Simply add it to your calendar, and you'll be all set!</p>
