@@ -92,9 +92,9 @@ const FoodMenu = {
                     label:["VE"],
                 },
                 {
-                    name: "Maple Dates",
-                    description:"Goat Cheese Stuffed Dates Wrapped With Bacon And Glazed With Maple Syrup",
-                    label:["GF"],
+                    name: "Prosciutto",
+                    description:"Crispy Barquette Filled With Micro Arugula, Pear, Crumbled Boursin And Topped With Prosciutto",
+                    label:[""],
                 }
             ],
             remarks:null,
@@ -104,9 +104,9 @@ const FoodMenu = {
             relationship:"and",
             food:[
                 {
-                    name: "Caesar Salad",
-                    description:"Hearts of Romaine, Shaved Parmesan, Bacon, Herbed Croutons And Creamy Garlic Dressing",
-                    label:[]
+                    name: "Burrata",
+                    description:"Mini Burrata, Heirloom Tomatos, Arugula, \"Bruschetta\" And Smoked Peach Dressing",
+                    label:["VG"]
                 },
                 
             ],
