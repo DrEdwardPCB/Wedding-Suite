@@ -396,6 +396,7 @@ export const SignupForm= ()=>{
                                     <Select
                                         labelId="SPersonalSide-label"
                                         id="SPersonalSide"
+                                        name="side"
                                         value={values.side}
                                         label="Prefix"
                                         onChange={handleChange}
