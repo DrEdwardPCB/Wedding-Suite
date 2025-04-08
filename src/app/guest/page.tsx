@@ -93,6 +93,7 @@ export default async function GuestHomePage(){
                 <GuestHomeRoute href="/guest/rundown" slot="guestRundown" title="Rundown"></GuestHomeRoute>
                 <GuestHomeRoute href="/guest/stream" slot="guestStream" title="Live Stream"></GuestHomeRoute>
                 <GuestHomeRoute href="/guest/comment" slot="guestComment" title="Leave a Message"></GuestHomeRoute>
+                <GuestHomeRoute href="/guest/account" slot="guestProfile" title="Edit Profile"></GuestHomeRoute>
             </div>
         </div>
     </div>
