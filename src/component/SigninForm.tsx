@@ -6,6 +6,7 @@ import { IconButton, TextField, Tooltip } from '@mui/material';
 import { Formik } from 'formik';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
+import { showToast } from '@/lib/toastify/showToast';
 export interface ISigninFormProps {
   submitFnc: (formData: FormData) => Promise<void>;
 }
@@ -32,10 +33,15 @@ export function SigninForm({ submitFnc }: ISigninFormProps) {
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={async values => {
-          const formdata = new FormData();
-          formdata.set('username', values.username);
-          formdata.set('password', values.password);
-          submitFnc(formdata);
+          try {
+            const formdata = new FormData();
+            formdata.set('username', values.username);
+            formdata.set('password', values.password);
+            await submitFnc(formdata);
+          } catch (err) {
+            showToast('error', 'Invalid username/password');
+            console.error(err);
+          }
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (

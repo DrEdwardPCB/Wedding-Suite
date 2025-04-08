@@ -18,7 +18,7 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { TZodUserSchema, ZodUserSchema } from '../../../lib/mongo/schema/UserSchema';
@@ -339,11 +339,12 @@ export const EditInfo = ({ info }: { info: TZodUserSchema }) => {
                   value={values.online}
                   label="Join Physical or online"
                   onChange={e => {
-                    console.log(e);
                     handleChange(e);
                   }}
                 >
+                  {/* @ts-expect-error value type needs to be boolean instead of string*/}
                   <MenuItem value={true}>Virtual</MenuItem>
+                  {/* @ts-expect-error value type needs to be boolean instead of string*/}
                   <MenuItem value={false}>Physical</MenuItem>
                 </Select>
                 <FormHelperText>
